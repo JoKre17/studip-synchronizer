@@ -1,0 +1,74 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.luh.kriegel.studip</groupId>
+	<artifactId>synchronzier</artifactId>
+	<version>0.0.1</version>
+
+	<properties>
+		<!-- DEPENDENCIES -->
+		<!-- <org.apache.httpcomponents.httpcore>4.4.9</org.apache.httpcomponents.httpcore> -->
+		<org.apache.httpcomponents.httpclient>4.5.5</org.apache.httpcomponents.httpclient>
+		<com.googlecode.json-simple.json-simple>1.1</com.googlecode.json-simple.json-simple>
+		<org.apache.logging.log4j.log4j-api>2.11.0</org.apache.logging.log4j.log4j-api>
+		<org.apache.logging.log4j.log4j-core>2.11.0</org.apache.logging.log4j.log4j-core>
+
+		<!-- BUILD -->
+		<amven-compiler-plugin>3.7.0</amven-compiler-plugin>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+
+		<!-- GLOBAL -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+	</properties>
+
+	<dependencies>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.httpcomponents</groupId> -->
+		<!-- <artifactId>httpcore</artifactId> -->
+		<!-- <version>${org.apache.httpcomponents.httpcore}</version> -->
+		<!-- </dependency> -->
+
+		<!-- HTTP -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${org.apache.httpcomponents.httpclient}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>${com.googlecode.json-simple.json-simple}</version>
+		</dependency>
+
+
+		<!-- LOGGING / LOG4J2 -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${org.apache.logging.log4j.log4j-api}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${org.apache.logging.log4j.log4j-core}</version>
+		</dependency>
+
+
+	</dependencies>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${amven-compiler-plugin}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
