@@ -1,7 +1,5 @@
 package de.luh.kriegel.studip.synchronizer;
 
-import java.util.UUID;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +12,7 @@ public class Main {
 
 	public static Config config;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 
 		config = new Config(args);
 		log.info(config);
@@ -23,9 +21,7 @@ public class Main {
 
 		studIPService.authenticate();
 
-		
-		String uniqueID = UUID.randomUUID().toString();
-		log.info(uniqueID);
+		System.out.println(studIPService.getCourses());
 	}
 
 }

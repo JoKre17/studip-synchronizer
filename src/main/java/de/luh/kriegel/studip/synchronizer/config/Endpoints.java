@@ -3,8 +3,9 @@ package de.luh.kriegel.studip.synchronizer.config;
 public enum Endpoints {
 
 	MESSAGES("/messages/write"),
-	USER("/user");
-	
+	COURSE("/course"),
+	USER("/user"),
+	USER_COURSES("/user/:user_id/courses");
 	
 	private final String path;
 	

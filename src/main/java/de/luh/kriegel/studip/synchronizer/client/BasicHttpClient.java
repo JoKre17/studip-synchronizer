@@ -1,8 +1,6 @@
 package de.luh.kriegel.studip.synchronizer.client;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -29,7 +27,6 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.IOUtils;
 import org.json.simple.JSONObject;
 
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
@@ -128,16 +125,7 @@ public class BasicHttpClient {
 
 		HttpResponse response = client.execute(get);
 
-		try {
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
-			String responseContent = writer.toString();
-			log.debug(responseContent);
-		} catch (UnsupportedOperationException | IOException e) {
-			log.error(e);
-		}
-
-		client.close();
+//		client.close();
 
 		return response;
 	}
@@ -184,14 +172,14 @@ public class BasicHttpClient {
 
 		HttpResponse response = httpClient.execute(post);
 
-		try {
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
-			String responseContent = writer.toString();
-			log.debug(responseContent);
-		} catch (UnsupportedOperationException | IOException e) {
-			log.error(e);
-		}
+//		try {
+//			StringWriter writer = new StringWriter();
+//			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
+//			String responseContent = writer.toString();
+//			log.debug(responseContent);
+//		} catch (UnsupportedOperationException | IOException e) {
+//			log.error(e);
+//		}
 
 		return response;
 	}
@@ -241,14 +229,14 @@ public class BasicHttpClient {
 
 		HttpResponse response = httpClient.execute(post);
 
-		try {
-			StringWriter writer = new StringWriter();
-			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
-			String responseContent = writer.toString();
-			log.debug(responseContent);
-		} catch (UnsupportedOperationException | IOException e) {
-			log.error(e);
-		}
+//		try {
+//			StringWriter writer = new StringWriter();
+//			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
+//			String responseContent = writer.toString();
+//			log.debug(responseContent);
+//		} catch (UnsupportedOperationException | IOException e) {
+//			log.error(e);
+//		}
 
 		return response;
 	}
