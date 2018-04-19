@@ -92,6 +92,26 @@ public class UserInformation {
 		return suffix;
 	}
 	
-	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Course)) {
+			return false;
+		}
+		UserInformation other = (UserInformation) obj;
+		if (username == null) {
+			if (other.username != null) {
+				return false;
+			}
+		} else if (!username.equals(other.username)) {
+			return false;
+		}
+		return true;
+	}
 	
 }

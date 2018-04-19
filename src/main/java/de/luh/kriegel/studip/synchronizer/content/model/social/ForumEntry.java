@@ -10,4 +10,26 @@ public class ForumEntry {
 		this.id = id;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof ForumEntry)) {
+			return false;
+		}
+		ForumEntry other = (ForumEntry) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
+	}
+	
 }

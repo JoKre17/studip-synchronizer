@@ -39,5 +39,35 @@ public class Id {
 	public String toString() {
 		return id_hex;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id_hex == null) ? 0 : id_hex.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Id)) {
+			return false;
+		}
+		Id other = (Id) obj;
+		if (id_hex == null) {
+			if (other.id_hex != null) {
+				return false;
+			}
+		} else if (!id_hex.equals(other.id_hex)) {
+			return false;
+		}
+		return true;
+	}
 	
 }

@@ -67,7 +67,7 @@ public class Course {
 		}
 
 		if (jsonObject.containsKey("number")) {
-			if(jsonObject.get("number").toString().isEmpty()) {
+			if (jsonObject.get("number").toString().isEmpty()) {
 				number = 0;
 			} else {
 				number = Integer.parseInt(jsonObject.get("number").toString().trim());
@@ -95,7 +95,7 @@ public class Course {
 		}
 
 		if (jsonObject.containsKey("lecturers")) {
-			
+
 			JSONObject lecturersJson = (JSONObject) jsonObject.get("lecturers");
 			((Map<String, JSONObject>) lecturersJson).forEach((key, value) -> {
 				User user = User.fromJson(value);
@@ -194,10 +194,40 @@ public class Course {
 	public int getGroup() {
 		return group;
 	}
-	
+
 	@Override
 	public String toString() {
 		return id.toString() + " - " + title;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Course)) {
+			return false;
+		}
+		Course other = (Course) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -37,4 +37,26 @@ public class CourseModule {
 	public String getSubUrl() {
 		return subUrl;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof CourseModule)) {
+			return false;
+		}
+		CourseModule other = (CourseModule) obj;
+		if (courseId == null) {
+			if (other.courseId != null) {
+				return false;
+			}
+		} else if (!courseId.equals(other.courseId)) {
+			return false;
+		}
+		return true;
+	}
 }

@@ -1,0 +1,73 @@
+package de.luh.kriegel.studip.synchronizer.client.service;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import org.apache.http.HttpResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import de.luh.kriegel.studip.synchronizer.client.BasicHttpClient;
+import de.luh.kriegel.studip.synchronizer.config.Endpoints;
+import de.luh.kriegel.studip.synchronizer.config.SubPaths;
+import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
+import de.luh.kriegel.studip.synchronizer.content.model.data.User;
+
+public class AuthService {
+
+	private static final Logger log = LogManager.getLogger(AuthService.class);
+	
+	private final BasicHttpClient httpClient;
+
+	private boolean isAuthenticated;
+	private Id currentUserId;
+
+	public AuthService(BasicHttpClient httpClient) {
+		this.httpClient = httpClient;
+
+		isAuthenticated = false;
+
+	}
+
+	public boolean authenticate() {
+		HttpResponse response;
+		try {
+			response = httpClient.get(SubPaths.API.toString() + Endpoints.USER.toString());
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+			isAuthenticated = false;
+			return false;
+		}
+
+		if (response.getStatusLine().getStatusCode() / 100 == 2) {
+			isAuthenticated = true;
+
+			String responseBody = BasicHttpClient.getResponseBody(response);
+			log.debug(responseBody);
+
+			try {
+				User user = User.fromJson((JSONObject) new JSONParser().parse(responseBody));
+				currentUserId = user.getId();
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+			return true;
+		}
+
+		isAuthenticated = false;
+		return false;
+	}
+	
+	public boolean isAuthenticated() {
+		return isAuthenticated;
+	}
+	
+	public Id getCurrentUserId() {
+		return currentUserId;
+	}
+
+}

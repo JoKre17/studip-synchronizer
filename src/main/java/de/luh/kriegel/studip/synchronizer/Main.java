@@ -1,10 +1,15 @@
 package de.luh.kriegel.studip.synchronizer;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.luh.kriegel.studip.synchronizer.client.StudIPService;
+import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
+import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
+import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.config.Config;
+import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 
 public class Main {
 
@@ -17,11 +22,15 @@ public class Main {
 		config = new Config(args);
 		log.info(config);
 
-		StudIPService studIPService = new StudIPService(config.baseUri, config.credentials);
+		StudIPClient studIPClient = new StudIPClient(config.baseUri, config.credentials);
 
-		studIPService.authenticate();
+		AuthService authService = studIPClient.getAuthService();
+		authService.authenticate();
+		
+		CourseService courseService = studIPClient.getCourseService();
 
-		System.out.println(studIPService.getCourses());
+		List<Course> allCourses = courseService.getCourses();
+		System.out.println(allCourses.size());
 	}
 
 }

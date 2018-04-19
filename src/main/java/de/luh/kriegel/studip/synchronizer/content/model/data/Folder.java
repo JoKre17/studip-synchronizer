@@ -23,10 +23,11 @@ public class Folder {
 	private final long mkdate;
 	private final long chdate;
 	private final List<Id> subfolders;
+	private final List<Id> file_refs;
 
 	public Folder(boolean is_visible, boolean is_readable, boolean is_writable, Id id, String user_id, String parent_id,
 			Id range_id, String range_type, String folder_type, String name, List<Id> data_content, String description,
-			long mkdate, long chdate, List<Id> subfolders) {
+			long mkdate, long chdate, List<Id> subfolders, List<Id> file_refs) {
 		this.is_visible = is_visible;
 		this.is_readable = is_readable;
 		this.is_writable = is_writable;
@@ -42,6 +43,7 @@ public class Folder {
 		this.mkdate = mkdate;
 		this.chdate = chdate;
 		this.subfolders = subfolders;
+		this.file_refs = file_refs;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -64,6 +66,7 @@ public class Folder {
 		long mkdate = 0;
 		long chdate = 0;
 		List<Id> subfolders = new ArrayList<>();
+		List<Id> file_refs = new ArrayList<>();
 
 		if (jsonObject.containsKey("is_visible")) {
 			is_visible = Boolean.parseBoolean(jsonObject.get("is_visible").toString());
@@ -130,9 +133,19 @@ public class Folder {
 				subfolders.add(subfolderId);
 			});
 		}
+		
+		if (jsonObject.containsKey("file_refs")) {
+			
+			((Map<Integer, JSONObject>) jsonObject.get("file_refs")).forEach((index, fileRefJson) -> {
+				Id fileRefId = new Id(fileRefJson.get("id").toString());
+				
+				file_refs.add(fileRefId);
+			});
+		}
+		
 
 		return new Folder(is_visible, is_readable, is_writable, id, user_id, parent_id, range_id, range_type,
-				folder_type, name, data_content, description, mkdate, chdate, subfolders);
+				folder_type, name, data_content, description, mkdate, chdate, subfolders, file_refs);
 	}
 
 	public boolean isIs_visible() {
@@ -193,6 +206,28 @@ public class Folder {
 
 	public List<Id> getSubfolders() {
 		return subfolders;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Folder)) {
+			return false;
+		}
+		Folder other = (Folder) obj;
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -25,6 +26,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -39,7 +41,7 @@ import de.luh.kriegel.studip.synchronizer.auth.Credentials;
  */
 public class BasicHttpClient {
 
-	Logger log = LogManager.getLogger(BasicHttpClient.class);
+	private static final Logger log = LogManager.getLogger(BasicHttpClient.class);
 
 	private final String USER_AGENT = "Mozilla/5.0";
 
@@ -94,6 +96,22 @@ public class BasicHttpClient {
 		return clientBuilder.build();
 	}
 
+	public static String getResponseBody(HttpResponse response) {
+		assert response != null;
+
+		String responseBody;
+		try {
+			HttpEntity entity = response.getEntity();
+
+			responseBody = EntityUtils.toString(entity);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
+
+		return responseBody;
+	}
+
 	/**
 	 * 
 	 * @param subpath
@@ -125,7 +143,7 @@ public class BasicHttpClient {
 
 		HttpResponse response = client.execute(get);
 
-//		client.close();
+		// client.close();
 
 		return response;
 	}
@@ -172,14 +190,15 @@ public class BasicHttpClient {
 
 		HttpResponse response = httpClient.execute(post);
 
-//		try {
-//			StringWriter writer = new StringWriter();
-//			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
-//			String responseContent = writer.toString();
-//			log.debug(responseContent);
-//		} catch (UnsupportedOperationException | IOException e) {
-//			log.error(e);
-//		}
+		// try {
+		// StringWriter writer = new StringWriter();
+		// IOUtils.copy(new InputStreamReader(response.getEntity().getContent(),
+		// "utf-8"), writer);
+		// String responseContent = writer.toString();
+		// log.debug(responseContent);
+		// } catch (UnsupportedOperationException | IOException e) {
+		// log.error(e);
+		// }
 
 		return response;
 	}
@@ -229,14 +248,15 @@ public class BasicHttpClient {
 
 		HttpResponse response = httpClient.execute(post);
 
-//		try {
-//			StringWriter writer = new StringWriter();
-//			IOUtils.copy(new InputStreamReader(response.getEntity().getContent(), "utf-8"), writer);
-//			String responseContent = writer.toString();
-//			log.debug(responseContent);
-//		} catch (UnsupportedOperationException | IOException e) {
-//			log.error(e);
-//		}
+		// try {
+		// StringWriter writer = new StringWriter();
+		// IOUtils.copy(new InputStreamReader(response.getEntity().getContent(),
+		// "utf-8"), writer);
+		// String responseContent = writer.toString();
+		// log.debug(responseContent);
+		// } catch (UnsupportedOperationException | IOException e) {
+		// log.error(e);
+		// }
 
 		return response;
 	}
