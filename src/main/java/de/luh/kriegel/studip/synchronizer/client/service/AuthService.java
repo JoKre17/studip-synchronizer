@@ -11,6 +11,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.luh.kriegel.studip.synchronizer.client.BasicHttpClient;
+import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
 import de.luh.kriegel.studip.synchronizer.config.Endpoints;
 import de.luh.kriegel.studip.synchronizer.config.SubPaths;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
@@ -19,7 +20,7 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.User;
 public class AuthService {
 
 	private static final Logger log = LogManager.getLogger(AuthService.class);
-	
+
 	private final BasicHttpClient httpClient;
 
 	private boolean isAuthenticated;
@@ -61,11 +62,19 @@ public class AuthService {
 		isAuthenticated = false;
 		return false;
 	}
-	
+
 	public boolean isAuthenticated() {
 		return isAuthenticated;
 	}
-	
+
+	public boolean checkIfAuthenticated() throws NotAuthenticatedException {
+		if (!isAuthenticated) {
+			throw new NotAuthenticatedException();
+		} else {
+			return isAuthenticated;
+		}
+	}
+
 	public Id getCurrentUserId() {
 		return currentUserId;
 	}

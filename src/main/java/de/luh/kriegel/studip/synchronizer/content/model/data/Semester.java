@@ -2,6 +2,8 @@ package de.luh.kriegel.studip.synchronizer.content.model.data;
 
 import org.json.simple.JSONObject;
 
+import de.luh.kriegel.studip.synchronizer.content.util.RegexHelper;
+
 public class Semester {
 
 	private final Id id;
@@ -74,6 +76,10 @@ public class Semester {
 		return title;
 	}
 
+	public String getTitleAsValidFilename() {
+		return RegexHelper.getValidFilename(title);
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -93,7 +99,7 @@ public class Semester {
 	public long getSeminars_end() {
 		return seminars_end;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

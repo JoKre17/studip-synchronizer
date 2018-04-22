@@ -2,9 +2,11 @@ package de.luh.kriegel.studip.synchronizer.content.model.data;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import de.luh.kriegel.studip.synchronizer.content.util.RegexHelper;
 
 public class Folder {
 
@@ -127,36 +129,35 @@ public class Folder {
 
 		if (jsonObject.containsKey("subfolders")) {
 
-			((Map<Integer, JSONObject>) jsonObject.get("subfolders")).forEach((index, folderJson) -> {
-				Id subfolderId = new Id(folderJson.get("id").toString());
+			((JSONArray) jsonObject.get("subfolders")).forEach(folderJson -> {
+				Id subfolderId = new Id(((JSONObject) folderJson).get("id").toString());
 
 				subfolders.add(subfolderId);
 			});
 		}
-		
+
 		if (jsonObject.containsKey("file_refs")) {
-			
-			((Map<Integer, JSONObject>) jsonObject.get("file_refs")).forEach((index, fileRefJson) -> {
-				Id fileRefId = new Id(fileRefJson.get("id").toString());
-				
+
+			((JSONArray) jsonObject.get("file_refs")).forEach((fileRefJson) -> {
+				Id fileRefId = new Id(((JSONObject) fileRefJson).get("id").toString());
+
 				file_refs.add(fileRefId);
 			});
 		}
-		
 
 		return new Folder(is_visible, is_readable, is_writable, id, user_id, parent_id, range_id, range_type,
 				folder_type, name, data_content, description, mkdate, chdate, subfolders, file_refs);
 	}
 
-	public boolean isIs_visible() {
+	public boolean isVisible() {
 		return is_visible;
 	}
 
-	public boolean isIs_readable() {
+	public boolean isReadable() {
 		return is_readable;
 	}
 
-	public boolean isIs_writable() {
+	public boolean isWritable() {
 		return is_writable;
 	}
 
@@ -164,23 +165,23 @@ public class Folder {
 		return id;
 	}
 
-	public String getUser_id() {
+	public String getUserId() {
 		return user_id;
 	}
 
-	public String getParent_id() {
+	public String getParentId() {
 		return parent_id;
 	}
 
-	public Id getRange_id() {
+	public Id getRangeId() {
 		return range_id;
 	}
 
-	public String getRange_type() {
+	public String getRangeType() {
 		return range_type;
 	}
 
-	public String getFolder_type() {
+	public String getFolderType() {
 		return folder_type;
 	}
 
@@ -188,7 +189,11 @@ public class Folder {
 		return name;
 	}
 
-	public List<Id> getData_content() {
+	public String getNameValidAsFilename() {
+		return RegexHelper.getValidFilename(name);
+	}
+
+	public List<Id> getDataContent() {
 		return data_content;
 	}
 
@@ -207,7 +212,11 @@ public class Folder {
 	public List<Id> getSubfolders() {
 		return subfolders;
 	}
-	
+
+	public List<Id> getFileRefs() {
+		return file_refs;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {

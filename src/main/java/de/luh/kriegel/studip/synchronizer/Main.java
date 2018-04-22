@@ -1,6 +1,13 @@
 package de.luh.kriegel.studip.synchronizer;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +17,8 @@ import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.config.Config;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
+import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
+import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
 
 public class Main {
 
@@ -26,11 +35,57 @@ public class Main {
 
 		AuthService authService = studIPClient.getAuthService();
 		authService.authenticate();
-		
-		CourseService courseService = studIPClient.getCourseService();
 
-		List<Course> allCourses = courseService.getCourses();
-		System.out.println(allCourses.size());
+		CourseService courseService = studIPClient.getCourseService();
+		DownloadManager downloadManager = courseService.getDownloadManager();
+
+		Map<Course, Course> courseTutorialMap = courseService.getCourseTutorialMap();
+
+		List<CompletableFuture<Void>> downloadTasks = new ArrayList<>();
+		ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+		for (Entry<Course, Course> e : courseTutorialMap.entrySet()) {
+
+			Course lecture = e.getKey();
+			Course tutorial = e.getValue();
+
+			downloadTasks.add(CompletableFuture.runAsync(() -> {
+				FileRefTree fileRefTree;
+
+				try {
+					fileRefTree = courseService.getFileRefTree(lecture);
+					downloadManager.downloadFileRefTree(lecture, fileRefTree);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+				if (tutorial != null) {
+					try {
+						fileRefTree = courseService.getFileRefTree(lecture);
+						downloadManager.downloadFileRefTree(tutorial, fileRefTree);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			}, es));
+
+		}
+
+		downloadTasks.forEach(t -> {
+			try {
+				t.get();
+			} catch (InterruptedException | ExecutionException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		courseService.close();
+		es.shutdown();
+
+		// Course course = courseTutorialMap.entrySet().iterator().next().getKey();
+		// FileRefTree fileRefTree = courseService.getFileRefTree(course);
+		// downloadManager.downloadFileRefTree(course, fileRefTree);
+
 	}
 
 }

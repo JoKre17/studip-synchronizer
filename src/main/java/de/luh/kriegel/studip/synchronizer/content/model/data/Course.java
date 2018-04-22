@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.simple.JSONObject;
 
 import de.luh.kriegel.studip.synchronizer.content.util.RegexHelper;
@@ -25,6 +26,8 @@ public class Course {
 	private final List<CourseModule> modules;
 	private final int group;
 
+	private final boolean isTutorium;
+
 	public Course(Id id, int number, String title, String subtitle, int type, String description, String location,
 			List<User> lecturers, Map<CourseMemberType, Integer> memberCounts, Id start_semesterId, Id end_semesterId,
 			List<CourseModule> modules, int group) {
@@ -41,6 +44,8 @@ public class Course {
 		this.end_semesterId = end_semesterId;
 		this.modules = modules;
 		this.group = group;
+
+		this.isTutorium = title.startsWith("Übung");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -75,7 +80,7 @@ public class Course {
 		}
 
 		if (jsonObject.containsKey("title")) {
-			title = jsonObject.get("title").toString().trim();
+			title = StringEscapeUtils.unescapeHtml4(jsonObject.get("title").toString()).trim();
 		}
 
 		if (jsonObject.containsKey("subtitle")) {
@@ -155,6 +160,10 @@ public class Course {
 		return title;
 	}
 
+	public String getTitleAsValidFilename() {
+		return RegexHelper.getValidFilename(title);
+	}
+
 	public String getSubtitle() {
 		return subtitle;
 	}
@@ -179,11 +188,11 @@ public class Course {
 		return memberCounts;
 	}
 
-	public Id getStart_semesterId() {
+	public Id getStartSemesterId() {
 		return start_semesterId;
 	}
 
-	public Id getEnd_semesterId() {
+	public Id getEndSemesterId() {
 		return end_semesterId;
 	}
 
@@ -195,9 +204,13 @@ public class Course {
 		return group;
 	}
 
+	public boolean isTutorium() {
+		return isTutorium;
+	}
+
 	@Override
 	public String toString() {
-		return id.toString() + " - " + title;
+		return id.toString() + " - " + getTitleAsValidFilename();
 	}
 
 	@Override

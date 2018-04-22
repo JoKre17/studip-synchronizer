@@ -138,7 +138,7 @@ public class BasicHttpClient {
 		CloseableHttpClient client = getHttpClient();
 
 		URI requestUri = new URI(baseUri.toString() + subpath.toString());
-		log.debug("Requested URI: " + requestUri);
+		log.debug("GET " + requestUri);
 		HttpGet get = new HttpGet(requestUri);
 
 		HttpResponse response = client.execute(get);
@@ -178,7 +178,7 @@ public class BasicHttpClient {
 		HttpClient httpClient = getHttpClient();
 
 		URI requestUri = new URI(baseUri.toString() + subpath.toString());
-		log.debug("Requested URI: " + requestUri);
+		log.debug("POST " + requestUri);
 		HttpPost post = new HttpPost(requestUri);
 
 		if (params != null && params.size() != 0) {
