@@ -157,9 +157,9 @@ public class BasicHttpClient {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public HttpResponse post(String subpath, JSONObject params)
+	public HttpResponse postJson(String subpath, JSONObject params)
 			throws ClientProtocolException, URISyntaxException, IOException {
-		return post(new URI(subpath), params);
+		return postJson(new URI(subpath), params);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class BasicHttpClient {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public HttpResponse post(URI subpath, JSONObject params)
+	public HttpResponse postJson(URI subpath, JSONObject params)
 			throws URISyntaxException, ClientProtocolException, IOException {
 		assert subpath != null;
 
@@ -212,9 +212,9 @@ public class BasicHttpClient {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public HttpResponse post(String subpath, Map<String, String> urlEncodedMap)
+	public HttpResponse postURLEncoded(String subpath, Map<String, String> urlEncodedMap)
 			throws ClientProtocolException, URISyntaxException, IOException {
-		return post(new URI(subpath), urlEncodedMap);
+		return postURLEncoded(new URI(subpath), urlEncodedMap);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class BasicHttpClient {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public HttpResponse post(URI subpath, Map<String, String> urlEncodedMap)
+	public HttpResponse postURLEncoded(URI subpath, Map<String, String> urlEncodedMap)
 			throws URISyntaxException, ClientProtocolException, IOException {
 		assert subpath != null;
 

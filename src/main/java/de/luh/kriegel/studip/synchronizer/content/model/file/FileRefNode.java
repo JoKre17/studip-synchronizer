@@ -56,7 +56,7 @@ public class FileRefNode {
 				sum += node.getSize();
 			}
 		}
-
+		
 		return sum;
 	}
 

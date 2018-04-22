@@ -1,5 +1,7 @@
 package de.luh.kriegel.studip.synchronizer;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
@@ -19,6 +22,8 @@ import de.luh.kriegel.studip.synchronizer.config.Config;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
 import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
+import de.luh.kriegel.studip.synchronizer.view.SynchronizerApp;
+import javafx.application.Application;
 
 public class Main {
 
@@ -30,6 +35,24 @@ public class Main {
 
 		config = new Config(args);
 		log.info(config);
+		
+		log.info(new File(".").getAbsolutePath());
+		
+		Thread applicationThread = new Thread() {
+            @Override
+            public void run() {
+                Application.launch(SynchronizerApp.class);
+            }
+        };
+        applicationThread.start();
+		
+		if(config.baseUri == null) {
+			config.baseUri = new URI("https://studip.uni-hannover.de");
+		}
+		
+		if(config.credentials == null) {
+			config.credentials = new Credentials("JK_14", "Aiedail95");
+		}
 
 		StudIPClient studIPClient = new StudIPClient(config.baseUri, config.credentials);
 

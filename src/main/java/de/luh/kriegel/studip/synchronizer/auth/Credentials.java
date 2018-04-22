@@ -33,6 +33,7 @@ public class Credentials {
 		this.password = password;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public JSONObject toJson() {
 		JSONObject jsonObject = new JSONObject();
 		

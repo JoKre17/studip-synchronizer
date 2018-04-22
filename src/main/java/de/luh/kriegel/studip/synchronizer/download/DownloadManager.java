@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -30,7 +31,7 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.Semester;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefNode;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
 
-public class DownloadManager {
+public class DownloadManager extends Observable{
 
 	private static final Logger log = LogManager.getLogger(DownloadManager.class);
 
@@ -113,24 +114,6 @@ public class DownloadManager {
 		return createDirIfNotExists(courseDir);
 	}
 
-	private void writeBytesToFile(byte[] bytes, File file) {
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = new FileOutputStream(file);
-			outputStream.write(bytes);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (outputStream != null) {
-					outputStream.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	public void downloadFileRefTree(Course course, FileRefTree fileRefTree) {
 
 		if (!createCourseDirectoryIfNotExists(course)) {
@@ -143,18 +126,22 @@ public class DownloadManager {
 
 		downloadFileRefTreeRecursive(parentDir, fileRefTree.getRoot(), downloadTasks);
 
-		int size = fileRefTree.getSize();
+		int size = downloadTasks.size();
 
 		int count = 0;
 		for (CompletableFuture<Void> task : downloadTasks) {
 			try {
-				log.info(count++ + "/" + size + " : " + course.getTitle());
+				log.info(count + "/" + size + " : " + course.getTitle());
 				task.get();
+				count++;
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
 
 		}
+		
+		setChanged();
+		notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
 		log.info("DONE : " + course.getTitle());
 	}
 
