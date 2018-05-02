@@ -1,0 +1,62 @@
+@import "/css/colors.css";
+
+* {
+	/* Some general colors 
+	lightColor: #f9f9f9;	
+	darkColor: derive(lightColor, -65%);
+	
+	separatorColor: linear-gradient(darkColor 0%, darkColor 30%, lightColor 40%, lightColor 70%, darkColor 80%, darkColor 100%);
+	textColor: white;
+	textAccentColor: white;
+	accentColor: #5493EE;*/
+}
+
+/* Toggle the default margin of the tabs */
+.tab-pane:top *.tab-header-area {
+    -fx-padding: -3px 0em 0em 0em; 
+}
+
+/* Gives the background for the area behind tabs */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: darkSecondaryColor; 
+}
+
+/* Setting width/height for tab titles and background for the area */
+.tab-pane {
+    -fx-tab-min-width:110px;
+    -fx-tab-min-height: 30px;
+    -fx-background-color: lightColor;      
+}
+
+/* Setting the default background and border color for titles  */
+.tab {
+    -fx-background-color: transparent;
+    
+    /* "separator" effect using one of the border of the tabs */
+    -fx-border-color: separatorColor;
+    -fx-border-width: 0 1 0 0;
+    
+    /* Ths two guys disable an unwanted effect of "selected tab" */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+
+/* Setting the default backgorund color for titles when selected */
+.tab:selected {
+    -fx-background-color: accentColor;
+    -fx-border-color: accentColor;
+    -fx-border-width: 1;
+}
+
+.tab:selected .tab-label {
+	-fx-text-fill: textTabAccentColor;
+}
+
+/* Text of the titles*/
+.tab .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: textTabColor;
+    -fx-font-size: 14px;
+    -fx-font-weight: 100;
+}

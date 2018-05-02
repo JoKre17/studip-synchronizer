@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
@@ -22,7 +23,6 @@ import de.luh.kriegel.studip.synchronizer.config.Config;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
 import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
-import de.luh.kriegel.studip.synchronizer.view.SynchronizerApp;
 import javafx.application.Application;
 
 public class Main {

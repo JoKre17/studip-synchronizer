@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+
+<!-- Container that will do the "shadow" effect -->
+
+<fx:root id="root" fx:id="root" onMouseDragged="#windowDragging" onMousePressed="#updateXY" onMouseReleased="#updateStatus" stylesheets="@../css/MinimalWindowStyle.css" type="BorderPane" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+	<center>
+		<!-- Main content -->
+		<BorderPane id="mainWindow" fx:id="mainWindow">
+			<!-- Padding will show the shadow effect under the window -->
+			<padding>
+				<Insets bottom="5" left="5" right="5" top="5" />
+			</padding>
+			
+			<!-- Top bar of the window -->
+			<top>
+				<HBox id="titleBar" alignment="CENTER" prefHeight="30" spacing="5">
+					<padding>
+						<Insets bottom="5" left="5" right="5" top="5" />
+					</padding> 
+					
+					<ImageView fx:id="logo" fitHeight="20" fitWidth="20" /> 
+					<Label id="title" fx:id="lblTitle" text="MinimalWindow" />
+					<Region prefHeight="30.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+					
+					<HBox alignment="CENTER_RIGHT" spacing="5">
+						<Button id="btnMin" maxHeight="20" maxWidth="20" minHeight="20" minWidth="20" onMouseClicked="#minimizeApp" />
+						<Button id="btnMax" fx:id="btnMax" maxHeight="20" maxWidth="20" minHeight="20" minWidth="20" onMouseClicked="#maximizeApp" />
+						<Button id="btnCls" maxHeight="20" maxWidth="20" minHeight="20" minWidth="20" onMouseClicked="#closeApp" />
+					</HBox>
+				</HBox>
+			</top>
+			
+			<!-- Window content -->
+			<center>
+				<BorderPane id="contentArea" fx:id="contentArea" />
+			</center>
+			
+						<!-- Footer of the window -->
+			<bottom>
+					<Button id="btnResize" fx:id="btnResize" maxHeight="10" maxWidth="10" minHeight="10" minWidth="10" onMouseClicked="#updateXY" onMouseDragged="#resizeWindow" onMouseEntered="#setMouseCursor" onMouseExited="#resetMouseCursor" />
+			</bottom>
+			
+		</BorderPane>
+	</center>
+</fx:root>
