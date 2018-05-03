@@ -1,71 +1,50 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class MinimalWindowCtrl extends BorderPane {
+public class SimpleWindowController {
 
-	// Values injected from the FXML
-	@FXML
-	private BorderPane root, mainWindow, contentArea;
+	private final static Logger log = LogManager.getLogger(SimpleWindowController.class);
 
 	@FXML
-	private Label lblTitle;
+	private StackPane root;
 
 	@FXML
-	private Button btnMax, btnResize;
+	private BorderPane windowPane;
 
-	// Reference to the primaryStage
-	final private Stage stage;
+	@FXML
+	private StackPane contentPane;
 
-	// References to min/max width/height and the shadow effect
-	final private int MINWIDTH, MINHEIGHT, SHADOWSPACE = 5;
+	@FXML
+	private ImageView iconWindow;
+
+	@FXML
+	private Label labelWindow;
+
+	@FXML
+	private Button buttonMax, buttonResize;
+
+	private Stage stage;
 
 	// Things for the resizing/moving window
 	private double actualX, actualY;
 	private boolean isMovable = true;
 
-	public MinimalWindowCtrl(Stage stage, int minwidth, int minheight) {
-		// First, take the reference to the stage
+	public void setStage(Stage stage) {
 		this.stage = stage;
-
-		// Taking the references to the window
-		MINWIDTH = minwidth;
-		MINHEIGHT = minheight;
-
-		// Then load the window, setting the root and controller
-		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/MinimalWindow.fxml"));
-		loader.setRoot(this);
-		loader.setController(this);
-
-		// Try to load
-		try {
-			loader.load();
-		} catch (Exception e) {
-			e.printStackTrace();
-			// TODO Show a message error
-		}
 	}
-
-	public void setTitle(String s) {
-		lblTitle.setText(s);
-	}
-
-	public void setContent(Node node) {
-		contentArea.setCenter(node);
-	}
-
-	//
-	// MIMIZIE | MAXIMIZE | CLOSE
-	//
 
 	// When pressed, will minimize the window to tray
 	@FXML
@@ -93,10 +72,6 @@ public class MinimalWindowCtrl extends BorderPane {
 		stage.close();
 		System.exit(0);
 	}
-
-	//
-	// WINDOW MOVING
-	//
 
 	// When i must update the XY of the click
 	@FXML
@@ -130,10 +105,6 @@ public class MinimalWindowCtrl extends BorderPane {
 		}
 	}
 
-	//
-	// WINDOW RESIZING
-	//
-
 	/*
 	 * onMouseEntered="#setMouseCursor" onMouseExited="#resetMouseCursor"
 	 * onMouseDragged="#resizeWindow"
@@ -141,52 +112,55 @@ public class MinimalWindowCtrl extends BorderPane {
 
 	@FXML
 	private void setMouseCursor(MouseEvent e) {
-		mainWindow.setCursor(Cursor.CROSSHAIR);
+		windowPane.setCursor(Cursor.CROSSHAIR);
 	}
 
 	@FXML
 	private void resetMouseCursor(MouseEvent e) {
-		mainWindow.setCursor(Cursor.DEFAULT);
+		windowPane.setCursor(Cursor.DEFAULT);
 	}
 
 	@FXML
 	private void resizeWindow(MouseEvent e) {
-		actualX = e.getScreenX() - stage.getX() + 13;
-		actualY = e.getScreenY() - stage.getY() + 10;
+		actualX = e.getScreenX() - stage.getX();
+		actualY = e.getScreenY() - stage.getY();
 
-		if (actualX % 5 == 0 || actualY % 5 == 0) {
-			if (actualX > MINWIDTH) {
-				stage.setWidth(actualX);
-			} else {
-				stage.setWidth(MINWIDTH);
-			}
+		if (actualX > stage.getMinWidth()) {
+			stage.setWidth(actualX);
+		} else {
+			stage.setWidth(stage.getMinWidth());
+		}
 
-			if (actualY > MINHEIGHT) {
-				stage.setHeight(actualY);
-			} else {
-				stage.setHeight(MINHEIGHT);
-			}
+		if (actualY > stage.getMinHeight()) {
+			stage.setHeight(actualY);
+		} else {
+			stage.setHeight(stage.getMinHeight());
 		}
 	}
-
-	//
-	// Internal methods
-	//
 
 	// Will set the window to MAXIMIZE size
 	private void setMax() {
 		stage.setMaximized(true);
-		btnResize.setVisible(false);
-		btnMax.setStyle("-fx-background-image: url('/images/window/dSquare.png');");
-		mainWindow.setPadding(new Insets(0, 0, 0, 0));
+		buttonResize.setVisible(false);
+		// buttonMax.setStyle("-fx-background-image:
+		// url('/images/window/dSquare.png');");
+		// windowPane.setPadding(new Insets(0, 0, 0, 0));
 	}
 
 	// Will set the window to NORMAL size
 	private void setMin() {
 		stage.setMaximized(false);
-		btnResize.setVisible(true);
-		btnMax.setStyle("-fx-background-image: url('/images/window/square.png');");
-		mainWindow.setPadding(new Insets(SHADOWSPACE, SHADOWSPACE, SHADOWSPACE, SHADOWSPACE));
+		buttonResize.setVisible(true);
+		// buttonMax.setStyle("-fx-background-image:
+		// url('/images/window/square.png');");
+		// windowPane.setPadding(new Insets(SHADOWSPACE, SHADOWSPACE, SHADOWSPACE,
+		// SHADOWSPACE));
 
 	}
+
+	public void setContent(Node node) {
+		contentPane.getChildren().clear();
+		contentPane.getChildren().add(node);
+	}
+
 }

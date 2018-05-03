@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane id="root" fx:id="root" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController">
+   <children>
+      <BorderPane id="windowPane" fx:id="windowPane" onMouseDragged="#windowDragging" onMousePressed="#updateXY" onMouseReleased="#updateStatus">
+         <top>
+            <HBox id="titleBar" spacing="5.0" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <children>
+                  <VBox alignment="CENTER">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <children>
+                        <ImageView fx:id="iconWindow" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <Label fx:id="labelWindow" alignment="CENTER" text="Application Name" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <Region HBox.hgrow="ALWAYS" />
+                  <VBox alignment="CENTER">
+                     <children>
+                        <HBox spacing="5.0">
+                           <children>
+                            <Button id="buttonMin" fx:id="buttonMin" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#minimizeApp" />
+                              <Button id="buttonMax" fx:id="buttonMax" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#maximizeApp" />
+                              <Button id="buttonClose" fx:id="buttonClose" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#closeApp" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin>
+                  </VBox>
+               </children>
+            </HBox>
+         </top>
+         <center>
+            <StackPane id="contentPane" fx:id="contentPane" BorderPane.alignment="CENTER" />
+         </center>
+         <bottom>
+            <HBox id="footer" alignment="BOTTOM_RIGHT" maxHeight="20.0" minHeight="20.0" BorderPane.alignment="BOTTOM_RIGHT">
+               <children>
+                  <Button id="buttonResize" fx:id="buttonResize" contentDisplay="CENTER" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onMouseClicked="#updateXY" onMouseDragged="#resizeWindow" onMouseEntered="#setMouseCursor" onMouseExited="#resetMouseCursor" text="Button">
+                     <HBox.margin>
+                        <Insets top="10.0" />
+                     </HBox.margin>
+                  </Button>
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
+   <stylesheets>
+      <URL value="@../css/Colors.css" />
+      <URL value="@../css/SimpleWindow.css" />
+   </stylesheets>
+</StackPane>

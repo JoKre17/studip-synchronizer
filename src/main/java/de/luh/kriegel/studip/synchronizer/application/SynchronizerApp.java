@@ -2,19 +2,22 @@ package de.luh.kriegel.studip.synchronizer.application;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
+import de.luh.kriegel.studip.synchronizer.application.view.MainPane;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class SynchronizerApp extends Application {
 
-	private static final String STUDIP_COLOR_BLUE_RGB = "rgb(40,73,124)";
+	private static final Logger log = LogManager.getLogger(SynchronizerApp.class);
 
-	final private int MINWIDTH = 650, MINHEGIHT = 500;
+	final private int MIN_WIDTH = 600;
+	final private int MIN_HEIGHT = 400;
+
+	public static SimpleWindowStage stage;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -23,44 +26,13 @@ public class SynchronizerApp extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 
-		// FXMLLoader loader = new
-		// FXMLLoader(getClass().getClassLoader().getResource("fxml/MainWindow.fxml"));
-		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/synchronizer.fxml"));
+		stage = new SimpleWindowStage(MIN_WIDTH, MIN_HEIGHT);
+		SimpleWindowController controller = stage.getController();
 
-		AnchorPane root = loader.load();
-		root.setBackground(Background.EMPTY);
+		MainPane mainPane = new MainPane();
+		controller.setContent(mainPane);
 
-		// BorderPane b = new BorderPane();
-		Scene scene = new Scene(root);
-
-		// MainPane mainPane = new MainPane();
-
-		// Setting the model for the controller
-		// ((MainWindowCtrl) loader.getController()).setModel(m);
-
-		// Creating the style for the custom window
-		// MinimalWindowCtrl minimalWindowCtrl = new MinimalWindowCtrl(primaryStage,
-		// MINWIDTH, MINHEGIHT);
-		// minimalWindowCtrl.setContent(mainPane);
-		// minimalWindowCtrl.setTitle("Smart Station");
-
-		// Making new scene
-		// Scene scene = new Scene(minimalWindowCtrl, MINWIDTH, MINHEGIHT);
-		// scene.setFill(null);
-
-		// Setting the style to the window (undecorating it)
-		primaryStage.initStyle(StageStyle.UNDECORATED);
-
-		// Setting the scene on the window
-		primaryStage.setScene(scene);
-
-		// Showing the window
-		primaryStage.show();
-
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		stage.show();
 	}
 
 }

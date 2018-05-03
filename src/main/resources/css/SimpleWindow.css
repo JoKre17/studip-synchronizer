@@ -1,0 +1,66 @@
+@import "/css/colors.css";
+
+#root {
+	-fx-background-color: transparent;
+}
+
+#windowPane {
+
+	-fx-border-insets: 0;
+	//-fx-background-insets: 0;
+
+	/* round borders */
+	-fx-background-radius: 6;
+	-fx-border-radius: 6;
+
+	/* border shape / color */
+	-fx-border-color: baseGrey;
+	-fx-border-style: solid;
+	-fx-border-width: 1;
+	-fx-effect: dropshadow(three-pass-box, baseGrey, 5, 0.6, 0, 0);
+
+}
+
+#titleBar {
+	-fx-background-color: baseColorLighter1;
+	
+	-fx-background-radius: 6 6 0 0;
+}
+
+#footer {
+	-fx-background-color: baseColorLighter2;
+	
+	-fx-background-radius: 0 0 6 6;
+}
+
+#contentPane {
+	-fx-background-color: baseGreyLighter10;
+}
+
+#buttonMax:hover, #buttonMin:hover {
+	-fx-background-color: baseGreyLighter2;	
+}
+
+#buttonClose:hover {
+	-fx-background-color: red;	
+}
+
+#buttonClose {
+	-fx-background-image: url("/images/window/x.png");
+	-fx-background-color: baseGreyLighter5;
+}
+
+#buttonMax {
+	-fx-background-image: url('/images/window/square.png');
+	-fx-background-color: baseGreyLighter5;
+}
+
+#buttonMin {
+	-fx-background-image: url('/images/window/line.png');
+	-fx-background-color: baseGreyLighter5;
+}
+
+#buttonResize {
+	-fx-background-image: url('/images/window/resize.png');
+	-fx-background-color: transparent;
+}
