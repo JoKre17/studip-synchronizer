@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -19,6 +20,13 @@ public class SimpleWindowStage extends Stage {
 	private static final Logger log = LogManager.getLogger(SimpleWindowStage.class);
 
 	private SimpleWindowController controller;
+
+	public SimpleWindowStage(String windowTitle, int MIN_WIDTH, int MIN_HEIGHT) {
+		super();
+
+		this.setTitle(windowTitle);
+		init(MIN_WIDTH, MIN_HEIGHT);
+	}
 
 	public SimpleWindowStage(int MIN_WIDTH, int MIN_HEIGHT) {
 		super();
@@ -34,7 +42,7 @@ public class SimpleWindowStage extends Stage {
 	}
 
 	private void init(double MIN_WIDTH, double MIN_HEIGHT) {
-		this.initStyle(StageStyle.UNDECORATED);
+		this.initStyle(StageStyle.TRANSPARENT);
 		this.setMinHeight(MIN_HEIGHT);
 		this.setMinWidth(MIN_WIDTH);
 
@@ -43,6 +51,7 @@ public class SimpleWindowStage extends Stage {
 		try {
 			Parent root = loader.load();
 			Scene scene = new Scene(root);
+			scene.setFill(Color.TRANSPARENT);
 
 			this.setScene(scene);
 		} catch (IOException e) {
@@ -67,6 +76,21 @@ public class SimpleWindowStage extends Stage {
 				}
 			}
 		});
+
+		// this.widthProperty().addListener(new ChangeListener<Number>() {
+		// @Override
+		// public void changed(ObservableValue<? extends Number> observable, Number
+		// oldValue, Number newValue) {
+		// log.info("Width: " + newValue);
+		// }
+		// });
+		// this.heightProperty().addListener(new ChangeListener<Number>() {
+		// @Override
+		// public void changed(ObservableValue<? extends Number> observable, Number
+		// oldValue, Number newValue) {
+		// log.info("Height: " + newValue);
+		// }
+		// });
 	}
 
 	public SimpleWindowController getController() {

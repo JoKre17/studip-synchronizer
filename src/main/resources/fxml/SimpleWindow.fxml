@@ -4,18 +4,24 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane id="root" fx:id="root" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController">
+<AnchorPane id="root" fx:id="root" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController">
    <children>
-      <BorderPane id="windowPane" fx:id="windowPane" onMouseDragged="#windowDragging" onMousePressed="#updateXY" onMouseReleased="#updateStatus">
+      <BorderPane id="windowPane" fx:id="windowPane" onMouseDragged="#windowDragging" onMousePressed="#updateXY" onMouseReleased="#updateStatus" styleClass="roundBorderWithShadow" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
          <top>
-            <HBox id="titleBar" spacing="5.0" BorderPane.alignment="CENTER">
+            <HBox id="titleBar" fx:id="titleBar" maxHeight="35.0" minHeight="35.0" spacing="5.0" styleClass="topBordered" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
@@ -25,12 +31,15 @@
                         <Insets />
                      </HBox.margin>
                      <children>
-                        <ImageView fx:id="iconWindow" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="windowIconView" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/studip-synchronizer.png" />
+                           </image></ImageView>
                      </children>
                   </VBox>
                   <VBox alignment="CENTER">
                      <children>
-                        <Label fx:id="labelWindow" alignment="CENTER" text="Application Name" textFill="WHITE" />
+                        <Label fx:id="windowTitleLabel" alignment="CENTER" text="Application Name" textFill="WHITE" />
                      </children>
                   </VBox>
                   <Region HBox.hgrow="ALWAYS" />
@@ -38,26 +47,61 @@
                      <children>
                         <HBox spacing="5.0">
                            <children>
-                            <Button id="buttonMin" fx:id="buttonMin" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#minimizeApp" />
-                              <Button id="buttonMax" fx:id="buttonMax" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#maximizeApp" />
-                              <Button id="buttonClose" fx:id="buttonClose" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#closeApp" />
+                            <Button id="minButton" fx:id="minButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#minimizeApp" />
+                              <Button id="maxButton" fx:id="maxButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#maximizeApp" />
+                              <Button id="closeButton" fx:id="closeButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onMouseClicked="#closeApp" />
                            </children>
                         </HBox>
                      </children>
                      <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
+                        <Insets />
                      </HBox.margin>
                   </VBox>
                </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
             </HBox>
          </top>
          <center>
-            <StackPane id="contentPane" fx:id="contentPane" BorderPane.alignment="CENTER" />
+            <StackPane id="contentPane" fx:id="contentPane" alignment="TOP_LEFT" BorderPane.alignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </StackPane>
          </center>
          <bottom>
-            <HBox id="footer" alignment="BOTTOM_RIGHT" maxHeight="20.0" minHeight="20.0" BorderPane.alignment="BOTTOM_RIGHT">
+            <HBox id="footerBar" fx:id="footerBar" alignment="BOTTOM_RIGHT" maxHeight="-Infinity" minHeight="25.0" prefHeight="25.0" spacing="5.0" styleClass="bottomBordered" BorderPane.alignment="BOTTOM_RIGHT">
                <children>
-                  <Button id="buttonResize" fx:id="buttonResize" contentDisplay="CENTER" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onMouseClicked="#updateXY" onMouseDragged="#resizeWindow" onMouseEntered="#setMouseCursor" onMouseExited="#resetMouseCursor" text="Button">
+                  <HBox fx:id="statusBar" spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <GridPane hgap="15.0" HBox.hgrow="SOMETIMES">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="ALWAYS" maxWidth="200.0" minWidth="10.0" percentWidth="20.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="70.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <VBox alignment="CENTER">
+                                 <children>
+                                    <ProgressBar fx:id="progressBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="50.0" progress="0.5" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+                                 <children>
+                                    <Label fx:id="statusLabel" text="Status" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </GridPane>
+                     </children>
+                     <padding>
+                        <Insets bottom="1.0" top="1.0" />
+                     </padding>
+                  </HBox>
+                  <Button id="resizeButton" fx:id="resizeButton" contentDisplay="CENTER" maxHeight="10.0" maxWidth="10.0" minHeight="10.0" minWidth="10.0" mnemonicParsing="false" onMouseClicked="#updateXY" onMouseDragged="#resizeWindow" onMouseEntered="#setMouseCursor" onMouseExited="#resetMouseCursor" text="">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
@@ -65,13 +109,13 @@
                </children>
             </HBox>
          </bottom>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
       </BorderPane>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
    <stylesheets>
-      <URL value="@../css/Colors.css" />
       <URL value="@../css/SimpleWindow.css" />
+      <URL value="@../css/Colors.css" />
    </stylesheets>
-</StackPane>
+</AnchorPane>

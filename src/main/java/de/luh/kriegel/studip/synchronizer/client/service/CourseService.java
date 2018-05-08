@@ -49,7 +49,7 @@ public class CourseService {
 		this.httpClient = httpClient;
 		this.authService = authService;
 
-		downloadManager = new DownloadManager(this, httpClient, new File("./test").toPath());
+		downloadManager = new DownloadManager(this, httpClient, new File("test").toPath());
 	}
 
 	public void close() {

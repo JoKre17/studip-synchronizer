@@ -3,6 +3,7 @@ package de.luh.kriegel.studip.synchronizer.client;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -132,7 +133,8 @@ public class BasicHttpClient {
 	 * @throws ClientProtocolException
 	 * @throws IOException
 	 */
-	public HttpResponse get(URI subpath) throws URISyntaxException, ClientProtocolException, IOException {
+	public HttpResponse get(URI subpath)
+			throws URISyntaxException, ClientProtocolException, UnknownHostException, IOException {
 		assert subpath != null;
 
 		CloseableHttpClient client = getHttpClient();

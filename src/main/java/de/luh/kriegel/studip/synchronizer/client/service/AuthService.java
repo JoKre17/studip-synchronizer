@@ -25,6 +25,7 @@ public class AuthService {
 
 	private boolean isAuthenticated;
 	private Id currentUserId;
+	private String authErrorResponse = "";
 
 	public AuthService(BasicHttpClient httpClient) {
 		this.httpClient = httpClient;
@@ -40,6 +41,7 @@ public class AuthService {
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 			isAuthenticated = false;
+			authErrorResponse = e.getClass().getName() + ": " + e.getMessage();
 			return false;
 		}
 
@@ -57,10 +59,16 @@ public class AuthService {
 			}
 
 			return true;
+		} else {
+			authErrorResponse = BasicHttpClient.getResponseBody(response);
 		}
 
 		isAuthenticated = false;
 		return false;
+	}
+
+	public String getAuthErrorResponse() {
+		return authErrorResponse;
 	}
 
 	public boolean isAuthenticated() {

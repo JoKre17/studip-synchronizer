@@ -6,8 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
-import de.luh.kriegel.studip.synchronizer.application.view.MainPane;
+import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class SynchronizerApp extends Application {
@@ -26,11 +27,13 @@ public class SynchronizerApp extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 
-		stage = new SimpleWindowStage(MIN_WIDTH, MIN_HEIGHT);
+		stage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
+		stage.getIcons()
+				.add(new Image(getClass().getClassLoader().getResourceAsStream("images/studip-synchronizer.jpg")));
 		SimpleWindowController controller = stage.getController();
 
-		MainPane mainPane = new MainPane();
-		controller.setContent(mainPane);
+		LoginView loginView = new LoginView();
+		controller.setContent(loginView);
 
 		stage.show();
 	}

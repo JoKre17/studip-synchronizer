@@ -1,25 +1,40 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
-public class SimpleWindowController {
+public class SimpleWindowController implements Initializable {
 
 	private final static Logger log = LogManager.getLogger(SimpleWindowController.class);
 
 	@FXML
-	private StackPane root;
+	private AnchorPane root;
+
+	@FXML
+	private HBox titleBar;
+
+	@FXML
+	private HBox footerBar;
 
 	@FXML
 	private BorderPane windowPane;
@@ -28,13 +43,22 @@ public class SimpleWindowController {
 	private StackPane contentPane;
 
 	@FXML
-	private ImageView iconWindow;
+	private ImageView windowIconView;
 
 	@FXML
-	private Label labelWindow;
+	private Label windowTitleLabel;
 
 	@FXML
-	private Button buttonMax, buttonResize;
+	private Button minButton, maxbutton, closeButton, resizeButton;
+
+	@FXML
+	private HBox statusBar;
+
+	@FXML
+	private ProgressBar progressBar;
+
+	@FXML
+	private Label statusLabel;
 
 	private Stage stage;
 
@@ -141,26 +165,138 @@ public class SimpleWindowController {
 	// Will set the window to MAXIMIZE size
 	private void setMax() {
 		stage.setMaximized(true);
-		buttonResize.setVisible(false);
-		// buttonMax.setStyle("-fx-background-image:
-		// url('/images/window/dSquare.png');");
-		// windowPane.setPadding(new Insets(0, 0, 0, 0));
+		resizeButton.setVisible(false);
+
+		if (windowPane.getStyleClass().contains("roundBorderWithShadow")) {
+			windowPane.getStyleClass().remove("roundBorderWithShadow");
+			titleBar.getStyleClass().remove("topBordered");
+			footerBar.getStyleClass().remove("bottomBordered");
+
+			AnchorPane.setTopAnchor(windowPane, 0.0);
+			AnchorPane.setRightAnchor(windowPane, 0.0);
+			AnchorPane.setBottomAnchor(windowPane, 0.0);
+			AnchorPane.setLeftAnchor(windowPane, 0.0);
+			log.info(windowPane.getStyle());
+		}
+
 	}
 
 	// Will set the window to NORMAL size
 	private void setMin() {
 		stage.setMaximized(false);
-		buttonResize.setVisible(true);
-		// buttonMax.setStyle("-fx-background-image:
-		// url('/images/window/square.png');");
-		// windowPane.setPadding(new Insets(SHADOWSPACE, SHADOWSPACE, SHADOWSPACE,
-		// SHADOWSPACE));
+		resizeButton.setVisible(true);
+
+		if (!windowPane.getStyleClass().contains("roundBorderWithShadow")) {
+			windowPane.getStyleClass().add("roundBorderWithShadow");
+			titleBar.getStyleClass().add("topBordered");
+			footerBar.getStyleClass().add("bottomBordered");
+
+			AnchorPane.setTopAnchor(windowPane, 5.0);
+			AnchorPane.setRightAnchor(windowPane, 5.0);
+			AnchorPane.setBottomAnchor(windowPane, 5.0);
+			AnchorPane.setLeftAnchor(windowPane, 5.0);
+			log.info(windowPane.getStyle());
+		}
 
 	}
 
-	public void setContent(Node node) {
-		contentPane.getChildren().clear();
-		contentPane.getChildren().add(node);
+	public void setContent(Region region) {
+
+		Platform.runLater(() -> {
+
+			double requestedMinWidth = region.minWidth(0);
+			double requestedMinHeight = region.minHeight(0);
+
+			double allowedMinWidth = stage.getMinWidth();
+			double allowedMinHeight = stage.getMinHeight() - (titleBar.getHeight() + footerBar.getHeight());
+
+			if (requestedMinWidth > allowedMinWidth) {
+				stage.setMinWidth(stage.getMinWidth() + requestedMinWidth - allowedMinWidth);
+			}
+
+			if (requestedMinHeight > allowedMinHeight) {
+				stage.setMinHeight(stage.getMinHeight() + requestedMinHeight - allowedMinHeight);
+			}
+			contentPane.setMinWidth(region.minWidth(0));
+			contentPane.setMinHeight(region.minHeight(0));
+
+			contentPane.getChildren().clear();
+			contentPane.getChildren().add(region);
+
+			region.prefWidthProperty().bind(contentPane.widthProperty());
+			region.prefHeightProperty().bind(contentPane.heightProperty());
+
+		});
+
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		Platform.runLater(() -> {
+
+			// For Mouse Clipping at round borders
+			Rectangle globalClipRect = (Rectangle) root.getClip();
+
+			if (globalClipRect == null) {
+				globalClipRect = new Rectangle();
+				windowPane.setClip(globalClipRect);
+			}
+
+			globalClipRect.widthProperty().bind(windowPane.widthProperty());
+			globalClipRect.heightProperty().bind(windowPane.heightProperty());
+			globalClipRect.setArcHeight(6.0);
+			globalClipRect.setArcWidth(6.0);
+
+			// Window Title set by stage
+			windowTitleLabel.textProperty().bindBidirectional(stage.titleProperty());
+
+			progressBar.setVisible(false);
+			statusLabel.setVisible(false);
+		});
+	}
+
+	public void setStatus(String status) {
+		if (status == null || status.isEmpty()) {
+			return;
+		}
+
+		Platform.runLater(() -> {
+			progressBar.setVisible(false);
+			if (statusBar.getChildren().contains(progressBar)) {
+				statusBar.getChildren().remove(progressBar);
+			}
+
+			statusLabel.setVisible(true);
+			statusLabel.setText(status);
+		});
+	}
+
+	public void setStatus(String status, double progress) {
+		if (status == null || status.isEmpty()) {
+			return;
+		}
+
+		Platform.runLater(() -> {
+			progressBar.setVisible(true);
+			progressBar.setProgress(progress);
+			if (!statusBar.getChildren().contains(progressBar)) {
+				statusBar.getChildren().add(0, progressBar);
+			}
+
+			statusLabel.setVisible(true);
+			statusLabel.setText(status);
+		});
+	}
+
+	public void clearStatus() {
+		Platform.runLater(() -> {
+			progressBar.setVisible(false);
+			statusLabel.setVisible(false);
+
+			progressBar.setProgress(0.0);
+			statusLabel.setText("");
+		});
 	}
 
 }

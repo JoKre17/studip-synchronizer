@@ -6,61 +6,94 @@
 
 #windowPane {
 
-	-fx-border-insets: 0;
-	//-fx-background-insets: 0;
+	/*
+	 * -fx-border-insets: 0;
+	 * -fx-background-insets: 0;
+	*/
 
 	/* round borders */
-	-fx-background-radius: 6;
-	-fx-border-radius: 6;
+
 
 	/* border shape / color */
 	-fx-border-color: baseGrey;
 	-fx-border-style: solid;
 	-fx-border-width: 1;
-	-fx-effect: dropshadow(three-pass-box, baseGrey, 5, 0.6, 0, 0);
+	
+	-fx-background-color: transparent;
 
 }
+
+.roundBorderWithShadow {
+	-fx-background-radius: 6;
+	-fx-border-radius: 6;
+	
+	-fx-effect: dropshadow(three-pass-box, baseGreyLighter3, 5, 0.6, 0, 0);
+}
+
+/* Header & Footer */
 
 #titleBar {
 	-fx-background-color: baseColorLighter1;
-	
-	-fx-background-radius: 6 6 0 0;
 }
 
-#footer {
+.topBordered {
+	-fx-background-radius: 5 5 0 0;
+}
+
+#footerBar {
 	-fx-background-color: baseColorLighter2;
-	
-	-fx-background-radius: 0 0 6 6;
+}
+
+.bottomBordered {
+	-fx-background-radius: 0 0 5 5;
 }
 
 #contentPane {
 	-fx-background-color: baseGreyLighter10;
 }
 
-#buttonMax:hover, #buttonMin:hover {
+/* Buttons */
+
+#maxButton:hover, #minButton:hover {
 	-fx-background-color: baseGreyLighter2;	
 }
 
-#buttonClose:hover {
+#closeButton:hover {
 	-fx-background-color: red;	
 }
 
-#buttonClose {
+#closeButton {
 	-fx-background-image: url("/images/window/x.png");
 	-fx-background-color: baseGreyLighter5;
 }
 
-#buttonMax {
+#maxButton {
 	-fx-background-image: url('/images/window/square.png');
 	-fx-background-color: baseGreyLighter5;
 }
 
-#buttonMin {
+#minButton {
 	-fx-background-image: url('/images/window/line.png');
 	-fx-background-color: baseGreyLighter5;
 }
 
-#buttonResize {
+#resizeButton {
 	-fx-background-image: url('/images/window/resize.png');
 	-fx-background-color: transparent;
+}
+
+.label {
+	-fx-text-fill: white;
+}
+
+.progress-bar {
+	-fx-accent: orange;
+}
+
+.progress-bar .track{
+    -fx-background-color: transparent;
+	-fx-border-style: solid;
+	-fx-border-color: baseGreyLighter1;
+	-fx-border-radius: 4px;
+	
 }
