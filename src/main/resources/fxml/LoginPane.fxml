@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane id="loginRoot" maxHeight="-Infinity" maxWidth="-Infinity" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
+<BorderPane id="loginRoot" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
    <center>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="200.0" prefWidth="400.0">
          <columnConstraints>
@@ -18,22 +18,22 @@
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="25.0" prefHeight="25.0" vgrow="NEVER" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="studipUrlField" promptText="https://studip.uni-hannover.de" styleClass="textInput" GridPane.columnIndex="1" />
-            <TextField fx:id="usernameField" styleClass="textInput" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="passwordField" onKeyPressed="#passwordFieldKeyPressed" onKeyTyped="#passwordFieldKeyTyped" promptText="********" styleClass="textInput" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Button id="loginButton" mnemonicParsing="false" onMouseClicked="#loginButtonClicked" prefWidth="100.0" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+            <TextField fx:id="studipUrlField" promptText="https://studip.uni-hannover.de" styleClass="textInputField" stylesheets="@../css/LoginPane.css" GridPane.columnIndex="1" />
+            <TextField fx:id="usernameField" styleClass="textInputField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="passwordField" onKeyPressed="#passwordFieldKeyPressed" onKeyTyped="#passwordFieldKeyTyped" promptText="********" styleClass="textInputField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Button id="loginButton" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#loginButtonClicked" prefWidth="300.0" text="Login" GridPane.columnSpan="2" GridPane.rowIndex="9" />
             <Label text="StudIP URL" />
             <Label text="Username" GridPane.rowIndex="3" />
             <Label text="Password" GridPane.rowIndex="6" />
@@ -47,7 +47,7 @@
       </GridPane>
    </center>
    <stylesheets>
-      <URL value="@../css/LoginPane.css" />
       <URL value="@../css/Colors.css" />
+      <URL value="@../css/LoginPane.css" />
    </stylesheets>
 </BorderPane>

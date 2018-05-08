@@ -1,8 +1,11 @@
 @import "/css/colors.css";
 
-.textInput {
-	-fx-background-color: baseGreyLighter9;
+.textInputField {
+	-fx-background-color: white;
 	-fx-text-fill: baseGrey;
+	-fx-border-color: baseGreyLighter1;
+	-fx-border-style: solid;
+	-fx-border-radius: 5px;
 }
 
 .label.inputFieldInfoLabel {

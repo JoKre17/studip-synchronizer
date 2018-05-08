@@ -240,13 +240,15 @@ public class SimpleWindowController implements Initializable {
 
 			if (globalClipRect == null) {
 				globalClipRect = new Rectangle();
-				windowPane.setClip(globalClipRect);
+				root.setClip(globalClipRect);
 			}
+			
+			
 
-			globalClipRect.widthProperty().bind(windowPane.widthProperty());
-			globalClipRect.heightProperty().bind(windowPane.heightProperty());
-			globalClipRect.setArcHeight(6.0);
-			globalClipRect.setArcWidth(6.0);
+			globalClipRect.widthProperty().bind(stage.widthProperty());
+			globalClipRect.heightProperty().bind(stage.heightProperty());
+			globalClipRect.setArcHeight(10.0);
+			globalClipRect.setArcWidth(10.0);
 
 			// Window Title set by stage
 			windowTitleLabel.textProperty().bindBidirectional(stage.titleProperty());

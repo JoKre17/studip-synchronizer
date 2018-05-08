@@ -24,10 +24,10 @@
 }
 
 .roundBorderWithShadow {
-	-fx-background-radius: 6;
-	-fx-border-radius: 6;
+	-fx-background-radius: 10;
+	-fx-border-radius: 10;
 	
-	-fx-effect: dropshadow(three-pass-box, baseGreyLighter3, 5, 0.6, 0, 0);
+	-fx-effect: dropshadow(three-pass-box, baseGreyLighter1, 8, 0.2, 0, 0);
 }
 
 /* Header & Footer */
@@ -37,7 +37,7 @@
 }
 
 .topBordered {
-	-fx-background-radius: 5 5 0 0;
+	-fx-background-radius: 10 10 0 0;
 }
 
 #footerBar {
@@ -45,7 +45,7 @@
 }
 
 .bottomBordered {
-	-fx-background-radius: 0 0 5 5;
+	-fx-background-radius: 0 0 10 10;
 }
 
 #contentPane {

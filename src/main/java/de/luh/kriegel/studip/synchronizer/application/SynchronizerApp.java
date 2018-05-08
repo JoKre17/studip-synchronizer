@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -36,6 +37,13 @@ public class SynchronizerApp extends Application {
 		controller.setContent(loginView);
 
 		stage.show();
+		
+		Platform.runLater(() -> {
+			log.info("Stage: " + stage.getWidth());
+			log.info("Scene: " + stage.getScene().getWidth());
+			log.info("Root: " + stage.getScene().getRoot().prefWidth(800));
+			log.info("Child: " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).getId() + " " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).prefWidth(0));
+		});
 	}
 
 }

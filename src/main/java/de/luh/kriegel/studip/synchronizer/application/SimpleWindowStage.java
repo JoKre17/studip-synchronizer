@@ -9,8 +9,8 @@ import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowCon
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,9 +49,11 @@ public class SimpleWindowStage extends Stage {
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/SimpleWindow.fxml"));
 
 		try {
-			Parent root = loader.load();
+			AnchorPane root = loader.load();
 			Scene scene = new Scene(root);
 			scene.setFill(Color.TRANSPARENT);
+			root.minWidthProperty().bindBidirectional(this.minWidthProperty());
+			root.minHeightProperty().bindBidirectional(this.minHeightProperty());
 
 			this.setScene(scene);
 		} catch (IOException e) {
@@ -76,7 +78,7 @@ public class SimpleWindowStage extends Stage {
 				}
 			}
 		});
-
+		
 		// this.widthProperty().addListener(new ChangeListener<Number>() {
 		// @Override
 		// public void changed(ObservableValue<? extends Number> observable, Number
