@@ -53,8 +53,6 @@ public class LoginController implements Initializable {
 
 	private final StringProperty passwordProperty = new SimpleStringProperty("");
 
-	private StudIPClient studipClient;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		passwordField.textProperty().bind(passwordProperty);
@@ -254,8 +252,8 @@ public class LoginController implements Initializable {
 		log.info("Base URL: " + studipUrlField.getText());
 		log.info(credentials);
 
-		studipClient = new StudIPClient(baseUri, credentials);
-		AuthService authService = studipClient.getAuthService();
+		SynchronizerApp.studipClient = new StudIPClient(baseUri, credentials);
+		AuthService authService = SynchronizerApp.studipClient.getAuthService();
 
 		boolean isSuccessfullyAuthenticated = authService.authenticate();
 		if (!isSuccessfullyAuthenticated) {
@@ -265,6 +263,7 @@ public class LoginController implements Initializable {
 		if (isSuccessfullyAuthenticated) {
 			SynchronizerApp.stage.getController().setStatus("Logged in");
 
+			SynchronizerApp.stage.getController().setContent(SynchronizerApp.settingsView);
 			// TODO
 			// Switch pane
 		} else {

@@ -7,6 +7,8 @@ import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
+import de.luh.kriegel.studip.synchronizer.application.view.SettingsView;
+import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -20,6 +22,8 @@ public class SynchronizerApp extends Application {
 	final private int MIN_HEIGHT = 400;
 
 	public static SimpleWindowStage stage;
+	public static StudIPClient studipClient;
+	public static SettingsView settingsView;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -36,13 +40,16 @@ public class SynchronizerApp extends Application {
 		LoginView loginView = new LoginView();
 		controller.setContent(loginView);
 
+		settingsView = new SettingsView();
+
 		stage.show();
-		
+
 		Platform.runLater(() -> {
 			log.info("Stage: " + stage.getWidth());
 			log.info("Scene: " + stage.getScene().getWidth());
 			log.info("Root: " + stage.getScene().getRoot().prefWidth(800));
-			log.info("Child: " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).getId() + " " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).prefWidth(0));
+			log.info("Child: " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).getId() + " "
+					+ stage.getScene().getRoot().getChildrenUnmodifiable().get(0).prefWidth(0));
 		});
 	}
 
