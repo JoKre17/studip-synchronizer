@@ -41,3 +41,8 @@
 
 
 }
+
+.root {
+	-fx-font-family: 'Roboto Medium';
+	-fx-font-size: 14.0px;
+}

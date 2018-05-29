@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -30,9 +31,9 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <TextField fx:id="studipUrlField" promptText="https://studip.uni-hannover.de" styleClass="textInputField" stylesheets="@../css/LoginPane.css" GridPane.columnIndex="1" />
-            <TextField fx:id="usernameField" styleClass="textInputField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="passwordField" onKeyPressed="#passwordFieldKeyPressed" onKeyTyped="#passwordFieldKeyTyped" promptText="********" styleClass="textInputField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <JFXTextField fx:id="studipUrlField" promptText="https://studip.uni-hannover.de" GridPane.columnIndex="1" />
+            <JFXTextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <JFXPasswordField fx:id="passwordField" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Button id="loginButton" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#loginButtonClicked" prefWidth="300.0" text="Login" GridPane.columnSpan="2" GridPane.rowIndex="9" />
             <Label text="StudIP URL" />
             <Label text="Username" GridPane.rowIndex="3" />

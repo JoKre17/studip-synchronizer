@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+		<TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" styleClass="root" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.MainController">
+			<tabs>
+				<Tab text="Settings">
+					<content>
+						<AnchorPane fx:id="settingsRootPane" minHeight="0.0" minWidth="0.0" />
+					</content>
+				</Tab>
+				<Tab text="About">
+					<content>
+						<AnchorPane fx:id="aboutRootPane" minHeight="0.0" minWidth="0.0" />
+					</content>
+				</Tab>
+			</tabs>
+   <stylesheets>
+      <URL value="@../css/Colors.css" />
+      <URL value="@../css/MainPane.css" />
+      <URL value="@../css/Default.css" />
+   </stylesheets>
+		</TabPane>

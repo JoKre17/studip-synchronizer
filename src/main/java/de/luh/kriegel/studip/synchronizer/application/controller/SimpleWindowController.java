@@ -242,8 +242,6 @@ public class SimpleWindowController implements Initializable {
 				globalClipRect = new Rectangle();
 				root.setClip(globalClipRect);
 			}
-			
-			
 
 			globalClipRect.widthProperty().bind(stage.widthProperty());
 			globalClipRect.heightProperty().bind(stage.heightProperty());

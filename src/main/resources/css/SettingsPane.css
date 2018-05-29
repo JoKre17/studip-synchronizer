@@ -1,0 +1,51 @@
+@import "/css/Default.css";
+@import "/css/Colors.css";
+
+.root {
+	-fx-background-color: transparent;
+}
+
+.button {
+	-fx-background-color: white;
+}
+
+.grid-pane > * {
+    -fx-min-height: 30px;
+    -fx-padding: 5px;
+}
+
+.flow-pane .stack-pane {
+	-fx-padding: 10 15 10 0;
+}
+
+.label {
+	-fx-wrap-text: true;
+	-fx-text-fill: baseGrey;
+}
+
+.jfx-radio-button {
+	-fx-text-fill: baseGrey;
+}
+
+.settings .pane {
+	-fx-effect: dropshadow(gaussian, baseGreyLighter3, 10, 0.5, 2, 2);
+	-fx-background-color: white;
+	
+}
+
+.settings .header {
+	-fx-font-size: 12px;
+	-fx-padding: 5 0 5 10;
+	-fx-text-fill: baseGreyLighter2;
+}
+
+.settings .key {
+	-fx-font-size: 14px;
+}
+
+.settingsGrid {
+	-fx-border-width: 0 0 1 0;
+	-fx-border-style: solid;
+	-fx-border-color: baseGreyLighter4;
+	-fx-border-insets: 0 5 0 5;
+}

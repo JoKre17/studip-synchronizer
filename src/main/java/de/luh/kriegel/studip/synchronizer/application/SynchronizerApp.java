@@ -5,12 +5,11 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
+import de.luh.kriegel.studip.synchronizer.application.controller.StageController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
-import de.luh.kriegel.studip.synchronizer.application.view.SettingsView;
+import de.luh.kriegel.studip.synchronizer.application.view.MainView;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -21,9 +20,11 @@ public class SynchronizerApp extends Application {
 	final private int MIN_WIDTH = 600;
 	final private int MIN_HEIGHT = 400;
 
-	public static SimpleWindowStage stage;
+	public static final String LOGIN_STAGE_ID = "LOGIN_STAGE";
+	public static final String MAIN_STAGE_ID = "MAIN_STAGE";
+	
+	public static SimpleWindowStage simpleWindowStage;
 	public static StudIPClient studipClient;
-	public static SettingsView settingsView;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -32,25 +33,19 @@ public class SynchronizerApp extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 
-		stage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
-		stage.getIcons()
+		simpleWindowStage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
+		simpleWindowStage.getIcons()
 				.add(new Image(getClass().getClassLoader().getResourceAsStream("images/studip-synchronizer.jpg")));
-		SimpleWindowController controller = stage.getController();
+		
+		StageController.setSimpleWindowStage(simpleWindowStage);
 
 		LoginView loginView = new LoginView();
-		controller.setContent(loginView);
-
-		settingsView = new SettingsView();
-
-		stage.show();
-
-		Platform.runLater(() -> {
-			log.info("Stage: " + stage.getWidth());
-			log.info("Scene: " + stage.getScene().getWidth());
-			log.info("Root: " + stage.getScene().getRoot().prefWidth(800));
-			log.info("Child: " + stage.getScene().getRoot().getChildrenUnmodifiable().get(0).getId() + " "
-					+ stage.getScene().getRoot().getChildrenUnmodifiable().get(0).prefWidth(0));
-		});
+		StageController.addRegionToStagingMap("LOGIN_STAGE", loginView);
+		
+		MainView mainView = new MainView();
+		StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
+		
+		StageController.setStage("LOGIN_STAGE");
 	}
-
+	
 }

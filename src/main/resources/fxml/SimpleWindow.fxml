@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="root" fx:id="root" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController">
+<AnchorPane id="root" fx:id="root" prefHeight="200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SimpleWindowController">
    <children>
       <BorderPane id="windowPane" fx:id="windowPane" onMouseDragged="#windowDragging" onMousePressed="#updateXY" onMouseReleased="#updateStatus" styleClass="roundBorderWithShadow" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <top>
@@ -60,7 +60,7 @@
                   </VBox>
                </children>
                <padding>
-                  <Insets left="5.0" right="5.0" />
+                  <Insets left="5.0" right="10.0" />
                </padding>
             </HBox>
          </top>

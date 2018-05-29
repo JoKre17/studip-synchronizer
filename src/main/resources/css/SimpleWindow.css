@@ -2,6 +2,8 @@
 
 #root {
 	-fx-background-color: transparent;
+	-fx-wrap-text: true;
+	-fx-text-fill: baseGrey;
 }
 
 #windowPane {
@@ -27,7 +29,7 @@
 	-fx-background-radius: 10;
 	-fx-border-radius: 10;
 	
-	-fx-effect: dropshadow(three-pass-box, baseGreyLighter1, 8, 0.2, 0, 0);
+	-fx-effect: dropshadow(three-pass-box, baseGrey, 8, 0.2, 0, 0);
 }
 
 /* Header & Footer */
@@ -49,7 +51,7 @@
 }
 
 #contentPane {
-	-fx-background-color: baseGreyLighter10;
+	-fx-background-color: derive(grey, 0.95);
 }
 
 /* Buttons */
@@ -97,3 +99,27 @@
 	-fx-border-radius: 4px;
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

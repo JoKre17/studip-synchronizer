@@ -9,6 +9,9 @@ import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
+
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
@@ -20,27 +23,23 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.IndexRange;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.util.StringConverter;
 
 public class LoginController implements Initializable {
 
 	private static final Logger log = LogManager.getLogger(LoginController.class);
 
 	@FXML
-	private TextField studipUrlField;
+	private JFXTextField studipUrlField;
 
 	@FXML
-	private TextField usernameField;
+	private JFXTextField usernameField;
 
 	@FXML
-	private TextField passwordField;
+	private JFXPasswordField passwordField;
 
 	@FXML
 	private Label studipUrlInfoLabel;
@@ -52,10 +51,12 @@ public class LoginController implements Initializable {
 	private Label passwordInfoLabel;
 
 	private final StringProperty passwordProperty = new SimpleStringProperty("");
+	
+	private boolean testRun = true;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		passwordField.textProperty().bind(passwordProperty);
+		passwordProperty.bind(passwordField.textProperty());
 
 		studipUrlField.textProperty().addListener(new ChangeListener<String>() {
 			@Override
@@ -117,25 +118,31 @@ public class LoginController implements Initializable {
 			}
 		});
 
-		passwordField.setTextFormatter(new TextFormatter<StringProperty>(new StringConverter<StringProperty>() {
+		if(testRun) {
+			new Thread(new Runnable() {
 
-			@Override
-			public String toString(StringProperty stringProperty) {
-				if (stringProperty == null) {
-					return "";
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
+					Platform.runLater(() -> {
+						studipUrlField.setText("https://studip.uni-hannover.de");
+						usernameField.setText("JK_14");
+						passwordField.setText("Aiedail95");
+						
+						try {
+							login();
+						} catch (URISyntaxException e) {
+							e.printStackTrace();
+						}
+					});
 				}
-
-				return stringProperty.getValue().replaceAll(".", "*");
-			}
-
-			@Override
-			public StringProperty fromString(String string) {
-				StringProperty sp = new SimpleStringProperty(string);
-				sp.setValue(string);
-				return sp;
-			}
-
-		}));
+				
+			}).start();
+		}
 
 	}
 
@@ -150,52 +157,6 @@ public class LoginController implements Initializable {
 		}
 	}
 
-	private KeyEvent lastKeyPressedEvent = null;
-
-	@FXML
-	private void passwordFieldKeyPressed(KeyEvent e) {
-		lastKeyPressedEvent = e;
-	}
-
-	@FXML
-	private void passwordFieldKeyTyped(KeyEvent e) {
-		KeyCode c;
-		if (lastKeyPressedEvent != null) {
-			c = lastKeyPressedEvent.getCode();
-		} else {
-			c = KeyCode.UNDEFINED;
-		}
-
-		// log.debug(c.isDigitKey() + " " + c.isLetterKey());
-		if (c.isDigitKey() || c.isLetterKey()) {
-			// log.debug(!c.isFunctionKey() + " " + !c.isArrowKey() + " " + !c.isMediaKey()
-			// + " " + !c.isNavigationKey()
-			// + " " + !c.isWhitespaceKey());
-			if (!c.isFunctionKey() && !c.isArrowKey() && !c.isMediaKey() && !c.isNavigationKey()
-					&& !c.isWhitespaceKey()) {
-				// log.debug(!e.isControlDown() + " " + !e.isAltDown());
-				if (!e.isControlDown() && !e.isAltDown()) {
-
-					passwordProperty.setValue(passwordProperty.getValue() + e.getCharacter());
-				}
-			}
-		}
-
-		if (c.equals(KeyCode.DELETE) || c.equals(KeyCode.BACK_SPACE)) {
-			IndexRange selection = passwordField.getSelection();
-			String passwordString = passwordProperty.getValue();
-
-			if ((selection.getEnd() - selection.getStart()) == 0) {
-				passwordProperty.setValue(passwordString.substring(0, Math.max(passwordString.length() - 1, 0)));
-			} else {
-				passwordString = passwordString.substring(0, selection.getStart())
-						+ passwordString.substring(selection.getEnd(), passwordString.length());
-				passwordProperty.setValue(passwordString);
-			}
-		}
-
-	}
-
 	@FXML
 	private void loginButtonClicked(MouseEvent e) {
 		try {
@@ -207,14 +168,14 @@ public class LoginController implements Initializable {
 
 	private void login() throws URISyntaxException {
 		log.info("Performing login!");
-		SynchronizerApp.stage.getController().setStatus("Performing login!");
+		SynchronizerApp.simpleWindowStage.getController().setStatus("Performing login!");
 
 		boolean urlIsMissing = studipUrlField.getText().isEmpty();
 		boolean usernameIsMissing = usernameField.getText().isEmpty();
 		boolean passwordIsMissing = passwordField.getText().isEmpty();
 
 		if (urlIsMissing || usernameIsMissing || passwordIsMissing) {
-			SynchronizerApp.stage.getController().setStatus("Missing data");
+			SynchronizerApp.simpleWindowStage.getController().setStatus("Missing data");
 
 			if (urlIsMissing) {
 				studipUrlInfoLabel.setText("Value missing!");
@@ -261,16 +222,15 @@ public class LoginController implements Initializable {
 		}
 
 		if (isSuccessfullyAuthenticated) {
-			SynchronizerApp.stage.getController().setStatus("Logged in");
-
-			SynchronizerApp.stage.getController().setContent(SynchronizerApp.settingsView);
-			// TODO
-			// Switch pane
+			SynchronizerApp.simpleWindowStage.getController().setStatus("Logged in");
+			
+			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
+//			StageController.setStage("SETTINGS_STAGE");
 		} else {
-			SynchronizerApp.stage.getController().setStatus(authService.getAuthErrorResponse());
+			SynchronizerApp.simpleWindowStage.getController().setStatus(authService.getAuthErrorResponse());
 		}
 
-		SynchronizerApp.stage.getController().clearStatus();
+		SynchronizerApp.simpleWindowStage.getController().clearStatus();
 	}
 
 }

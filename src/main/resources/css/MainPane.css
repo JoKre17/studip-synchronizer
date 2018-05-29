@@ -1,0 +1,43 @@
+@import "/css/Default.css";
+@import "/css/Colors.css";
+
+.root {
+	-fx-background-color: transparent;
+}
+
+
+.tab-pane .tab-header-area {
+	-fx-padding: -1.0 -1.0 -1.0 -1.0;
+	-fx-border-width: 0 0 1 0;
+	-fx-border-style: solid;
+	-fx-border-color: baseGreyLighter1;
+}
+
+.tab-pane *.tab-header-background {
+	-fx-background-color: transparent;
+}
+
+.tab {
+    -fx-pref-width: 80.0px;
+    -fx-fill-width: true;
+	-fx-background-insets: 0.0 1.0 0.0 1.0,0.0,0.0;
+	-fx-pref-height: 30.0px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: linear-gradient(baseGreyLighter5 0.0%, baseGreyLighter8 40.0%, baseGreyLighter5 80.0%, baseGreyLighter4 100.0%);
+}
+
+.tab:selected {
+	-fx-border-color: baseColor;
+	-fx-background-color: baseGreyLighte9;
+	-fx-background-radius: 0.0;
+    -fx-background-insets: 0.0;
+    -fx-border-width: 0.0 0.0 3.0 0.0;
+    -fx-background-color: linear-gradient(baseGreyLighter8 0.0%, baseGreyLighter7 40.0%, baseGreyLighter5 80.0%, baseGreyLighter6 100.0%);
+}
+
+.tab .tab-label {
+	-fx-pref-width: 70.0px;
+	-fx-alignment: center;
+	-fx-text-alignment: center;
+}
