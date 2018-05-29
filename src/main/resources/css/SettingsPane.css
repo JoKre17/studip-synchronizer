@@ -11,7 +11,7 @@
 
 .grid-pane > * {
     -fx-min-height: 30px;
-    -fx-padding: 5px;
+    -fx-padding: 5px;	
 }
 
 .flow-pane .stack-pane {
