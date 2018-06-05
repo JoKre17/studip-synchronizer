@@ -9,10 +9,11 @@
 	-fx-background-color: white;
 }
 
+/*
 .grid-pane > * {
-    -fx-min-height: 30px;
-    -fx-padding: 5px;	
+    -fx-min-height: 45px;
 }
+*/
 
 .flow-pane .stack-pane {
 	-fx-padding: 10 15 10 0;

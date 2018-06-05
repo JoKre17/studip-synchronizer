@@ -17,12 +17,12 @@ public class SynchronizerApp extends Application {
 
 	private static final Logger log = LogManager.getLogger(SynchronizerApp.class);
 
-	final private int MIN_WIDTH = 600;
-	final private int MIN_HEIGHT = 400;
+	final private int MIN_WIDTH = 800;
+	final private int MIN_HEIGHT = 600;
 
 	public static final String LOGIN_STAGE_ID = "LOGIN_STAGE";
 	public static final String MAIN_STAGE_ID = "MAIN_STAGE";
-	
+
 	public static SimpleWindowStage simpleWindowStage;
 	public static StudIPClient studipClient;
 
@@ -36,16 +36,16 @@ public class SynchronizerApp extends Application {
 		simpleWindowStage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
 		simpleWindowStage.getIcons()
 				.add(new Image(getClass().getClassLoader().getResourceAsStream("images/studip-synchronizer.jpg")));
-		
+
 		StageController.setSimpleWindowStage(simpleWindowStage);
 
 		LoginView loginView = new LoginView();
 		StageController.addRegionToStagingMap("LOGIN_STAGE", loginView);
-		
+
 		MainView mainView = new MainView();
 		StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
-		
+
 		StageController.setStage("LOGIN_STAGE");
 	}
-	
+
 }

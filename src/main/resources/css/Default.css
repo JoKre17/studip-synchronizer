@@ -19,6 +19,22 @@
     -jfx-toggle-line-color: baseColorLighter2;
 }
 
-.jfx-radio-button{
+.jfx-radio-button {
     -jfx-selected-color: derived(brandColor, 0.25);
 }
+
+.jfx-button {
+	-fx-border-width: 3;
+	-fx-border-style: solid;
+	-fx-border-color: baseGreyLighter4;
+}
+
+.label {
+	-fx-padding: 5;
+}
+
+
+
+
+
+

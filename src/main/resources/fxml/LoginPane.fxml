@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
@@ -9,9 +11,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane id="loginRoot" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
+<BorderPane id="loginRoot" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
    <center>
       <GridPane maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="200.0" prefWidth="400.0">
          <columnConstraints>
@@ -31,7 +35,17 @@
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <JFXTextField fx:id="studipUrlField" promptText="https://studip.uni-hannover.de" GridPane.columnIndex="1" />
+            <VBox spacing="10.0" GridPane.columnIndex="1">
+               <children>
+                  <JFXComboBox fx:id="studipUrlComboBox" maxWidth="1.7976931348623157E308" promptText="https://studip.uni-hannover.de" />
+                  <HBox spacing="10.0">
+                     <children>
+                        <JFXCheckBox fx:id="studipUrlOtherCheckBox" maxHeight="1.7976931348623157E308" text="Other" HBox.hgrow="ALWAYS" />
+                        <JFXTextField fx:id="studipUrlField" disable="true" promptText="https://studip.uni-hannover.de" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
             <JFXTextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <JFXPasswordField fx:id="passwordField" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Button id="loginButton" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#loginButtonClicked" prefWidth="300.0" text="Login" GridPane.columnSpan="2" GridPane.rowIndex="9" />

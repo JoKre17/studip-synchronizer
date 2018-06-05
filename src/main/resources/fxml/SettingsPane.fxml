@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXToggleButton?>
 <?import java.lang.String?>
@@ -15,8 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
+<VBox xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
    <children>
       <GridPane>
          <columnConstraints>
@@ -39,8 +39,9 @@
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="75.0" />
                      </columnConstraints>
                      <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <Label styleClass="key" text="Synchronize Interval" GridPane.rowIndex="1" />
@@ -77,6 +78,17 @@
                            </GridPane.margin>
                         </FlowPane>
                         <Label styleClass="key" text="Enabled" />
+                        <Label text="Download Directory" GridPane.rowIndex="2" />
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label fx:id="dowloadDirectoryLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="C:\Dummy\Dummy" HBox.hgrow="ALWAYS" />
+                              <VBox alignment="CENTER" minWidth="60.0">
+                                 <children>
+                                    <JFXButton fx:id="downloadDirectoryBrowseButton" minWidth="50.0" text="..." VBox.vgrow="NEVER" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
                      </children>
                      <styleClass>
                         <String fx:value="grid-pane" />
@@ -123,7 +135,7 @@
                      </rowConstraints>
                      <children>
                         <Label styleClass="key" text="Enabled" />
-                        <JFXToggleButton fx:id="notificationsEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" GridPane.columnIndex="1" />
+                        <JFXToggleButton fx:id="notificationEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" GridPane.columnIndex="1" />
                      </children>
                      <styleClass>
                         <String fx:value="grid-pane" />

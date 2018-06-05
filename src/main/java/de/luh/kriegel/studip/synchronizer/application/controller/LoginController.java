@@ -1,14 +1,22 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
@@ -23,10 +31,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 
 public class LoginController implements Initializable {
 
@@ -42,6 +54,12 @@ public class LoginController implements Initializable {
 	private JFXPasswordField passwordField;
 
 	@FXML
+	private JFXComboBox studipUrlComboBox;
+
+	@FXML
+	private JFXCheckBox studipUrlOtherCheckBox;
+
+	@FXML
 	private Label studipUrlInfoLabel;
 
 	@FXML
@@ -51,11 +69,49 @@ public class LoginController implements Initializable {
 	private Label passwordInfoLabel;
 
 	private final StringProperty passwordProperty = new SimpleStringProperty("");
-	
-	private boolean testRun = true;
+
+	private boolean testRun = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		try {
+			InputStream studipServerAddressesInputStream = getClass().getClassLoader()
+					.getResourceAsStream("config/studipServerAddresses.prop");
+			InputStreamReader isr = new InputStreamReader(studipServerAddressesInputStream, "UTF-8");
+
+			List<String> lines = new BufferedReader(isr).lines().collect(Collectors.toList());
+
+			for (String line : lines) {
+				log.info(line.split("=")[0] + " => " + line.split("=")[1]);
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		studipUrlComboBox.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+			@Override
+			public ListCell<String> call(ListView<String> p) {
+				return new ListCell<String>() {
+					String content = "";
+
+					{
+						setContentDisplay(ContentDisplay.CENTER);
+					}
+
+					@Override
+					protected void updateItem(String item, boolean empty) {
+						super.updateItem(item, empty);
+
+						if (item != null && !empty) {
+
+						}
+					}
+				};
+			}
+		});
+
 		passwordProperty.bind(passwordField.textProperty());
 
 		studipUrlField.textProperty().addListener(new ChangeListener<String>() {
@@ -118,7 +174,7 @@ public class LoginController implements Initializable {
 			}
 		});
 
-		if(testRun) {
+		if (testRun) {
 			new Thread(new Runnable() {
 
 				@Override
@@ -132,7 +188,7 @@ public class LoginController implements Initializable {
 						studipUrlField.setText("https://studip.uni-hannover.de");
 						usernameField.setText("JK_14");
 						passwordField.setText("Aiedail95");
-						
+
 						try {
 							login();
 						} catch (URISyntaxException e) {
@@ -140,9 +196,17 @@ public class LoginController implements Initializable {
 						}
 					});
 				}
-				
+
 			}).start();
 		}
+
+		studipUrlOtherCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				studipUrlComboBox.setDisable(newValue);
+				studipUrlField.setDisable(!newValue);
+			}
+		});
 
 	}
 
@@ -223,9 +287,9 @@ public class LoginController implements Initializable {
 
 		if (isSuccessfullyAuthenticated) {
 			SynchronizerApp.simpleWindowStage.getController().setStatus("Logged in");
-			
+
 			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
-//			StageController.setStage("SETTINGS_STAGE");
+			// StageController.setStage("SETTINGS_STAGE");
 		} else {
 			SynchronizerApp.simpleWindowStage.getController().setStatus(authService.getAuthErrorResponse());
 		}
