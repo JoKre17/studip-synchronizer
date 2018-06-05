@@ -21,6 +21,7 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
+import de.luh.kriegel.studip.synchronizer.application.model.CustomServerPair;
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
@@ -29,6 +30,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContentDisplay;
@@ -38,6 +41,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class LoginController implements Initializable {
@@ -54,8 +58,18 @@ public class LoginController implements Initializable {
 	private JFXPasswordField passwordField;
 
 	@FXML
-	private JFXComboBox studipUrlComboBox;
+	private JFXComboBox<CustomServerPair> studipUrlComboBox;
 
+	private ChangeListener<CustomServerPair> studipURLComboBoxListner = new ChangeListener<CustomServerPair>(){
+		@Override
+		public void changed(ObservableValue<? extends CustomServerPair> observable, CustomServerPair oldValue,
+				CustomServerPair newValue) {
+			if(newValue != null && newValue.getValue() != null) {
+				studipUrlField.setText(newValue.getValue().toString());
+			}
+		}
+	};
+	
 	@FXML
 	private JFXCheckBox studipUrlOtherCheckBox;
 
@@ -82,36 +96,63 @@ public class LoginController implements Initializable {
 
 			List<String> lines = new BufferedReader(isr).lines().collect(Collectors.toList());
 
+			ObservableList<CustomServerPair> items = FXCollections.observableArrayList();
 			for (String line : lines) {
-				log.info(line.split("=")[0] + " => " + line.split("=")[1]);
+				if(line.indexOf("=") < 0) {
+					continue;
+				}
+				
+				String[] split = line.split("=");
+				String serverName = split[0];
+				URL url;
+				try {
+					url = new URL(split[1]);
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+					log.error("Could not add " + serverName + " => " + split[1] + " to the list.");
+					continue;
+				}
+				items.add(new CustomServerPair(serverName, url));
 			}
+			studipUrlComboBox.setItems(items);
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		studipUrlComboBox.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+		
+		studipUrlComboBox.setCellFactory(new Callback<ListView<CustomServerPair>, ListCell<CustomServerPair>>() {
 			@Override
-			public ListCell<String> call(ListView<String> p) {
-				return new ListCell<String>() {
-					String content = "";
-
+			public ListCell<CustomServerPair> call(ListView<CustomServerPair> p) {
+				return new ListCell<CustomServerPair>() {
+			        VBox vbox = new VBox();
+			        Label serverName = new Label("(Unknown)");
+			        Label url = new Label("(Unknown)");
+			        
 					{
 						setContentDisplay(ContentDisplay.CENTER);
+						vbox.getChildren().addAll(serverName, url);
 					}
 
 					@Override
-					protected void updateItem(String item, boolean empty) {
+					protected void updateItem(CustomServerPair item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if (item != null && !empty) {
+						if(item == null || empty) {
+							setGraphic(null);
+						}
+						
+						if (item != null) {
+							serverName.setText(item.getKey());
+							url.setText(item.getValue().toString());
+							setGraphic(vbox);
 
 						}
 					}
+					
 				};
 			}
 		});
-
+		
 		passwordProperty.bind(passwordField.textProperty());
 
 		studipUrlField.textProperty().addListener(new ChangeListener<String>() {
@@ -125,7 +166,6 @@ public class LoginController implements Initializable {
 						String host = baseUri.getHost();
 						String protocol = baseUri.getProtocol();
 						URL baseUrl = new URL(protocol + "://" + host);
-						log.debug(baseUrl);
 
 						Platform.runLater(() -> {
 							studipUrlInfoLabel.setText("");
@@ -205,8 +245,22 @@ public class LoginController implements Initializable {
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				studipUrlComboBox.setDisable(newValue);
 				studipUrlField.setDisable(!newValue);
+				
+				if(newValue) {
+					studipUrlComboBox.getSelectionModel().selectedItemProperty().removeListener(studipURLComboBoxListner);
+				} else {
+					studipUrlComboBox.getSelectionModel().selectedItemProperty().addListener(studipURLComboBoxListner);
+				}
 			}
 		});
+		
+		if(!studipUrlOtherCheckBox.isSelected()) {
+			studipUrlComboBox.getSelectionModel().selectedItemProperty().addListener(studipURLComboBoxListner);
+		}
+		
+		if(!studipUrlComboBox.getItems().isEmpty()) {
+			studipUrlComboBox.getSelectionModel().select(studipUrlComboBox.getItems().get(0));
+		}
 
 	}
 
