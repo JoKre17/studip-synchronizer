@@ -77,7 +77,7 @@ public class Main {
 
 				try {
 					fileRefTree = courseService.getFileRefTree(lecture);
-					downloadManager.downloadFileRefTree(lecture, fileRefTree);
+					downloadManager.downloadFileRefTree(lecture, fileRefTree, null);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -85,7 +85,7 @@ public class Main {
 				if (tutorial != null) {
 					try {
 						fileRefTree = courseService.getFileRefTree(lecture);
-						downloadManager.downloadFileRefTree(tutorial, fileRefTree);
+						downloadManager.downloadFileRefTree(tutorial, fileRefTree, null);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}

@@ -27,7 +27,7 @@
 	<Loggers>
 
 		<!-- Root Logger -->
-		<Root level="debug">
+		<Root level="info">
 			<AppenderRef ref="ConsoleStdOut" />
 			<AppenderRef ref="ConsoleStdErr" />
 			<AppenderRef ref="RollingFile" />

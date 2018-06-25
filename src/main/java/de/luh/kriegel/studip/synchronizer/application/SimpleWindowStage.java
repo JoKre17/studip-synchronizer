@@ -19,6 +19,7 @@ public class SimpleWindowStage extends Stage {
 
 	private static final Logger log = LogManager.getLogger(SimpleWindowStage.class);
 
+
 	private SimpleWindowController controller;
 
 	public SimpleWindowStage(String windowTitle, int MIN_WIDTH, int MIN_HEIGHT) {
@@ -79,6 +80,8 @@ public class SimpleWindowStage extends Stage {
 			}
 		});
 		
+		controller.createTrayIcon(this);
+
 		// this.widthProperty().addListener(new ChangeListener<Number>() {
 		// @Override
 		// public void changed(ObservableValue<? extends Number> observable, Number
@@ -95,6 +98,7 @@ public class SimpleWindowStage extends Stage {
 		// });
 	}
 
+	
 	public SimpleWindowController getController() {
 		return controller;
 	}

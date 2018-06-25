@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
@@ -68,8 +69,12 @@ public class DownloadManager extends Observable{
 		}
 	}
 
-	private File getDownloadDirectory() {
+	public File getDownloadDirectory() {
 		return defaultDownloadDirectory.toFile();
+	}
+	
+	public void setDownloadDirectory(File defaultDownloadDirectory) {
+		this.defaultDownloadDirectory = defaultDownloadDirectory.toPath();
 	}
 
 	private File getSemesterDirectory(Semester semester) {
@@ -114,7 +119,7 @@ public class DownloadManager extends Observable{
 		return createDirIfNotExists(courseDir);
 	}
 
-	public void downloadFileRefTree(Course course, FileRefTree fileRefTree) {
+	public void downloadFileRefTree(Course course, FileRefTree fileRefTree, AtomicBoolean cancelled) {
 
 		if (!createCourseDirectoryIfNotExists(course)) {
 			return;
@@ -130,6 +135,11 @@ public class DownloadManager extends Observable{
 
 		int count = 0;
 		for (CompletableFuture<Void> task : downloadTasks) {
+			if(cancelled != null && cancelled.get()) {
+				task.cancel(true);
+				continue;
+			}
+			
 			try {
 				log.info(count + "/" + size + " : " + course.getTitle());
 				task.get();
@@ -138,6 +148,10 @@ public class DownloadManager extends Observable{
 				e.printStackTrace();
 			}
 
+		}
+		
+		if(cancelled != null && cancelled.get()) {
+			return;
 		}
 		
 		setChanged();

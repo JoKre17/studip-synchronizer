@@ -19,6 +19,10 @@
     -jfx-toggle-line-color: baseColorLighter2;
 }
 
+.jfx-check-box {
+    -jfx-checked-color: derived(brandColor, 0.25);
+}
+
 .jfx-radio-button {
     -jfx-selected-color: derived(brandColor, 0.25);
 }

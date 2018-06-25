@@ -13,9 +13,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXToggleButton;
 
+import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -64,8 +63,6 @@ public class SettingsController implements Initializable {
 
 	private List<JFXRadioButton> synchronizeIntervalRadioButtons;
 
-	private final ReadOnlyIntegerWrapper synchronizeIntervalWrapper = new ReadOnlyIntegerWrapper();
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// Download
@@ -87,17 +84,20 @@ public class SettingsController implements Initializable {
 					if (newValue != null && newValue.booleanValue()) {
 						Object userData = radioButton.getUserData();
 						if (userData instanceof Integer) {
-							synchronizeIntervalWrapper.set((Integer) userData);
+							ConfigManager.getSynchronizationIntervalProperty().set((Integer) userData);
 						}
 					}
 				}
 			});
 
 			// set initial value
-			if (radioButton.isSelected()) {
-				Object userData = radioButton.getUserData();
-				if (userData instanceof Integer) {
-					synchronizeIntervalWrapper.set((Integer) userData);
+			Object userData = radioButton.getUserData();
+			if(userData instanceof Integer) {
+				int synchInterval = (int) userData;
+				if(synchInterval == ConfigManager.getSynchronizationIntervalProperty().get()) {
+					radioButton.selectedProperty().set(true);
+				} else {
+					radioButton.selectedProperty().set(false);
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public class SettingsController implements Initializable {
 			public void handle(MouseEvent event) {
 				File dir = new DirectoryChooser().showDialog(null);
 				if (dir != null) {
-					log.info("Download Dir: " + dir.getAbsolutePath());
+					downloadDirectoryLabel.setText(dir.getAbsolutePath());
 				}
 			}
 		});
@@ -115,23 +115,24 @@ public class SettingsController implements Initializable {
 		downloadEnabledToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				log.info("Download Enabled: " + newValue);
-			}
-		});
-
-		synchronizeIntervalWrapper.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				log.info("Synch Interval: " + newValue);
 			}
 		});
 
 		notificationEnabledToggleButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				log.info("Notification Enabled: " + newValue);
 			}
 		});
+		
+		downloadEnabledToggleButton.selectedProperty().set(ConfigManager.getDownloadEnabledProperty().get());
+		downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
+		
+		notificationEnabledToggleButton.selectedProperty().set(ConfigManager.getNotificationsEnabledProperty().get());
+		
+		ConfigManager.getDownloadEnabledProperty().bind(downloadEnabledToggleButton.selectedProperty());
+		ConfigManager.getDownloadDirectoryPathProperty().bind(downloadDirectoryLabel.textProperty());
+
+		ConfigManager.getNotificationsEnabledProperty().bind(notificationEnabledToggleButton.selectedProperty());
 	}
 
 	public BooleanProperty getDownloadEnabledProperty() {
@@ -140,14 +141,6 @@ public class SettingsController implements Initializable {
 
 	public boolean isDownloadEnabled() {
 		return downloadEnabledToggleButton.isArmed();
-	}
-
-	public int getSynchronizeInterval() {
-		return synchronizeIntervalWrapper.get();
-	}
-
-	public ReadOnlyIntegerProperty getSynchronizeIntervalProperty() {
-		return synchronizeIntervalWrapper.getReadOnlyProperty();
 	}
 
 }

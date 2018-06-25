@@ -28,7 +28,7 @@ public class StageController {
 		assert region != null;
 		
 		stagingMap.put(stageId, region);
-		log.info("Registered stage: " + stageId);
+		log.debug("Registered stage: " + stageId);
 	}
 	
 	public static void setStage(String stageId) {
@@ -36,7 +36,7 @@ public class StageController {
 			log.error("simpleWindowStage is not initialized");
 		}
 		
-		log.info("Change stage to: " + stageId);
+		log.debug("Change stage to: " + stageId);
 		Region region = stagingMap.get(stageId);
 		simpleWindowStage.getController().setContent(region);
 		
