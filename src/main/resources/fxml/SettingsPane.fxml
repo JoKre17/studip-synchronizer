@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
    <children>
       <GridPane>
          <columnConstraints>
@@ -42,11 +42,16 @@
                         <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="45.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label styleClass="key" text="Synchronize Interval" GridPane.rowIndex="1" />
-                        <JFXToggleButton fx:id="downloadEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" GridPane.columnIndex="1" />
-                        <FlowPane styleClass="flow-pane" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label styleClass="key" text="Synchronize Interval" GridPane.rowIndex="2" />
+                        <HBox GridPane.columnIndex="1">
+                           <children>
+                              <JFXToggleButton fx:id="downloadEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" />
+                           </children>
+                        </HBox>
+                        <FlowPane styleClass="flow-pane" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
                               <StackPane styleClass="stack-pane">
                                  <children>
@@ -78,8 +83,8 @@
                            </GridPane.margin>
                         </FlowPane>
                         <Label styleClass="key" text="Enabled" />
-                        <Label text="Download Directory" GridPane.rowIndex="2" />
-                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label text="Download Directory" GridPane.rowIndex="3" />
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <children>
                               <Label fx:id="dowloadDirectoryLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="C:\Dummy\Dummy" HBox.hgrow="ALWAYS" />
                               <VBox alignment="CENTER" minWidth="60.0">
@@ -89,6 +94,8 @@
                               </VBox>
                            </children>
                         </HBox>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Next Synchronization at:" GridPane.rowIndex="1" />
+                        <Label fx:id="nextSynchAtLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                      <styleClass>
                         <String fx:value="grid-pane" />

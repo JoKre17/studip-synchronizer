@@ -23,6 +23,7 @@ import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedExcep
 import de.luh.kriegel.studip.synchronizer.config.Endpoints;
 import de.luh.kriegel.studip.synchronizer.config.SubPaths;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
+import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
 import de.luh.kriegel.studip.synchronizer.content.model.data.FileRef;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Folder;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
@@ -271,6 +272,73 @@ public class CourseService {
 		Semester semester = Semester.fromJson(responseJson);
 
 		return semester;
+	}
+
+	public int getAmountCourseNewsForCourseId(Id id) throws NotAuthenticatedException, ParseException {
+		authService.checkIfAuthenticated();
+
+		HttpResponse response;
+
+		try {
+			response = httpClient.get(SubPaths.API.toString()
+					+ Endpoints.COURSE_NEWS.toString().replace(":course_id", id.asHex()) + "?limit=1");
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+			return -1;
+		}
+
+		if (response.getStatusLine().getStatusCode() / 100 == 2) {
+			String responseBody = BasicHttpClient.getResponseBody(response);
+			JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
+
+			if (responseJson.containsKey("pagination")) {
+				JSONObject paginationJson = (JSONObject) responseJson.get("pagination");
+
+				if (paginationJson.containsKey("total")) {
+					return Integer.parseInt(paginationJson.get("total").toString());
+				}
+			}
+		}
+
+		return -1;
+	}
+
+	public List<CourseNews> getAllCourseNewsForCourseId(Id id) throws NotAuthenticatedException, ParseException {
+		authService.checkIfAuthenticated();
+
+		int totalAmountCourseNews = getAmountCourseNewsForCourseId(id);
+
+		int limit = 20;
+
+		List<CourseNews> allCourseNews = new ArrayList<>();
+
+		HttpResponse response;
+
+		for (int offset = 0; offset < totalAmountCourseNews; offset += limit) {
+			try {
+				response = httpClient.get(
+						SubPaths.API.toString() + Endpoints.COURSE_NEWS.toString().replace(":course_id", id.asHex())
+								+ "?offset=" + offset + "&limit=" + limit);
+			} catch (URISyntaxException | IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+			if (response.getStatusLine().getStatusCode() / 100 == 2) {
+				String responseBody = BasicHttpClient.getResponseBody(response);
+				JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
+
+				if (responseJson.containsKey("collection")) {
+					((Map<String, JSONObject>) responseJson.get("collection")).forEach((link, courseNewsJson) -> {
+						CourseNews courseNews = CourseNews.fromJson(courseNewsJson);
+
+						allCourseNews.add(courseNews);
+					});
+				}
+			}
+		}
+
+		return allCourseNews;
 	}
 
 }
