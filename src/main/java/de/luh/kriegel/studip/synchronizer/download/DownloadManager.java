@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +32,7 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.Semester;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefNode;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
 
-public class DownloadManager extends Observable{
+public class DownloadManager extends Observable {
 
 	private static final Logger log = LogManager.getLogger(DownloadManager.class);
 
@@ -68,8 +69,12 @@ public class DownloadManager extends Observable{
 		}
 	}
 
-	private File getDownloadDirectory() {
+	public File getDownloadDirectory() {
 		return defaultDownloadDirectory.toFile();
+	}
+
+	public void setDownloadDirectory(File defaultDownloadDirectory) {
+		this.defaultDownloadDirectory = defaultDownloadDirectory.toPath();
 	}
 
 	private File getSemesterDirectory(Semester semester) {
@@ -114,7 +119,7 @@ public class DownloadManager extends Observable{
 		return createDirIfNotExists(courseDir);
 	}
 
-	public void downloadFileRefTree(Course course, FileRefTree fileRefTree) {
+	public void downloadFileRefTree(Course course, FileRefTree fileRefTree, AtomicBoolean cancelled) {
 
 		if (!createCourseDirectoryIfNotExists(course)) {
 			return;
@@ -130,6 +135,11 @@ public class DownloadManager extends Observable{
 
 		int count = 0;
 		for (CompletableFuture<Void> task : downloadTasks) {
+			if (cancelled != null && cancelled.get()) {
+				task.cancel(true);
+				continue;
+			}
+
 			try {
 				log.info(count + "/" + size + " : " + course.getTitle());
 				task.get();
@@ -139,7 +149,11 @@ public class DownloadManager extends Observable{
 			}
 
 		}
-		
+
+		if (cancelled != null && cancelled.get()) {
+			return;
+		}
+
 		setChanged();
 		notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
 		log.info("DONE : " + course.getTitle());
@@ -149,13 +163,14 @@ public class DownloadManager extends Observable{
 			Queue<CompletableFuture<Void>> downloadTasks) {
 
 		for (FileRefNode child : node.getChildren()) {
-			downloadTasks.add(CompletableFuture.runAsync(() -> {
-				if (child.isDirectory()) {
-					File dir = new File(parentDir.getAbsolutePath() + "/" + child.getFolder().getNameValidAsFilename());
-					createDirIfNotExists(dir);
+			if (child.isDirectory()) {
+				File dir = new File(parentDir.getAbsolutePath() + "/" + child.getFolder().getNameValidAsFilename());
+				createDirIfNotExists(dir);
 
-					downloadFileRefTreeRecursive(dir, child, downloadTasks);
-				} else {
+				downloadFileRefTreeRecursive(dir, child, downloadTasks);
+			} else {
+				downloadTasks.add(CompletableFuture.runAsync(() -> {
+
 					HttpResponse response;
 
 					FileRef fileRef = child.getFileRef();
@@ -189,11 +204,9 @@ public class DownloadManager extends Observable{
 					} catch (URISyntaxException | IOException e) {
 						e.printStackTrace();
 					}
-				}
-			}, es));
-
+				}, es));
+			}
 		}
-
 	}
 
 }

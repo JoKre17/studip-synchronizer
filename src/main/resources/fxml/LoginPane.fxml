@@ -15,9 +15,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane id="loginRoot" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
+<BorderPane id="loginRoot" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.LoginController">
+   <stylesheets>
+      <URL value="@../css/Default.css" />
+      <URL value="@../css/Colors.css" />
+      <URL value="@../css/LoginPane.css" />
+   </stylesheets>
    <center>
-      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="200.0" prefWidth="400.0">
+      <GridPane maxHeight="-Infinity" maxWidth="-Infinity" onKeyPressed="#keyPressed" prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="100.0" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
@@ -25,12 +30,12 @@
          <rowConstraints>
             <RowConstraints vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
-            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="40.0" />
             <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints prefHeight="40.0" />
             <RowConstraints maxHeight="-Infinity" prefHeight="25.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
             <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
@@ -46,23 +51,24 @@
                   </HBox>
                </children>
             </VBox>
-            <JFXTextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <JFXPasswordField fx:id="passwordField" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <JFXTextField fx:id="usernameField" promptText="Username" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <JFXPasswordField fx:id="passwordField" promptText="Password" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
             <Button id="loginButton" minHeight="35.0" mnemonicParsing="false" onMouseClicked="#loginButtonClicked" prefWidth="300.0" text="Login" GridPane.columnSpan="2" GridPane.rowIndex="9" />
             <Label text="StudIP URL" />
-            <Label text="Username" GridPane.rowIndex="3" />
-            <Label text="Password" GridPane.rowIndex="6" />
+            <Label text="Username" GridPane.rowIndex="2" />
+            <Label text="Password" GridPane.rowIndex="5" />
             <Label fx:id="studipUrlInfoLabel" maxWidth="1.7976931348623157E308" styleClass="inputFieldInfoLabel" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label fx:id="usernameInfoLabel" maxWidth="1.7976931348623157E308" styleClass="inputFieldInfoLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="passwordInfoLabel" maxWidth="1.7976931348623157E308" styleClass="inputFieldInfoLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <Label fx:id="usernameInfoLabel" maxWidth="1.7976931348623157E308" styleClass="inputFieldInfoLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="passwordInfoLabel" maxWidth="1.7976931348623157E308" styleClass="inputFieldInfoLabel" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <JFXCheckBox fx:id="rememberMeCheckBox" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Remember me" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
       </GridPane>
    </center>
-   <stylesheets>
-      <URL value="@../css/Colors.css" />
-      <URL value="@../css/LoginPane.css" />
-   </stylesheets>
 </BorderPane>

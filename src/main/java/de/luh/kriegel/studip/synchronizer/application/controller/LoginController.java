@@ -1,6 +1,7 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -21,13 +22,12 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
+import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.model.CustomServerPair;
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -60,16 +60,19 @@ public class LoginController implements Initializable {
 	@FXML
 	private JFXComboBox<CustomServerPair> studipUrlComboBox;
 
-	private ChangeListener<CustomServerPair> studipURLComboBoxListner = new ChangeListener<CustomServerPair>(){
+	private ChangeListener<CustomServerPair> studipURLComboBoxListner = new ChangeListener<CustomServerPair>() {
 		@Override
 		public void changed(ObservableValue<? extends CustomServerPair> observable, CustomServerPair oldValue,
 				CustomServerPair newValue) {
-			if(newValue != null && newValue.getValue() != null) {
+			if (newValue != null && newValue.getValue() != null) {
 				studipUrlField.setText(newValue.getValue().toString());
+
+				ConfigManager.getStudipServerNameProperty().set(newValue.getKey());
+				ConfigManager.getStudipUrlProperty().set(studipUrlField.getText());
 			}
 		}
 	};
-	
+
 	@FXML
 	private JFXCheckBox studipUrlOtherCheckBox;
 
@@ -82,26 +85,27 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label passwordInfoLabel;
 
-	private final StringProperty passwordProperty = new SimpleStringProperty("");
+	@FXML
+	private JFXCheckBox rememberMeCheckBox;
 
-	private boolean testRun = false;
+	private boolean testRun = true;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		try {
 			InputStream studipServerAddressesInputStream = getClass().getClassLoader()
-					.getResourceAsStream("config/studipServerAddresses.prop");
+					.getResourceAsStream("config/studipServerAddresses.conf");
 			InputStreamReader isr = new InputStreamReader(studipServerAddressesInputStream, "UTF-8");
 
 			List<String> lines = new BufferedReader(isr).lines().collect(Collectors.toList());
 
 			ObservableList<CustomServerPair> items = FXCollections.observableArrayList();
 			for (String line : lines) {
-				if(line.indexOf("=") < 0) {
+				if (line.indexOf("=") < 0) {
 					continue;
 				}
-				
+
 				String[] split = line.split("=");
 				String serverName = split[0];
 				URL url;
@@ -119,15 +123,15 @@ public class LoginController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		studipUrlComboBox.setCellFactory(new Callback<ListView<CustomServerPair>, ListCell<CustomServerPair>>() {
 			@Override
 			public ListCell<CustomServerPair> call(ListView<CustomServerPair> p) {
 				return new ListCell<CustomServerPair>() {
-			        VBox vbox = new VBox();
-			        Label serverName = new Label("(Unknown)");
-			        Label url = new Label("(Unknown)");
-			        
+					VBox vbox = new VBox();
+					Label serverName = new Label("(Unknown)");
+					Label url = new Label("(Unknown)");
+
 					{
 						setContentDisplay(ContentDisplay.CENTER);
 						vbox.getChildren().addAll(serverName, url);
@@ -137,10 +141,10 @@ public class LoginController implements Initializable {
 					protected void updateItem(CustomServerPair item, boolean empty) {
 						super.updateItem(item, empty);
 
-						if(item == null || empty) {
+						if (item == null || empty) {
 							setGraphic(null);
 						}
-						
+
 						if (item != null) {
 							serverName.setText(item.getKey());
 							url.setText(item.getValue().toString());
@@ -148,18 +152,18 @@ public class LoginController implements Initializable {
 
 						}
 					}
-					
+
 				};
 			}
 		});
-		
-		passwordProperty.bind(passwordField.textProperty());
 
 		studipUrlField.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
 				if (newValue != null && newValue.length() > 0) {
+
+					ConfigManager.getStudipUrlProperty().set(newValue);
 
 					try {
 						URL baseUri = new URL(studipUrlField.getText());
@@ -197,7 +201,7 @@ public class LoginController implements Initializable {
 			}
 		});
 
-		passwordProperty.addListener(new ChangeListener<String>() {
+		ConfigManager.getPasswordProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if (newValue != null) {
@@ -214,52 +218,67 @@ public class LoginController implements Initializable {
 			}
 		});
 
-		if (testRun) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e1) {
-						e1.printStackTrace();
-					}
-					Platform.runLater(() -> {
-						studipUrlField.setText("https://studip.uni-hannover.de");
-						usernameField.setText("JK_14");
-						passwordField.setText("Aiedail95");
-
-						try {
-							login();
-						} catch (URISyntaxException e) {
-							e.printStackTrace();
-						}
-					});
-				}
-
-			}).start();
+		if (ConfigManager.getStudipServerNameProperty().get().equals("") && studipUrlComboBox.getItems().size() > 0) {
+			studipUrlComboBox.getSelectionModel().select(0);
+			studipUrlField.setText(studipUrlComboBox.getItems().get(0).getValue().toString());
 		}
+
+		for (int i = 0; i < studipUrlComboBox.getItems().size(); i++) {
+			if (ConfigManager.getStudipServerNameProperty().get()
+					.equals(studipUrlComboBox.getItems().get(i).getKey())) {
+				studipUrlComboBox.getSelectionModel().select(i);
+				studipUrlField.setText(studipUrlComboBox.getItems().get(i).getValue().toString());
+				break;
+			}
+		}
+
+		studipUrlOtherCheckBox.selectedProperty().set(ConfigManager.getStudipOtherUrlEnabledProperty().get());
+		studipUrlField.setText(ConfigManager.getStudipUrlProperty().get());
+		usernameField.setText(ConfigManager.getUsernameProperty().get());
+		passwordField.setText(ConfigManager.getPasswordProperty().get());
+		rememberMeCheckBox.selectedProperty().set(ConfigManager.getRememberMeEnabledProperty().get());
 
 		studipUrlOtherCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				studipUrlComboBox.setDisable(newValue);
 				studipUrlField.setDisable(!newValue);
-				
-				if(newValue) {
-					studipUrlComboBox.getSelectionModel().selectedItemProperty().removeListener(studipURLComboBoxListner);
+
+				if (newValue) {
+					studipUrlComboBox.getSelectionModel().selectedItemProperty()
+							.removeListener(studipURLComboBoxListner);
 				} else {
 					studipUrlComboBox.getSelectionModel().selectedItemProperty().addListener(studipURLComboBoxListner);
 				}
+
 			}
 		});
-		
-		if(!studipUrlOtherCheckBox.isSelected()) {
-			studipUrlComboBox.getSelectionModel().selectedItemProperty().addListener(studipURLComboBoxListner);
-		}
-		
-		if(!studipUrlComboBox.getItems().isEmpty()) {
-			studipUrlComboBox.getSelectionModel().select(studipUrlComboBox.getItems().get(0));
+
+		rememberMeCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					usernameField.setText(usernameField.getText());
+				}
+			}
+		});
+
+		studipUrlComboBox.setDisable(studipUrlOtherCheckBox.selectedProperty().get());
+		studipUrlField.setDisable(!studipUrlOtherCheckBox.selectedProperty().get());
+
+		ConfigManager.getStudipOtherUrlEnabledProperty().bind(studipUrlOtherCheckBox.selectedProperty());
+		ConfigManager.getUsernameProperty().bind(usernameField.textProperty());
+		ConfigManager.getPasswordProperty().bind(passwordField.textProperty());
+		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeCheckBox.selectedProperty());
+
+		if (testRun) {
+			Platform.runLater(() -> {
+				try {
+					login();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			});
 		}
 
 	}
@@ -324,14 +343,16 @@ public class LoginController implements Initializable {
 
 		studipUrlField.setText(baseUri.toString());
 
-		String username = usernameField.getText();
-		String password = passwordProperty.getValue();
+		String username = ConfigManager.getUsernameProperty().getValue();
+		String password = ConfigManager.getPasswordProperty().getValue();
 
 		Credentials credentials = new Credentials(username, password);
 		log.info("Base URL: " + studipUrlField.getText());
 		log.info(credentials);
 
 		SynchronizerApp.studipClient = new StudIPClient(baseUri, credentials);
+		SynchronizerApp.studipClient.getCourseService().getDownloadManager()
+				.setDownloadDirectory(new File(ConfigManager.getDownloadDirectoryPathProperty().get()));
 		AuthService authService = SynchronizerApp.studipClient.getAuthService();
 
 		boolean isSuccessfullyAuthenticated = authService.authenticate();
@@ -348,7 +369,6 @@ public class LoginController implements Initializable {
 			SynchronizerApp.simpleWindowStage.getController().setStatus(authService.getAuthErrorResponse());
 		}
 
-		SynchronizerApp.simpleWindowStage.getController().clearStatus();
 	}
 
 }

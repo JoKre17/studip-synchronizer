@@ -2,10 +2,6 @@ package de.luh.kriegel.studip.synchronizer;
 
 import java.io.File;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,8 +12,6 @@ import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.config.Config;
-import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
-import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
 import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
 import javafx.application.Application;
 
@@ -58,23 +52,6 @@ public class Main {
 		CourseService courseService = studIPClient.getCourseService();
 		DownloadManager downloadManager = courseService.getDownloadManager();
 
-		Map<Course, Course> courseTutorialMap = courseService.getCourseTutorialMap();
-		Map<Course, List<CourseNews>> courseNotifications = new HashMap<>();
-		for (Entry<Course, Course> entry : courseTutorialMap.entrySet()) {
-			List<CourseNews> courseNews = courseService.getAllCourseNewsForCourseId(entry.getKey().getId());
-			if (courseNews.size() > 0) {
-				courseNotifications.put(entry.getKey(), courseNews);
-			}
-		}
-
-		for (Entry<Course, List<CourseNews>> entry : courseNotifications.entrySet()) {
-			System.out.println(entry.getKey().getTitle());
-			for (CourseNews cn : entry.getValue()) {
-				System.out.println("\t" + cn.toString());
-			}
-		}
-
-		courseService.close();
 	}
 
 }

@@ -21,7 +21,7 @@ def ping(url:'http://google.com'):
 	
 urlMap = {}
 
-file = io.open('studipServerAddresses.prop', mode='r', encoding="utf-8")
+file = io.open('studipServerAddresses.conf', mode='r', encoding="utf-8")
 lines = file.read().strip().split('\n')
 
 for line in lines:

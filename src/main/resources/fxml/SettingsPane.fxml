@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
    <children>
       <GridPane>
          <columnConstraints>
@@ -86,7 +86,7 @@
                         <Label text="Download Directory" GridPane.rowIndex="3" />
                         <HBox GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <children>
-                              <Label fx:id="dowloadDirectoryLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="C:\Dummy\Dummy" HBox.hgrow="ALWAYS" />
+                              <Label fx:id="downloadDirectoryLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="C:\Dummy\Dummy" HBox.hgrow="ALWAYS" />
                               <VBox alignment="CENTER" minWidth="60.0">
                                  <children>
                                     <JFXButton fx:id="downloadDirectoryBrowseButton" minWidth="50.0" text="..." VBox.vgrow="NEVER" />

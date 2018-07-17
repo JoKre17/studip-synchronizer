@@ -1,12 +1,21 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
+import java.awt.AWTException;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -22,10 +31,14 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class SimpleWindowController implements Initializable {
 
 	private final static Logger log = LogManager.getLogger(SimpleWindowController.class);
+
+	public TrayIcon trayIcon;
+	private boolean firstTimeMinimizedToTray = true;
 
 	@FXML
 	private AnchorPane root;
@@ -74,6 +87,7 @@ public class SimpleWindowController implements Initializable {
 	@FXML
 	private void minimizeApp(MouseEvent e) {
 		stage.setIconified(true);
+
 	}
 
 	// When pressed, check if it must maximize or restore the window
@@ -93,8 +107,12 @@ public class SimpleWindowController implements Initializable {
 	// When pressed, will kill the window
 	@FXML
 	private void closeApp(MouseEvent e) {
-		stage.close();
-		System.exit(0);
+		if (SystemTray.isSupported()) {
+			hide(stage);
+		} else {
+			stage.close();
+			System.exit(0);
+		}
 	}
 
 	// When i must update the XY of the click
@@ -228,6 +246,92 @@ public class SimpleWindowController implements Initializable {
 
 		});
 
+	}
+
+	public void createTrayIcon(final Stage stage) {
+		if (SystemTray.isSupported()) {
+			// get the SystemTray instance
+
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent t) {
+					log.debug("Closing stage");
+					hide(stage);
+				}
+			});
+			// create a action listener to listen for default action executed on the tray
+			// icon
+			final ActionListener closeListener = new ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					System.exit(0);
+				}
+			};
+
+			ActionListener showListener = new ActionListener() {
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							stage.show();
+						}
+					});
+				}
+			};
+			// create a popup menu
+			PopupMenu popup = new PopupMenu();
+
+			MenuItem showItem = new MenuItem("Show");
+			showItem.addActionListener(showListener);
+			popup.add(showItem);
+
+			MenuItem closeItem = new MenuItem("Close");
+			closeItem.addActionListener(closeListener);
+			popup.add(closeItem);
+			/// ... add other items
+			// construct a TrayIcon
+
+			trayIcon = new TrayIcon(SwingFXUtils.fromFXImage(SynchronizerApp.ICON_TRANSPARENT, null),
+					"StudIP Synchronizer", popup);
+			trayIcon.setImageAutoSize(true);
+			// set the TrayIcon properties
+			trayIcon.addActionListener(showListener);
+			// ...
+			// add the tray image
+
+			// ...
+			SystemTray tray = SystemTray.getSystemTray();
+			try {
+				tray.add(trayIcon);
+			} catch (AWTException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	public void showProgramIsMinimizedMsg() {
+		if (firstTimeMinimizedToTray) {
+
+		}
+	}
+
+	private void hide(final Stage stage) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				if (SystemTray.isSupported()) {
+					stage.hide();
+					if (firstTimeMinimizedToTray) {
+						trayIcon.displayMessage("StudIP Synchronizer", "Still running in background.",
+								TrayIcon.MessageType.INFO);
+						firstTimeMinimizedToTray = false;
+					}
+				} else {
+					System.exit(0);
+				}
+			}
+		});
 	}
 
 	@Override

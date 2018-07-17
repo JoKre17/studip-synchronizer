@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.client.BasicHttpClient;
 import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
 import de.luh.kriegel.studip.synchronizer.config.Endpoints;
@@ -42,6 +43,7 @@ public class AuthService {
 			e.printStackTrace();
 			isAuthenticated = false;
 			authErrorResponse = e.getClass().getName() + ": " + e.getMessage();
+			SynchronizerApp.simpleWindowStage.getController().setStatus(authErrorResponse);
 			return false;
 		}
 
