@@ -18,6 +18,7 @@ import com.jfoenix.controls.JFXToggleButton;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -79,12 +80,14 @@ public class SettingsController implements Initializable {
 
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MILLISECOND, timeUntilNextSynchronizationInMilliseconds);
-			c.add(Calendar.MINUTE, synchIntervallInMinutes);
+//			c.add(Calendar.MINUTE, synchIntervallInMinutes);
 
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 			String content = format.format(c.getTime());
 
-			nextSynchAtLabel.setText("Next run at " + content + " (local time)");
+			Platform.runLater(() -> {
+				nextSynchAtLabel.setText("Next run at " + content + " (local time)");
+			});
 
 			if (SynchronizerApp.synchronizerTimer != null) {
 				SynchronizerApp.synchronizerTimer.interrupt();
@@ -100,7 +103,9 @@ public class SettingsController implements Initializable {
 				SynchronizerApp.synchronizerTimer.start();
 			}
 		} else {
-			nextSynchAtLabel.setText("No run scheduled");
+			Platform.runLater(() -> {
+				nextSynchAtLabel.setText("No run scheduled");
+			});
 
 			if (SynchronizerApp.synchronizerTimer != null) {
 				SynchronizerApp.synchronizerTimer.interrupt();

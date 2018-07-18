@@ -134,6 +134,7 @@ public class DownloadManager extends Observable {
 		int size = downloadTasks.size();
 
 		int count = 0;
+		log.debug(count + "/" + size + " : " + course.getTitle());
 		for (CompletableFuture<Void> task : downloadTasks) {
 			if (cancelled != null && cancelled.get()) {
 				task.cancel(true);
@@ -141,9 +142,9 @@ public class DownloadManager extends Observable {
 			}
 
 			try {
-				log.info(count + "/" + size + " : " + course.getTitle());
 				task.get();
 				count++;
+				log.debug(count + "/" + size + " : " + course.getTitle());
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
