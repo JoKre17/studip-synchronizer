@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.controller.StageController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
-import de.luh.kriegel.studip.synchronizer.application.view.MainView;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Application;
@@ -53,10 +52,9 @@ public class SynchronizerApp extends Application {
 		LoginView loginView = new LoginView();
 		StageController.addRegionToStagingMap("LOGIN_STAGE", loginView);
 
-		MainView mainView = new MainView();
-		StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
-
 		StageController.setStage("LOGIN_STAGE");
+		
+		simpleWindowStage.show();
 	}
 
 }

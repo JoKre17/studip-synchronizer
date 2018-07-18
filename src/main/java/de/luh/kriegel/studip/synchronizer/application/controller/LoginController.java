@@ -24,6 +24,7 @@ import com.jfoenix.controls.JFXTextField;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.model.CustomServerPair;
+import de.luh.kriegel.studip.synchronizer.application.view.MainView;
 import de.luh.kriegel.studip.synchronizer.auth.Credentials;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
@@ -88,7 +89,7 @@ public class LoginController implements Initializable {
 	@FXML
 	private JFXCheckBox rememberMeCheckBox;
 
-	private boolean testRun = true;
+	private boolean testRun = false;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -362,6 +363,9 @@ public class LoginController implements Initializable {
 
 		if (isSuccessfullyAuthenticated) {
 			SynchronizerApp.simpleWindowStage.getController().setStatus("Logged in");
+			
+			MainView mainView = new MainView();
+			StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
 
 			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
 			// StageController.setStage("SETTINGS_STAGE");

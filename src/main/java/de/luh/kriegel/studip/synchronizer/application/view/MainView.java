@@ -36,7 +36,7 @@ public class MainView extends VBox implements Initializable {
 
 		mainController = loader.getController();
 		
-		this.setStyle("-fx-background-color: transparent;");
+//		this.setStyle("-fx-background-color: transparent;");
 		
 		initialize();
 	}

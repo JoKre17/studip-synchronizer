@@ -303,6 +303,7 @@ public class CourseService {
 		return -1;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<CourseNews> getAllCourseNewsForCourseId(Id id) throws NotAuthenticatedException, ParseException {
 		authService.checkIfAuthenticated();
 

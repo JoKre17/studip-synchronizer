@@ -45,8 +45,8 @@ public class Credentials {
 
 	@Override
 	public String toString() {
-//		return username + " : " + password.replaceAll(".", "*");
-		return toJson().toJSONString();
+		return "Credentials: " + "username: " + username + ", password: " + password.replaceAll(".", "*");
+//		return toJson().toJSONString();
 	}
 	
 }

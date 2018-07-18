@@ -114,10 +114,10 @@ public class SettingsController implements Initializable {
 		// Download
 
 		// Set UserData for Radio Buttons
-		oncePerStartRadioButton.setUserData(new Integer(0));
-		fiveMinRadioButton.setUserData(new Integer(5));
-		fifteenMinRadioButton.setUserData(new Integer(15));
-		thirtyMinRadioButton.setUserData(new Integer(30));
+		oncePerStartRadioButton.setUserData(0);
+		fiveMinRadioButton.setUserData(5);
+		fifteenMinRadioButton.setUserData(15);
+		thirtyMinRadioButton.setUserData(30);
 
 		synchronizeIntervalRadioButtons = Arrays.asList(oncePerStartRadioButton, fiveMinRadioButton,
 				fifteenMinRadioButton, thirtyMinRadioButton);
