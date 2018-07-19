@@ -63,8 +63,12 @@ public class ConfigManager {
 
 	// APPLICATION
 	private static final String FIRST_START_OF_APPLICATION_KEY = "FIRST_START";
+	private static final String MINIMIZED_START_OF_APPLICATION_KEY = "MINIMIZED_START";
+	private static final String RUN_APPLICATION_ON_SYSTEM_START_KEY = "RUN_APPLICATION_ON_SYSTEM_START";
 
 	private static final BooleanProperty firstStartOfApplicationProperty = new SimpleBooleanProperty(true);
+	private static final BooleanProperty minimizedStartOfApplicationProperty = new SimpleBooleanProperty(false);
+	private static final BooleanProperty runApplicationOnSystemStartProperty = new SimpleBooleanProperty(false);
 
 	public ConfigManager() {
 
@@ -147,6 +151,12 @@ public class ConfigManager {
 			// APPLICATION
 			case FIRST_START_OF_APPLICATION_KEY:
 				firstStartOfApplicationProperty.set(Boolean.parseBoolean(value));
+				break;
+			case MINIMIZED_START_OF_APPLICATION_KEY:
+				minimizedStartOfApplicationProperty.set(Boolean.parseBoolean(value));
+				break;
+			case RUN_APPLICATION_ON_SYSTEM_START_KEY:
+				runApplicationOnSystemStartProperty.set(Boolean.parseBoolean(value));
 				break;
 			}
 		}
@@ -336,6 +346,30 @@ public class ConfigManager {
 			}
 		});
 
+		minimizedStartOfApplicationProperty.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				properties.setProperty(MINIMIZED_START_OF_APPLICATION_KEY, newValue.toString());
+				try {
+					saveProperties();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		runApplicationOnSystemStartProperty.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				properties.setProperty(RUN_APPLICATION_ON_SYSTEM_START_KEY, newValue.toString());
+				try {
+					saveProperties();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
 	}
 
 	// LOGIN
@@ -388,5 +422,13 @@ public class ConfigManager {
 
 	public static BooleanProperty getFirstStartOfApplicationProperty() {
 		return firstStartOfApplicationProperty;
+	}
+
+	public static BooleanProperty getMinimizedStartOfApplicationProperty() {
+		return minimizedStartOfApplicationProperty;
+	}
+	
+	public static BooleanProperty getRunApplicationOnSystemStartProperty() {
+		return runApplicationOnSystemStartProperty;
 	}
 }

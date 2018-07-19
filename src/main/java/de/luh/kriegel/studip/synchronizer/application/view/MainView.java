@@ -19,6 +19,7 @@ public class MainView extends VBox implements Initializable {
 
 	private MainController mainController;
 	private SettingsView settingsView;
+	private TaskSchedulerView taskSchedulerView;
 
 	public MainView() {
 
@@ -48,8 +49,10 @@ public class MainView extends VBox implements Initializable {
 	
 	private void initialize() {
 		settingsView = new SettingsView();
+		taskSchedulerView = new TaskSchedulerView();
 		
 		mainController.setSettingsPane(settingsView);
+		mainController.setTaskSchedulerPane(taskSchedulerView);
 	}
 
 	public MainController getController() {

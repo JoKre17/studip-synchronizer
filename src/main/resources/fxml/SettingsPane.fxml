@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.SettingsController">
    <children>
       <GridPane>
          <columnConstraints>
@@ -143,6 +143,64 @@
                      <children>
                         <Label styleClass="key" text="Enabled" />
                         <JFXToggleButton fx:id="notificationEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" GridPane.columnIndex="1" />
+                     </children>
+                     <styleClass>
+                        <String fx:value="grid-pane" />
+                        <String fx:value="pane" />
+                     </styleClass>
+                  </GridPane>
+               </children>
+               <GridPane.margin>
+                  <Insets bottom="15.0" />
+               </GridPane.margin>
+            </VBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <styleClass>
+            <String fx:value="settings" />
+            <String fx:value="settingsGrid" />
+         </styleClass>
+      </GridPane>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <VBox>
+               <children>
+                  <HBox>
+                     <children>
+                        <Label styleClass="header" text="Application" />
+                     </children>
+                  </HBox>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="75.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label styleClass="key" text="Start Minimized" GridPane.rowIndex="1" />
+                        <HBox GridPane.columnIndex="1">
+                           <children>
+                              <JFXToggleButton fx:id="rememberMeEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" />
+                           </children>
+                        </HBox>
+                        <Label styleClass="key" text="Remember Me" />
+                        <HBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <JFXToggleButton fx:id="minimizedStartEnabledToggleButton" selected="true" text=" " toggleColor="#028a7c" toggleLineColor="#70c6bd" />
+                           </children>
+                        </HBox>
                      </children>
                      <styleClass>
                         <String fx:value="grid-pane" />

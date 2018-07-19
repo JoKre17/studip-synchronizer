@@ -46,7 +46,7 @@ public class SynchronizerApp extends Application {
 
 		simpleWindowStage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
 		simpleWindowStage.getIcons().add(ICON);
-
+		
 		StageController.setSimpleWindowStage(simpleWindowStage);
 
 		LoginView loginView = new LoginView();

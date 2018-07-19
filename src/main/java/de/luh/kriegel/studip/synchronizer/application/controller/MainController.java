@@ -15,6 +15,9 @@ public class MainController {
 	AnchorPane settingsRootPane;
 
 	@FXML
+	AnchorPane taskSchedulerRootPane;
+
+	@FXML
 	AnchorPane aboutRootPane;
 	
 	public void setSettingsPane(Region settingsPane) {
@@ -22,6 +25,13 @@ public class MainController {
 		settingsRootPane.getChildren().add(settingsPane);
 
 		setAllAnchors(settingsPane, 0.0);
+	}
+	
+	public void setTaskSchedulerPane(Region taskSchedulerPane) {
+		taskSchedulerRootPane.getChildren().clear();
+		taskSchedulerRootPane.getChildren().add(taskSchedulerPane);
+		
+		setAllAnchors(taskSchedulerPane, 0.0);
 	}
 	
 	public void setAboutPane(Region aboutPane) {

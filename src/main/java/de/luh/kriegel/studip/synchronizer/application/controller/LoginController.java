@@ -272,7 +272,7 @@ public class LoginController implements Initializable {
 		ConfigManager.getPasswordProperty().bind(passwordField.textProperty());
 		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeCheckBox.selectedProperty());
 
-		if (testRun) {
+		if (ConfigManager.getRememberMeEnabledProperty().get()) {
 			Platform.runLater(() -> {
 				try {
 					login();

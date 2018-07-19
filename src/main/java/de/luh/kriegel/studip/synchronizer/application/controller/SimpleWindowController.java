@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
+import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
@@ -38,7 +39,6 @@ public class SimpleWindowController implements Initializable {
 	private final static Logger log = LogManager.getLogger(SimpleWindowController.class);
 
 	public TrayIcon trayIcon;
-	private boolean firstTimeMinimizedToTray = true;
 
 	@FXML
 	private AnchorPane root;
@@ -310,22 +310,16 @@ public class SimpleWindowController implements Initializable {
 		}
 	}
 
-	public void showProgramIsMinimizedMsg() {
-		if (firstTimeMinimizedToTray) {
-
-		}
-	}
-
-	private void hide(final Stage stage) {
+	public void hide(final Stage stage) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				if (SystemTray.isSupported()) {
 					stage.hide();
-					if (firstTimeMinimizedToTray) {
+					if (ConfigManager.getFirstStartOfApplicationProperty().get()) {
 						trayIcon.displayMessage("StudIP Synchronizer", "Still running in background.",
 								TrayIcon.MessageType.INFO);
-						firstTimeMinimizedToTray = false;
+						ConfigManager.getFirstStartOfApplicationProperty().set(false);
 					}
 				} else {
 					System.exit(0);

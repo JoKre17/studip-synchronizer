@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.SimpleWindowStage;
+import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import javafx.scene.layout.Region;
 
 public class StageController {
@@ -34,6 +35,10 @@ public class StageController {
 	public static void setStage(String stageId) {
 		if(simpleWindowStage == null) {
 			log.error("simpleWindowStage is not initialized");
+		}
+		
+		if(ConfigManager.getMinimizedStartOfApplicationProperty().get()) {
+			simpleWindowStage.getController().hide(simpleWindowStage);
 		}
 		
 		log.debug("Change stage to: " + stageId);

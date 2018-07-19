@@ -70,6 +70,14 @@ public class SettingsController implements Initializable {
 
 	@FXML
 	private JFXToggleButton notificationEnabledToggleButton;
+	
+	// Application
+	
+	@FXML
+	private JFXToggleButton minimizedStartEnabledToggleButton;
+
+	@FXML
+	private JFXToggleButton rememberMeEnabledToggleButton;
 
 	private List<JFXRadioButton> synchronizeIntervalRadioButtons;
 
@@ -182,12 +190,18 @@ public class SettingsController implements Initializable {
 		downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
 
 		notificationEnabledToggleButton.selectedProperty().set(ConfigManager.getNotificationsEnabledProperty().get());
+		
+		minimizedStartEnabledToggleButton.selectedProperty().set(ConfigManager.getMinimizedStartOfApplicationProperty().get());
+		rememberMeEnabledToggleButton.selectedProperty().set(ConfigManager.getRememberMeEnabledProperty().get());
 
 		ConfigManager.getDownloadEnabledProperty().bind(downloadEnabledToggleButton.selectedProperty());
 		ConfigManager.getDownloadDirectoryPathProperty().bind(downloadDirectoryLabel.textProperty());
 
 		ConfigManager.getNotificationsEnabledProperty().bind(notificationEnabledToggleButton.selectedProperty());
-
+		
+		ConfigManager.getMinimizedStartOfApplicationProperty().bind(minimizedStartEnabledToggleButton.selectedProperty());
+		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeEnabledToggleButton.selectedProperty());
+		
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
