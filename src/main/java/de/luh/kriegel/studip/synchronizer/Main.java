@@ -13,6 +13,7 @@ import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.config.Config;
 import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
+import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Application;
 
 public class Main {
@@ -52,6 +53,9 @@ public class Main {
 		CourseService courseService = studIPClient.getCourseService();
 		DownloadManager downloadManager = courseService.getDownloadManager();
 
+		SynchronizeTimer timer = new SynchronizeTimer(studIPClient, 0);
+		timer.start();
+		
 	}
 
 }

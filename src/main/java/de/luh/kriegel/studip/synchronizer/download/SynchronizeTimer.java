@@ -120,7 +120,7 @@ public class SynchronizeTimer extends Thread {
 							downloadManager.downloadFileRefTree(lecture, fileRefTree, cancelled);
 
 							if (tutorial != null) {
-								fileRefTree = courseService.getFileRefTree(lecture);
+								fileRefTree = courseService.getFileRefTree(tutorial);
 								downloadManager.downloadFileRefTree(tutorial, fileRefTree, cancelled);
 							}
 

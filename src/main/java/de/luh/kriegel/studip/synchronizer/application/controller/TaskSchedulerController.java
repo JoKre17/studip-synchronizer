@@ -173,7 +173,7 @@ public class TaskSchedulerController implements Initializable {
 		String executableScript = "\"\\\"" + new File("").getAbsolutePath() + "\\studipSynchronizer.vbs\\\"\" ";
 
 		String schtaskCommand = "cmd /c schtasks /create /tn \"StudIP Synchronizer\" /tr " + executableScript
-				+ " /sc onstart /rl highest /V1 /RU " + username + " /RP " + password;
+				+ " /sc onlogon /delay 0001:00 /rl highest /V1 /RU " + username + " /RP " + password;
 
 		Runtime runTime = Runtime.getRuntime();
 		Process p = runTime.exec(schtaskCommand);

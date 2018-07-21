@@ -17,9 +17,11 @@ import com.jfoenix.controls.JFXToggleButton;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
+import de.luh.kriegel.studip.synchronizer.application.notification.NotificationController;
 import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -82,6 +84,17 @@ public class SettingsController implements Initializable {
 	private List<JFXRadioButton> synchronizeIntervalRadioButtons;
 
 	private void downloadEnabledUpdated(boolean downloadEnabled) {
+		
+		Platform.runLater(() -> {
+			StringProperty downloadDirectoryPathProperty = ConfigManager.getDownloadDirectoryPathProperty();
+			if(downloadDirectoryPathProperty.get().equals("")) {
+				downloadDirectoryLabel.setText(SynchronizerApp.studipClient.getCourseService().getDownloadManager().getDownloadDirectory().getAbsolutePath());
+			} else {
+				downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
+			}
+		});
+		
+		
 		if (downloadEnabled) {
 			int timeUntilNextSynchronizationInMilliseconds = (int) SynchronizeTimer.SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS;
 			int synchIntervallInMinutes = ConfigManager.getSynchronizationIntervalProperty().get();

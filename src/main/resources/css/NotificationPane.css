@@ -1,0 +1,22 @@
+@import "/css/Default.css";
+
+#root {}
+
+#titleBar {
+	-fx-background-color: linear-gradient(to right, -fx-base, baseGreyLighter6 0.0%, white 100.0%);
+}
+
+#title {
+	-fx-font-size: 18.0px;
+}
+
+#closeButton {
+	-fx-background-image: url("/images/window/x_inverted_25_25.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-color: transparent;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
