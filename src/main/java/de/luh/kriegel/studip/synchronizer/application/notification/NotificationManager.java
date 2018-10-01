@@ -29,7 +29,7 @@ public class NotificationManager {
 	private final File courseNewsIdLogfile;
 	private final String COURSE_NEWS_ID_LOGFILE = "courseNewsIds.log";
 	private final List<Id> oldCourseNewsIds;
-	
+
 	public NotificationManager() throws Exception {
 		courseNewsIdLogfile = new File(COURSE_NEWS_ID_LOGFILE);
 		if (!courseNewsIdLogfile.exists()) {
@@ -90,6 +90,8 @@ public class NotificationManager {
 
 	public Map<Course, List<CourseNews>> getAllNewCoursNews() throws NotAuthenticatedException, ParseException {
 
+		log.info("Fetch all new course news");
+
 		Map<Course, List<CourseNews>> courseNewsMap = new HashMap<>();
 		List<Course> allCourses = SynchronizerApp.studipClient.getCourseService().getAllCourses();
 
@@ -118,6 +120,7 @@ public class NotificationManager {
 			}
 		}
 
+		log.info("Fetching course news finished.");
 		log.info("Fetched new news for " + courseNewsMap.size() + " courses.");
 		return courseNewsMap;
 	}

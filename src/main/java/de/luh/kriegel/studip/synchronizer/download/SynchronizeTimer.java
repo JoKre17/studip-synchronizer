@@ -34,6 +34,8 @@ public class SynchronizeTimer extends Thread {
 	private DownloadManager downloadManager;
 	private Map<Course, Course> courseTutorialMap;
 
+	private ExecutorService es;
+
 	private AtomicBoolean cancelled = new AtomicBoolean(false);
 
 	public SynchronizeTimer(StudIPClient studipClient, long sleepTimeMillis) {
@@ -59,6 +61,21 @@ public class SynchronizeTimer extends Thread {
 		}
 	}
 
+	private void deinit() {
+
+		if (es != null) {
+			es.shutdown();
+			while (es.isShutdown()) {
+				try {
+					Thread.sleep(20);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+
+	}
+
 	public void updateSleepTimeMillis(long sleepTimeMillis) {
 
 		this.sleepTimeMillis = sleepTimeMillis;
@@ -72,6 +89,9 @@ public class SynchronizeTimer extends Thread {
 			return;
 		}
 
+		es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
+		// Run
 		while (true) {
 
 			// wait 30 seconds before first synch
@@ -82,27 +102,26 @@ public class SynchronizeTimer extends Thread {
 					Thread.sleep(SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS);
 					firstRun = false;
 				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return;
+					log.error(e.getMessage(), e);
+					break;
 				}
 			}
 
 			try {
 				courseTutorialMap = courseService.getCourseTutorialMap();
 			} catch (NotAuthenticatedException | ParseException e2) {
-				e2.printStackTrace();
-				return;
+				log.error(e2.getMessage(), e2);
+				break;
 			}
 
 			if (!downloadManager.getDownloadDirectory().exists()
 					|| !downloadManager.getDownloadDirectory().isDirectory()) {
 				log.info(downloadManager.getDownloadDirectory().getAbsolutePath()
 						+ " does not exist or is no directory!");
-				return;
+				break;
 			}
 
 			List<CompletableFuture<Void>> downloadTasks = new ArrayList<>();
-			ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 			log.info("Start Synchronization");
 
@@ -125,8 +144,8 @@ public class SynchronizeTimer extends Thread {
 							}
 
 						} catch (Exception e1) {
-							System.out.println("Inner exception");
-							e1.printStackTrace();
+							log.error("Inner exception");
+							log.error(e1.getMessage(), e1);
 						}
 					}, es));
 
@@ -149,16 +168,18 @@ public class SynchronizeTimer extends Thread {
 				}
 
 				log.debug("Sleep Time! for " + (sleepTimeMillis / 60000.0) + " minutes");
+
+				// if run only once at startup, then interrupt here
 				if (sleepTimeMillis == 0) {
 					break;
 				}
 				Thread.sleep(sleepTimeMillis);
 			} catch (InterruptedException e) {
-
-			} finally {
-				es.shutdown();
+				log.warn(e.getMessage(), e);
 			}
 		}
+
+		deinit();
 	}
 
 }

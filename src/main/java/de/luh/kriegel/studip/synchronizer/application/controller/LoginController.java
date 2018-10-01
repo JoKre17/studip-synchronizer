@@ -336,7 +336,7 @@ public class LoginController implements Initializable {
 			String protocol = baseUrl.getProtocol();
 			baseUrl = new URL(protocol + "://" + host);
 			baseUri = baseUrl.toURI();
-			log.info(baseUrl);
+			log.debug("Base URL: " + baseUrl);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 			studipUrlInfoLabel.setText("Malformed URL");
@@ -348,8 +348,8 @@ public class LoginController implements Initializable {
 		String password = ConfigManager.getPasswordProperty().getValue();
 
 		Credentials credentials = new Credentials(username, password);
-		log.info("Base URL: " + studipUrlField.getText());
-		log.info(credentials);
+		log.debug("Base URL: " + studipUrlField.getText());
+		log.debug("Credentials: " + credentials);
 
 		SynchronizerApp.studipClient = new StudIPClient(baseUri, credentials);
 		SynchronizerApp.studipClient.getCourseService().getDownloadManager()
@@ -357,19 +357,18 @@ public class LoginController implements Initializable {
 		AuthService authService = SynchronizerApp.studipClient.getAuthService();
 
 		boolean isSuccessfullyAuthenticated = authService.authenticate();
-		if (!isSuccessfullyAuthenticated) {
-			log.info(authService.getAuthErrorResponse());
-		}
 
 		if (isSuccessfullyAuthenticated) {
 			SynchronizerApp.simpleWindowStage.getController().setStatus("Logged in");
-			
+
 			MainView mainView = new MainView();
 			StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
 
 			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
+			mainView.getSettingsView().getController().loginPerformed();
 			// StageController.setStage("SETTINGS_STAGE");
 		} else {
+			log.error(authService.getAuthErrorResponse());
 			SynchronizerApp.simpleWindowStage.getController().setStatus(authService.getAuthErrorResponse());
 		}
 

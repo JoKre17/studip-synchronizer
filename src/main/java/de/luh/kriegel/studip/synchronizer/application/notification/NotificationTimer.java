@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
 
 import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
@@ -50,6 +52,8 @@ public class NotificationTimer extends Observable {
 
 class NotificationTimerThread extends Thread {
 
+	private static final Logger log = LogManager.getLogger(NotificationTimerThread.class);
+
 	// 3 seconds
 	private final long TIMER_STARTUP_MILLIS = 3000;
 
@@ -69,17 +73,22 @@ class NotificationTimerThread extends Thread {
 	public void run() {
 
 		try {
+			log.debug("Waiting " + (TIMER_STARTUP_MILLIS / 1000.0) + " seconds before first run.");
 			Thread.sleep(TIMER_STARTUP_MILLIS);
 		} catch (InterruptedException e) {
+			log.error(e.getMessage(), e);
 			return;
 		}
 
 		while (true) {
+			log.info("Notification Timer: Trigger!");
 			notificationTimer.trigger();
 
 			try {
+				log.debug("Waiting " + (TIMER_INTERVAL_MILLIS / 1000.0) + " seconds before next run.");
 				Thread.sleep(TIMER_INTERVAL_MILLIS);
 			} catch (InterruptedException e) {
+				log.error(e.getMessage(), e);
 				return;
 			}
 		}

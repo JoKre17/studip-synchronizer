@@ -9,37 +9,50 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane id="root" maxHeight="200.0" maxWidth="300.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="root" fx:id="root" maxHeight="200.0" maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onMouseClicked" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox id="titleBar" fx:id="titleBar" VBox.vgrow="SOMETIMES">
+            <HBox id="titleBar" fx:id="titleBar" maxHeight="30.0" minHeight="30.0" spacing="5.0" VBox.vgrow="NEVER">
                <children>
-                  <Label id="title" fx:id="title" maxHeight="30.0" maxWidth="1.7976931348623157E308" text="Title" HBox.hgrow="ALWAYS">
+                  <VBox id="notificationTypeColorIndicationPanel" fx:id="notificationTypeColorIndicationPanel" fillWidth="false" maxWidth="6.0" minWidth="6.0" styleClass="notificationTypeColorIndicationPanel" HBox.hgrow="NEVER" />
+                  <Label id="title" fx:id="title" contentDisplay="TOP" maxHeight="30.0" maxWidth="1.7976931348623157E308" minHeight="30.0" textOverrun="WORD_ELLIPSIS" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets left="5.0" right="10.0" />
                      </padding>
-                  </Label>
-                  <Button id="closeButton" fx:id="closeButton" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" HBox.hgrow="NEVER">
                      <HBox.margin>
-                        <Insets right="5.0" />
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+                  <Button id="closeButton" fx:id="closeButton" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onMouseClicked="#closeButtonOnMouseClicked" HBox.hgrow="NEVER">
+                     <HBox.margin>
+                        <Insets />
                      </HBox.margin>
                   </Button>
                </children>
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
             </HBox>
-            <WebView id="webView" fx:id="webView" disable="true" minHeight="50.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
+            <WebView id="webView" fx:id="webView" disable="true" minHeight="50.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></WebView>
+            <HBox fx:id="footerBar" alignment="BOTTOM_RIGHT" maxHeight="20.0" minHeight="20.0" style="-fx-border-radius: 0 0 20 0; -fx-background-radius: 0 0 20 0;">
+               <children>
+                  <Label alignment="BOTTOM_CENTER" contentDisplay="CENTER" maxHeight="20.0" minHeight="20.0" style="-fx-padding: 0 5 5 0;" text="see more..." textFill="WHITE">
+                     <HBox.margin>
+                        <Insets right="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>
    <stylesheets>
       <URL value="@../css/NotificationPane.css" />
-      <URL value="@../css/Default.css" />
       <URL value="@../css/Colors.css" />
+      <URL value="@../css/Default.css" />
    </stylesheets>
 </AnchorPane>

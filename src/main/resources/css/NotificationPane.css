@@ -1,17 +1,38 @@
 @import "/css/Default.css";
 
-#root {}
+
+Label {
+/*	-fx-text-fill: brandColor; */
+	-fx-text-fill: black;
+}
+
+#root {
+	-fx-background-color: baseGreyLighter7;
+}
+
+.notificationTypeColorIndicationPanel {
+	-fx-background-color: baseGreyLighter4;
+}
 
 #titleBar {
-	-fx-background-color: linear-gradient(to right, -fx-base, baseGreyLighter6 0.0%, white 100.0%);
+	/*
+	-fx-background-color: linear-gradient(to left, -fx-base, baseColorLighter2 0.0%, baseColorLighter2 20.0%, baseColorLighter4 40.0%, white 100.0%);
+	*/
+	-fx-background-color: baseGreyLighter7;
+}
+
+#footerBar {
+	-fx-background-color: baseGreyLighter7;
 }
 
 #title {
-	-fx-font-size: 18.0px;
+	-fx-font-size: 16.0px;
+/*	-fx-text-fill: brandColor; */
+	-fx-padding: 0;
 }
 
 #closeButton {
-	-fx-background-image: url("/images/window/x_inverted_25_25.png");
+	-fx-background-image: url("/images/window/x_30_30.png");
 	-fx-background-repeat: no-repeat;
 	-fx-background-color: transparent;
 }

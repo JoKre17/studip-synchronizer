@@ -48,7 +48,7 @@ public class DownloadManager extends Observable {
 		this.courseService = courseService;
 		this.httpClient = httpClient;
 
-		log.debug("Init DownloadManager with defaultDownloadDirectory: " + defaultDownloadDirectory.toAbsolutePath());
+		log.info("Init DownloadManager with defaultDownloadDirectory: " + defaultDownloadDirectory.toAbsolutePath());
 		this.defaultDownloadDirectory = defaultDownloadDirectory;
 	}
 

@@ -290,11 +290,15 @@ public class ConfigManager {
 
 					File downloadDirectory = new File(downloadDirectoryPathProperty.get());
 
-					if (synchronizationIntervalProperty.get() > 0 && downloadDirectory.exists()
-							&& downloadDirectory.isDirectory()) {
+					if (downloadDirectory.exists() && downloadDirectory.isDirectory()) {
 						SynchronizerApp.synchronizerTimer = new SynchronizeTimer(SynchronizerApp.studipClient,
 								synchronizationIntervalProperty.get() * 60000);
 						SynchronizerApp.synchronizerTimer.start();
+					} else {
+						log.warn("Could not start Synchronization. Conditions:");
+						log.warn("\tdownload directory exists: " + downloadDirectory.exists());
+						log.warn("\tdownload directory is directory: " + downloadDirectory.isDirectory());
+						properties.setProperty(SYNCHRONIZATION_INTERVAL_KEY, oldValue.toString());
 					}
 				}
 
@@ -357,7 +361,7 @@ public class ConfigManager {
 				}
 			}
 		});
-		
+
 		runApplicationOnSystemStartProperty.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -427,7 +431,7 @@ public class ConfigManager {
 	public static BooleanProperty getMinimizedStartOfApplicationProperty() {
 		return minimizedStartOfApplicationProperty;
 	}
-	
+
 	public static BooleanProperty getRunApplicationOnSystemStartProperty() {
 		return runApplicationOnSystemStartProperty;
 	}

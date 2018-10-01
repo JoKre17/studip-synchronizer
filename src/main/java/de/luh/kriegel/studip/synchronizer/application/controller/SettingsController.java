@@ -72,9 +72,9 @@ public class SettingsController implements Initializable {
 
 	@FXML
 	private JFXToggleButton notificationEnabledToggleButton;
-	
+
 	// Application
-	
+
 	@FXML
 	private JFXToggleButton minimizedStartEnabledToggleButton;
 
@@ -84,24 +84,24 @@ public class SettingsController implements Initializable {
 	private List<JFXRadioButton> synchronizeIntervalRadioButtons;
 
 	private void downloadEnabledUpdated(boolean downloadEnabled) {
-		
+
 		Platform.runLater(() -> {
 			StringProperty downloadDirectoryPathProperty = ConfigManager.getDownloadDirectoryPathProperty();
-			if(downloadDirectoryPathProperty.get().equals("")) {
-				downloadDirectoryLabel.setText(SynchronizerApp.studipClient.getCourseService().getDownloadManager().getDownloadDirectory().getAbsolutePath());
+			if (downloadDirectoryPathProperty.get().equals("")) {
+				downloadDirectoryLabel.setText(SynchronizerApp.studipClient.getCourseService().getDownloadManager()
+						.getDownloadDirectory().getAbsolutePath());
 			} else {
 				downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
 			}
 		});
-		
-		
+
 		if (downloadEnabled) {
 			int timeUntilNextSynchronizationInMilliseconds = (int) SynchronizeTimer.SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS;
 			int synchIntervallInMinutes = ConfigManager.getSynchronizationIntervalProperty().get();
 
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.MILLISECOND, timeUntilNextSynchronizationInMilliseconds);
-//			c.add(Calendar.MINUTE, synchIntervallInMinutes);
+			// c.add(Calendar.MINUTE, synchIntervallInMinutes);
 
 			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 			String content = format.format(c.getTime());
@@ -189,7 +189,6 @@ public class SettingsController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				downloadEnabledUpdated(newValue);
-
 			}
 		});
 
@@ -199,40 +198,36 @@ public class SettingsController implements Initializable {
 			}
 		});
 
+		try {
+			notificationController = new NotificationController();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Called by LoginController after login has been performed
+	 */
+	public void loginPerformed() {
 		downloadEnabledToggleButton.selectedProperty().set(ConfigManager.getDownloadEnabledProperty().get());
 		downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
 
 		notificationEnabledToggleButton.selectedProperty().set(ConfigManager.getNotificationsEnabledProperty().get());
-		
-		minimizedStartEnabledToggleButton.selectedProperty().set(ConfigManager.getMinimizedStartOfApplicationProperty().get());
+
+		minimizedStartEnabledToggleButton.selectedProperty()
+				.set(ConfigManager.getMinimizedStartOfApplicationProperty().get());
 		rememberMeEnabledToggleButton.selectedProperty().set(ConfigManager.getRememberMeEnabledProperty().get());
 
 		ConfigManager.getDownloadEnabledProperty().bind(downloadEnabledToggleButton.selectedProperty());
 		ConfigManager.getDownloadDirectoryPathProperty().bind(downloadDirectoryLabel.textProperty());
 
 		ConfigManager.getNotificationsEnabledProperty().bind(notificationEnabledToggleButton.selectedProperty());
-		
-		ConfigManager.getMinimizedStartOfApplicationProperty().bind(minimizedStartEnabledToggleButton.selectedProperty());
+
+		ConfigManager.getMinimizedStartOfApplicationProperty()
+				.bind(minimizedStartEnabledToggleButton.selectedProperty());
 		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeEnabledToggleButton.selectedProperty());
-		
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				downloadEnabledUpdated(downloadEnabledToggleButton.selectedProperty().get());
 
-			}
-		}).start();
-
-		try {
-			notificationController = new NotificationController();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		notificationController.loginPerformed();
 	}
 
 	public BooleanProperty getDownloadEnabledProperty() {
