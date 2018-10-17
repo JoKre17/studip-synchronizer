@@ -20,6 +20,7 @@ public class MainView extends VBox implements Initializable {
 	private MainController mainController;
 	private SettingsView settingsView;
 	private TaskSchedulerView taskSchedulerView;
+	private EventView eventView;
 
 	public MainView() {
 
@@ -36,32 +37,41 @@ public class MainView extends VBox implements Initializable {
 		}
 
 		mainController = loader.getController();
-		
-//		this.setStyle("-fx-background-color: transparent;");
-		
+
+		// this.setStyle("-fx-background-color: transparent;");
+
 		initialize();
 	}
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initialize();
 	}
-	
+
 	private void initialize() {
 		settingsView = new SettingsView();
 		taskSchedulerView = new TaskSchedulerView();
-		
+		eventView = new EventView();
+
 		mainController.setSettingsPane(settingsView);
 		mainController.setTaskSchedulerPane(taskSchedulerView);
+		mainController.setEventPane(eventView);
 	}
 
 	public MainController getController() {
 		return mainController;
 	}
-	
+
 	public SettingsView getSettingsView() {
 		return settingsView;
 	}
 
-	
+	public TaskSchedulerView getTaskSchedulerView() {
+		return taskSchedulerView;
+	}
+
+	public EventView getEventView() {
+		return eventView;
+	}
+
 }

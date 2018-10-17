@@ -17,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
+import de.luh.kriegel.studip.synchronizer.application.event.CourseNewsReceivedEvent;
+import de.luh.kriegel.studip.synchronizer.application.event.CourseNewsReceivedEventListener;
 import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
@@ -25,6 +27,8 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
 public class NotificationManager {
 
 	private final Logger log = LogManager.getLogger(NotificationManager.class);
+
+	private final List<CourseNewsReceivedEventListener> courseNewsReceivedEventListeners = new ArrayList<>();
 
 	private final File courseNewsIdLogfile;
 	private final String COURSE_NEWS_ID_LOGFILE = "courseNewsIds.log";
@@ -47,6 +51,18 @@ public class NotificationManager {
 
 			oldCourseNewsIds = loadCourseNewsIdsFromFile(courseNewsIdLogfile);
 		}
+	}
+
+	public void addCourseNewsReceivedEventListener(CourseNewsReceivedEventListener courseNewsReceivedEventListener) {
+		this.courseNewsReceivedEventListeners.add(courseNewsReceivedEventListener);
+	}
+
+	public void removeCourseNewsReceivedEventListener(CourseNewsReceivedEventListener courseNewsReceivedEventListener) {
+		this.courseNewsReceivedEventListeners.remove(courseNewsReceivedEventListener);
+	}
+
+	public List<CourseNewsReceivedEventListener> getCourseNewsReceivedEventListeners() {
+		return courseNewsReceivedEventListeners;
 	}
 
 	private List<Id> loadCourseNewsIdsFromFile(File logfile) {
@@ -102,6 +118,9 @@ public class NotificationManager {
 			List<CourseNews> newCourseNews = new ArrayList<>();
 			for (CourseNews cn : courseNews) {
 				if (!oldCourseNewsIds.contains(cn.getId())) {
+					for (CourseNewsReceivedEventListener eventListener : courseNewsReceivedEventListeners) {
+						eventListener.onCourseNewsReceived(new CourseNewsReceivedEvent(cn));
+					}
 					newCourseNews.add(cn);
 					oldCourseNewsIds.add(cn.getId());
 				}

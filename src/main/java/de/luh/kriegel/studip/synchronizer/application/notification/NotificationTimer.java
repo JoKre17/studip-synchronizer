@@ -1,16 +1,9 @@
 package de.luh.kriegel.studip.synchronizer.application.notification;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Observable;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.parser.ParseException;
-
-import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
-import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
-import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
 
 public class NotificationTimer extends Observable {
 
@@ -36,15 +29,11 @@ public class NotificationTimer extends Observable {
 
 	protected void trigger() {
 
-		try {
-			Map<Course, List<CourseNews>> courseNewsMap = notificationManager.getAllNewCoursNews();
+		// Map<Course, List<CourseNews>> courseNewsMap =
+		// notificationManager.getAllNewCoursNews();
 
-			this.setChanged();
-			this.notifyObservers(courseNewsMap);
-
-		} catch (NotAuthenticatedException | ParseException e) {
-			e.printStackTrace();
-		}
+		this.setChanged();
+		this.notifyObservers();
 
 	}
 

@@ -36,8 +36,6 @@ public class SettingsController implements Initializable {
 
 	private final static Logger log = LogManager.getLogger(SettingsController.class);
 
-	private NotificationController notificationController;
-
 	// UI Elements //
 
 	@FXML
@@ -199,7 +197,7 @@ public class SettingsController implements Initializable {
 		});
 
 		try {
-			notificationController = new NotificationController();
+			SynchronizerApp.notificationController = new NotificationController();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -209,6 +207,7 @@ public class SettingsController implements Initializable {
 	 * Called by LoginController after login has been performed
 	 */
 	public void loginPerformed() {
+
 		downloadEnabledToggleButton.selectedProperty().set(ConfigManager.getDownloadEnabledProperty().get());
 		downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
 
@@ -227,7 +226,7 @@ public class SettingsController implements Initializable {
 				.bind(minimizedStartEnabledToggleButton.selectedProperty());
 		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeEnabledToggleButton.selectedProperty());
 
-		notificationController.loginPerformed();
+		SynchronizerApp.notificationController.loginPerformed();
 	}
 
 	public BooleanProperty getDownloadEnabledProperty() {

@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.controller.StageController;
+import de.luh.kriegel.studip.synchronizer.application.notification.NotificationController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
 import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
@@ -33,6 +34,7 @@ public class SynchronizerApp extends Application {
 	public static SimpleWindowStage simpleWindowStage;
 	public static StudIPClient studipClient;
 	public static ConfigManager configManager = new ConfigManager();
+	public static NotificationController notificationController;
 
 	public static SynchronizeTimer synchronizerTimer;
 
@@ -46,14 +48,14 @@ public class SynchronizerApp extends Application {
 
 		simpleWindowStage = new SimpleWindowStage("StudIP Synchronizer", MIN_WIDTH, MIN_HEIGHT);
 		simpleWindowStage.getIcons().add(ICON);
-		
+
 		StageController.setSimpleWindowStage(simpleWindowStage);
 
 		LoginView loginView = new LoginView();
 		StageController.addRegionToStagingMap("LOGIN_STAGE", loginView);
 
 		StageController.setStage("LOGIN_STAGE");
-		
+
 		simpleWindowStage.show();
 	}
 

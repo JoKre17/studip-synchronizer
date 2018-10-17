@@ -1,0 +1,54 @@
+@import "/css/Default.css";
+
+
+Label {
+/*	-fx-text-fill: brandColor; */
+	-fx-text-fill: black;
+}
+
+
+.jfx-tab-pane {
+
+}
+
+
+
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: baseGreyLighter7;
+}
+
+
+
+.jfx-tab-pane .headers-region > .tab {
+	-fx-background-color: baseColorLighter1;
+    -fx-pref-width: 120.0px;
+    -fx-fill-width: true;
+	-fx-pref-height: 30.0px;
+    -fx-background-color: linear-gradient(baseColorLighter3 0.0%, baseColorLighter3 40.0%, baseColorLighter2 80.0%, baseColorLighter1 100.0%);
+}
+
+.jfx-tab-pane .headers-region > .tab:selected {
+/*	-fx-border-color: baseColor;*/
+	-fx-background-color: baseColorLighter2;
+	-fx-background-radius: 0.0;
+    -fx-background-insets: 0.0;
+    -fx-border-width: 0.0 0.0 3.0 0.0;
+/*    -fx-background-color: linear-gradient(baseColorLighter4 0.0%, baseColorLighter3 40.0%, baseColorLighter2 80.0%, baseColorLighter1 100.0%); */
+}
+
+.jfx-tab-pane .headers-region > .tab > .jfx-rippler {
+    -jfx-rippler-fill: baseColorLighter4;
+}
+
+.jfx-tab-pane .headers-region .tab-selected-line {
+    -fx-background-color: baseColorLighter4;
+}
+
+
+Tab {
+	
+}
+
+#root {
+	-fx-background-color: baseGreyLighter7;
+}

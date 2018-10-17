@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
@@ -31,10 +33,15 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.FileRef;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Semester;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefNode;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
+import de.luh.kriegel.studip.synchronizer.event.CourseDownloadFinishedEvent;
+import de.luh.kriegel.studip.synchronizer.event.CourseDownloadFinishedEventListener;
+import de.luh.kriegel.studip.synchronizer.event.CourseDownloadProgressEvent;
 
 public class DownloadManager extends Observable {
 
 	private static final Logger log = LogManager.getLogger(DownloadManager.class);
+
+	private final List<CourseDownloadFinishedEventListener> courseDownloadFinishedEventListeners = new ArrayList<>();
 
 	private final CourseService courseService;
 
@@ -75,6 +82,20 @@ public class DownloadManager extends Observable {
 
 	public void setDownloadDirectory(File defaultDownloadDirectory) {
 		this.defaultDownloadDirectory = defaultDownloadDirectory.toPath();
+	}
+
+	public void addCourseDownloadFinishedEventListener(
+			CourseDownloadFinishedEventListener courseDownloadFinishedEventListener) {
+		this.courseDownloadFinishedEventListeners.add(courseDownloadFinishedEventListener);
+	}
+
+	public void removeCourseDownloadFinishedEventListener(
+			CourseDownloadFinishedEventListener courseDownloadFinishedEventListener) {
+		this.courseDownloadFinishedEventListeners.remove(courseDownloadFinishedEventListener);
+	}
+
+	public List<CourseDownloadFinishedEventListener> getCourseDownloadFinishedEventListeners() {
+		return courseDownloadFinishedEventListeners;
 	}
 
 	private File getSemesterDirectory(Semester semester) {
@@ -128,8 +149,9 @@ public class DownloadManager extends Observable {
 		File parentDir = getCourseDirectory(course);
 
 		Queue<CompletableFuture<Void>> downloadTasks = new ConcurrentLinkedQueue<>();
+		List<File> toBeDownloadedFiles = new ArrayList<>();
 
-		downloadFileRefTreeRecursive(parentDir, fileRefTree.getRoot(), downloadTasks);
+		downloadFileRefTreeRecursive(parentDir, fileRefTree.getRoot(), downloadTasks, toBeDownloadedFiles);
 
 		int size = downloadTasks.size();
 
@@ -145,6 +167,8 @@ public class DownloadManager extends Observable {
 				task.get();
 				count++;
 				log.debug(count + "/" + size + " : " + course.getTitle());
+				setChanged();
+				notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
@@ -157,31 +181,39 @@ public class DownloadManager extends Observable {
 
 		setChanged();
 		notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
+		for (CourseDownloadFinishedEventListener eventListener : courseDownloadFinishedEventListeners) {
+			eventListener.onCourseDownloadFinished(new CourseDownloadFinishedEvent(course, toBeDownloadedFiles));
+		}
 		log.info("DONE : " + course.getTitle());
 	}
 
 	private void downloadFileRefTreeRecursive(File parentDir, FileRefNode node,
-			Queue<CompletableFuture<Void>> downloadTasks) {
+			Queue<CompletableFuture<Void>> downloadTasks, List<File> toBeDownloadedFiles) {
 
 		for (FileRefNode child : node.getChildren()) {
 			if (child.isDirectory()) {
 				File dir = new File(parentDir.getAbsolutePath() + "/" + child.getFolder().getNameValidAsFilename());
 				createDirIfNotExists(dir);
 
-				downloadFileRefTreeRecursive(dir, child, downloadTasks);
+				downloadFileRefTreeRecursive(dir, child, downloadTasks, toBeDownloadedFiles);
 			} else {
+
+				FileRef fileRef = child.getFileRef();
+				File outputFile = new File(parentDir.getAbsolutePath() + "/" + fileRef.getName());
+
+				// dont create a download task for a file which has already been downloaded AND
+				// is up to date
+				if (outputFile.exists()) {
+					if (fileRef.getChdate() < outputFile.lastModified()) {
+						continue;
+					}
+				}
+
+				toBeDownloadedFiles.add(outputFile);
+
 				downloadTasks.add(CompletableFuture.runAsync(() -> {
 
 					HttpResponse response;
-
-					FileRef fileRef = child.getFileRef();
-					File outputFile = new File(parentDir.getAbsolutePath() + "/" + fileRef.getName());
-
-					if (outputFile.exists()) {
-						if (fileRef.getChdate() < outputFile.lastModified()) {
-							return;
-						}
-					}
 
 					try {
 						response = httpClient.get(SubPaths.API

@@ -196,6 +196,10 @@ public class NotificationController implements Observer {
 
 	}
 
+	public NotificationManager getNotificationManager() {
+		return notificationManager;
+	}
+
 	public void loginPerformed() {
 		if (ConfigManager.getNotificationsEnabledProperty().get()) {
 			notificationTimer.start();

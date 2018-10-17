@@ -1,4 +1,4 @@
-package de.luh.kriegel.studip.synchronizer.download;
+package de.luh.kriegel.studip.synchronizer.event;
 
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 
