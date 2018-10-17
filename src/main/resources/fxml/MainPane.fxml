@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" styleClass="root" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.MainController">
+<TabPane fx:id="tabPane" prefHeight="400.0" prefWidth="600.0" styleClass="root" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.luh.kriegel.studip.synchronizer.application.controller.MainController">
 			<tabs>
 				<Tab text="Settings">
 					<content>
@@ -29,8 +29,8 @@
 				</Tab>
 			</tabs>
    <stylesheets>
-      <URL value="@../css/Default.css" />
       <URL value="@../css/MainPane.css" />
+      <URL value="@../css/Default.css" />
       <URL value="@../css/Colors.css" />
    </stylesheets>
 		</TabPane>

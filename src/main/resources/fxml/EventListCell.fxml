@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+
+<fx:root type="javafx.scene.control.ListCell" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+	<graphic>
+
+
+<!-- <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"> -->
+<!-- 	<children> -->
+	
+		<GridPane minHeight="50.0">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" />
+				<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="30.0" vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Label fx:id="typeLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Type" wrapText="true" />
+				<AnchorPane fx:id="viewAnchorPane" GridPane.columnIndex="1" />
+				<Label fx:id="dateLabel" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Datum" wrapText="true" GridPane.columnIndex="2" />
+			</children>
+		</GridPane>
+<!-- 	</children> -->
+	<stylesheets>
+		<URL value="@../css/Default.css" />
+		<URL value="@../css/Colors.css" />
+	</stylesheets>
+<!-- </AnchorPane> -->
+
+	</graphic>
+</fx:root>

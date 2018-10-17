@@ -362,8 +362,8 @@ public class LoginController implements Initializable {
 			SynchronizerApp.simpleWindowStage.getController().setStatus("Logged in");
 
 			MainView mainView = new MainView();
-			StageController.addRegionToStagingMap("MAIN_STAGE", mainView);
-
+			StageController.addRegionToStagingMap(SynchronizerApp.MAIN_STAGE_ID, mainView);
+			
 			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
 			mainView.getSettingsView().getController().loginPerformed();
 			// StageController.setStage("SETTINGS_STAGE");

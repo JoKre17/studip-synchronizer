@@ -20,7 +20,7 @@ public class MainView extends VBox implements Initializable {
 	private MainController mainController;
 	private SettingsView settingsView;
 	private TaskSchedulerView taskSchedulerView;
-	private EventView eventView;
+	private EventDashbordView eventView;
 
 	public MainView() {
 
@@ -51,7 +51,7 @@ public class MainView extends VBox implements Initializable {
 	private void initialize() {
 		settingsView = new SettingsView();
 		taskSchedulerView = new TaskSchedulerView();
-		eventView = new EventView();
+		eventView = new EventDashbordView();
 
 		mainController.setSettingsPane(settingsView);
 		mainController.setTaskSchedulerPane(taskSchedulerView);
@@ -70,7 +70,7 @@ public class MainView extends VBox implements Initializable {
 		return taskSchedulerView;
 	}
 
-	public EventView getEventView() {
+	public EventDashbordView getEventView() {
 		return eventView;
 	}
 

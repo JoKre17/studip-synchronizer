@@ -47,5 +47,9 @@ public class StageController {
 
 		simpleWindowStage.show();
 	}
-
+	
+	public static Region getStageById(String stageId) {
+		return stagingMap.get(stageId);
+	}
+	
 }

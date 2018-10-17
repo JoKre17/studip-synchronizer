@@ -69,7 +69,7 @@ public class CourseNews {
 		}
 
 		if (jsonObject.containsKey("date")) {
-			date = Long.parseLong(jsonObject.get("date").toString());
+			date = Long.parseLong(jsonObject.get("date").toString()) * 1000;
 		}
 
 		if (jsonObject.containsKey("user_id")) {
@@ -85,7 +85,7 @@ public class CourseNews {
 		}
 
 		if (jsonObject.containsKey("chdate")) {
-			chdate = Long.parseLong(jsonObject.get("chdate").toString());
+			chdate = Long.parseLong(jsonObject.get("chdate").toString()) * 1000;
 		}
 
 		if (jsonObject.containsKey("chdate_uid")) {
@@ -95,7 +95,7 @@ public class CourseNews {
 		}
 
 		if (jsonObject.containsKey("mkdate")) {
-			mkdate = Long.parseLong(jsonObject.get("mkdate").toString());
+			mkdate = Long.parseLong(jsonObject.get("mkdate").toString()) * 1000;
 		}
 
 		if (jsonObject.containsKey("body_html")) {
@@ -169,7 +169,18 @@ public class CourseNews {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + allow_comments;
+		result = prime * result + ((body == null) ? 0 : body.hashCode());
+		result = prime * result + ((body_html == null) ? 0 : body_html.hashCode());
+		result = prime * result + (int) (chdate ^ (chdate >>> 32));
+		result = prime * result + ((chdate_uid == null) ? 0 : chdate_uid.hashCode());
+		result = prime * result + (int) (date ^ (date >>> 32));
+		result = prime * result + (int) (expire ^ (expire >>> 32));
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + (int) (mkdate ^ (mkdate >>> 32));
+		result = prime * result + ((ranges == null) ? 0 : ranges.hashCode());
+		result = prime * result + ((topic == null) ? 0 : topic.hashCode());
+		result = prime * result + ((user_id == null) ? 0 : user_id.hashCode());
 		return result;
 	}
 
@@ -181,18 +192,77 @@ public class CourseNews {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof Course)) {
+		if (!(obj instanceof CourseNews)) {
 			return false;
 		}
-		Course other = (Course) obj;
-		if (id == null) {
-			if (other.getId() != null) {
+		CourseNews other = (CourseNews) obj;
+		if (allow_comments != other.allow_comments) {
+			return false;
+		}
+		if (body == null) {
+			if (other.body != null) {
 				return false;
 			}
-		} else if (!id.equals(other.getId())) {
+		} else if (!body.equals(other.body)) {
+			return false;
+		}
+		if (body_html == null) {
+			if (other.body_html != null) {
+				return false;
+			}
+		} else if (!body_html.equals(other.body_html)) {
+			return false;
+		}
+		if (chdate != other.chdate) {
+			return false;
+		}
+		if (chdate_uid == null) {
+			if (other.chdate_uid != null) {
+				return false;
+			}
+		} else if (!chdate_uid.equals(other.chdate_uid)) {
+			return false;
+		}
+		if (date != other.date) {
+			return false;
+		}
+		if (expire != other.expire) {
+			return false;
+		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
+		if (mkdate != other.mkdate) {
+			return false;
+		}
+		if (ranges == null) {
+			if (other.ranges != null) {
+				return false;
+			}
+		} else if (!ranges.equals(other.ranges)) {
+			return false;
+		}
+		if (topic == null) {
+			if (other.topic != null) {
+				return false;
+			}
+		} else if (!topic.equals(other.topic)) {
+			return false;
+		}
+		if (user_id == null) {
+			if (other.user_id != null) {
+				return false;
+			}
+		} else if (!user_id.equals(other.user_id)) {
 			return false;
 		}
 		return true;
 	}
+
+
 
 }

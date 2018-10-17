@@ -62,6 +62,32 @@ public class CourseService {
 	public DownloadManager getDownloadManager() {
 		return downloadManager;
 	}
+	
+	public Course getCourseById(Id courseId) throws NotAuthenticatedException {
+		authService.checkIfAuthenticated();
+		
+		HttpResponse response;
+
+		try {
+			response = httpClient.get(SubPaths.API.toString()
+					+ Endpoints.COURSE.toString().replace(":course_id", courseId.asHex()));
+		
+
+		if (response.getStatusLine().getStatusCode() / 100 == 2) {
+			String responseBody = BasicHttpClient.getResponseBody(response);
+			JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
+
+			return Course.fromJson(responseJson);
+		}
+		
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 	public int getAmountCourses() throws NotAuthenticatedException, ParseException {
 		authService.checkIfAuthenticated();
@@ -273,6 +299,32 @@ public class CourseService {
 
 		return semester;
 	}
+	
+	public CourseNews getCourseNewsForCourseNewsId(Id courseNewsId) throws NotAuthenticatedException {
+		authService.checkIfAuthenticated();
+
+		HttpResponse response;
+
+		try {
+			response = httpClient.get(SubPaths.API.toString()
+					+ Endpoints.COURSE_NEWS.toString().replace(":news_id", courseNewsId.asHex()));
+		
+
+			if (response.getStatusLine().getStatusCode() / 100 == 2) {
+				String responseBody = BasicHttpClient.getResponseBody(response);
+				JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
+	
+				return CourseNews.fromJson(responseJson);
+			}
+		
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	public int getAmountCourseNewsForCourseId(Id id) throws NotAuthenticatedException, ParseException {
 		authService.checkIfAuthenticated();
@@ -281,7 +333,7 @@ public class CourseService {
 
 		try {
 			response = httpClient.get(SubPaths.API.toString()
-					+ Endpoints.COURSE_NEWS.toString().replace(":course_id", id.asHex()) + "?limit=1");
+					+ Endpoints.ALL_COURSE_NEWS.toString().replace(":course_id", id.asHex()) + "?limit=1");
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 			return -1;
@@ -318,7 +370,7 @@ public class CourseService {
 		for (int offset = 0; offset < totalAmountCourseNews; offset += limit) {
 			try {
 				response = httpClient.get(
-						SubPaths.API.toString() + Endpoints.COURSE_NEWS.toString().replace(":course_id", id.asHex())
+						SubPaths.API.toString() + Endpoints.ALL_COURSE_NEWS.toString().replace(":course_id", id.asHex())
 								+ "?offset=" + offset + "&limit=" + limit);
 			} catch (URISyntaxException | IOException e) {
 				e.printStackTrace();

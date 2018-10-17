@@ -1,12 +1,15 @@
 @import "/css/Default.css";
 
-
-Label {
-/*	-fx-text-fill: brandColor; */
-	-fx-text-fill: black;
+.tab-pane .tab-header-area {
+	-fx-font-size: 12.0px;
+	-fx-pref-height: 25px;
 }
 
+.tab {
+	-fx-pref-height: 25px;
+}
 
+/*
 .jfx-tab-pane {
 
 }
@@ -21,19 +24,23 @@ Label {
 
 .jfx-tab-pane .headers-region > .tab {
 	-fx-background-color: baseColorLighter1;
-    -fx-pref-width: 120.0px;
     -fx-fill-width: true;
 	-fx-pref-height: 30.0px;
-    -fx-background-color: linear-gradient(baseColorLighter3 0.0%, baseColorLighter3 40.0%, baseColorLighter2 80.0%, baseColorLighter1 100.0%);
+	-fx-text-fill: black;
+    -fx-background-color: linear-gradient(baseGreyLighter5 0.0%, baseGreyLighter8 40.0%, baseGreyLighter5 80.0%, baseGreyLighter4 100.0%);
 }
 
 .jfx-tab-pane .headers-region > .tab:selected {
-/*	-fx-border-color: baseColor;*/
 	-fx-background-color: baseColorLighter2;
 	-fx-background-radius: 0.0;
     -fx-background-insets: 0.0;
     -fx-border-width: 0.0 0.0 3.0 0.0;
-/*    -fx-background-color: linear-gradient(baseColorLighter4 0.0%, baseColorLighter3 40.0%, baseColorLighter2 80.0%, baseColorLighter1 100.0%); */
+	-fx-background-color: linear-gradient(baseGreyLighter8 0.0%, baseGreyLighter7 40.0%, baseGreyLighter5 80.0%, baseGreyLighter6 100.0%);
+}
+
+.jfx-tab-pane .headers-region > .tab .tab-label {
+	-fx-text-fill: black;
+	-fx-font-weight: normal;
 }
 
 .jfx-tab-pane .headers-region > .tab > .jfx-rippler {
@@ -44,10 +51,8 @@ Label {
     -fx-background-color: baseColorLighter4;
 }
 
+*/
 
-Tab {
-	
-}
 
 #root {
 	-fx-background-color: baseGreyLighter7;

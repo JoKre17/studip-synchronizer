@@ -5,23 +5,24 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.jfoenix.controls.JFXTabPane;
-
 import de.luh.kriegel.studip.synchronizer.application.controller.EventDisplayController;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
 
-public class EventView extends StackPane {
+public class EventDashbordView extends StackPane {
 
 	private static final Logger log = LogManager.getLogger(SettingsView.class);
 
 	private EventDisplayController controller;
 
-	public EventView() {
+	private TabPane root;
+	
+	public EventDashbordView() {
 		FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/EventDisplayPane.fxml"));
 
 		try {
-			JFXTabPane root = loader.load();
+			root = loader.load();
 			this.getChildren().add(root);
 
 			root.prefWidthProperty().bind(this.widthProperty());
@@ -35,6 +36,10 @@ public class EventView extends StackPane {
 
 	public EventDisplayController getController() {
 		return controller;
+	}
+	
+	public TabPane getTabPane() {
+		return root;
 	}
 
 }

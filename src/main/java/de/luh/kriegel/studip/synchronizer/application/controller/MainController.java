@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 
@@ -11,6 +12,9 @@ public class MainController {
 
 	private final static Logger log = LogManager.getLogger(MainController.class);
 
+	@FXML
+	TabPane tabPane;
+	
 	@FXML
 	AnchorPane settingsRootPane;
 

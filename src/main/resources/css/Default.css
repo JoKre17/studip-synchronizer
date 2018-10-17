@@ -35,6 +35,7 @@
 .label {
 	-fx-padding: 5;
 	-fx-text-wrap: true;
+	-fx-text-fill: baseGrey;
 }
 
 

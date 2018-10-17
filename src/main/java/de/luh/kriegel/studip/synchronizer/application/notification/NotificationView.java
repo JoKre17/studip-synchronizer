@@ -1,10 +1,13 @@
 package de.luh.kriegel.studip.synchronizer.application.notification;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.synchronizer.event.Event;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class NotificationView extends Stage {
+	
+	public static final String HTML_STYLE = "<style>body{" + "overflow: hidden;\n" + "font-family: Lato,sans-serif;\n"
+			+ "font-size: 14px;" + "line-height: 1.42857143;" + "color: #000;" + "background-color: #f5f5f6;"
+			+ "}</style>";
 
 	private static final Logger log = LogManager.getLogger(NotificationView.class);
 
@@ -39,11 +46,16 @@ public class NotificationView extends Stage {
 	private VBox notificationTypeColorIndicationPanel;
 
 	private String notificationTitle;
-
-	public NotificationView(String title, String content, NotificationType notificationType) {
+	private Event event;
+	
+	private List<NotificationViewClickedEventListener> notificationViewClickedEventListeners = new ArrayList<>();
+	private List<NotificationViewClosedEventListener> notificationViewClosedEventListeners = new ArrayList<>();
+	
+	public NotificationView(String title, String content, NotificationType notificationType, Event event) {
 		super(StageStyle.TRANSPARENT);
 
 		notificationTitle = title;
+		this.event = event;
 
 		Stage wrapperStage = new Stage(StageStyle.UTILITY);
 		wrapperStage.setOpacity(0);
@@ -81,23 +93,36 @@ public class NotificationView extends Stage {
 			this.title.setText(title);
 			WebEngine webEngine = webView.getEngine();
 
-			String bodyStyle = "<style>body{" + "overflow: hidden;\n" + "font-family: Lato,sans-serif;\n"
-					+ "font-size: 14px;" + "line-height: 1.42857143;" + "color: #000;" + "background-color: #f5f5f6;"
-					+ "}</style>";
-			webEngine.loadContent(bodyStyle + content);
+			webEngine.loadContent(HTML_STYLE + content);
 		});
 
+	}
+	
+	public void addNotificationViewClickedEventListener(NotificationViewClickedEventListener notificationViewClickedEventListener) {
+		this.notificationViewClickedEventListeners.add(notificationViewClickedEventListener);
+	}
+
+	public void removeNotificationViewClickedEventListener(NotificationViewClickedEventListener notificationViewClickedEventListener) {
+		this.notificationViewClickedEventListeners.remove(notificationViewClickedEventListener);
 	}
 
 	@FXML
 	private void onMouseClicked(MouseEvent e) {
-		log.info("onMouseClicked");
+		for(NotificationViewClickedEventListener listener : notificationViewClickedEventListeners) {
+			listener.onNotificationViewClicked(this);
+		}
+		
+		notificationViewClickedEventListeners.clear();
 		this.hide();
 	}
 
 	@FXML
 	private void closeButtonOnMouseClicked(MouseEvent e) {
-		log.info("closeButtonOnMouseClicked");
+		for(NotificationViewClosedEventListener listener : notificationViewClosedEventListeners) {
+			listener.onNotificationViewClosed(this);
+		}
+		
+		notificationViewClosedEventListeners.clear();
 		this.hide();
 	}
 
@@ -123,5 +148,18 @@ public class NotificationView extends Stage {
 	public String getNotificationTitle() {
 		return notificationTitle;
 	}
+	
+	public Event getEvent() {
+		return event;
+	}
+	
+	public interface NotificationViewClickedEventListener {
+		public void onNotificationViewClicked(NotificationView notificationView);
+	}
+
+	public interface NotificationViewClosedEventListener {
+		public void onNotificationViewClosed(NotificationView notificationView);
+	}
+	
 
 }

@@ -43,8 +43,8 @@ class NotificationTimerThread extends Thread {
 
 	private static final Logger log = LogManager.getLogger(NotificationTimerThread.class);
 
-	// 3 seconds
-	private final long TIMER_STARTUP_MILLIS = 3000;
+	// 10 seconds
+	private final long TIMER_STARTUP_MILLIS = 10000;
 
 	// 30 seconds
 	// private final long TIMER_STARTUP_MILLIS = 30 * 1000;
@@ -56,6 +56,8 @@ class NotificationTimerThread extends Thread {
 
 	public NotificationTimerThread(NotificationTimer notificationTimer) {
 		this.notificationTimer = notificationTimer;
+		
+		this.setDaemon(true);
 	}
 
 	@Override

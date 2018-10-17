@@ -1,6 +1,7 @@
 package de.luh.kriegel.studip.synchronizer.application.notification;
 
 import java.awt.TrayIcon;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -13,9 +14,11 @@ import org.json.simple.parser.ParseException;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
+import de.luh.kriegel.studip.synchronizer.application.event.CourseNewsReceivedEvent;
 import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
+import de.luh.kriegel.studip.synchronizer.event.Event;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -45,6 +48,8 @@ public class NotificationController implements Observer {
 	private final ObservableList<NotificationView> notificationViews = FXCollections.observableArrayList();
 	private final ObservableList<NotificationView> notificationQueue = FXCollections.observableArrayList();
 	private final int NOTIFICATION_DISPLAY_AMOUNT_MAX;
+
+	private final List<NotificationViewCreatedEventListener> notificationViewCreatedEventListeners = new ArrayList<>();
 
 	public NotificationController() throws Exception {
 		trayIcon = SynchronizerApp.simpleWindowStage.getController().trayIcon;
@@ -148,7 +153,7 @@ public class NotificationController implements Observer {
 				/ (NotificationView.HEIGHT + 10));
 		log.debug("Max amount notifications: " + NOTIFICATION_DISPLAY_AMOUNT_MAX);
 
-		notificationQueue.addListener(new ListChangeListener<>() {
+		notificationQueue.addListener(new ListChangeListener<NotificationView>() {
 
 			Thread processNotificationQueueThread;
 
@@ -187,6 +192,7 @@ public class NotificationController implements Observer {
 
 						});
 
+						processNotificationQueueThread.setDaemon(true);
 						processNotificationQueueThread.start();
 					}
 				}
@@ -194,6 +200,11 @@ public class NotificationController implements Observer {
 
 		});
 
+	}
+
+	public void addNotificationViewCreatedEventListener(
+			NotificationViewCreatedEventListener notificationViewCreatedEventListener) {
+		notificationViewCreatedEventListeners.add(notificationViewCreatedEventListener);
 	}
 
 	public NotificationManager getNotificationManager() {
@@ -214,26 +225,36 @@ public class NotificationController implements Observer {
 				+ "<p>Lesen Sie hierzu auch die Teilnahmebedingungen auf unserer Homepage unter <a href=\"https://www.sk.uni-hannover.de/faq_infos.html\" class=\"link-extern\">https://www.sk.uni-hannover.de/faq_infos.html</a></p>";
 
 		new Thread(new Runnable() {
+
 			@Override
 			public void run() {
 				try {
-					displayMessage("Notification 1", content, NotificationType.COURSE_NEWS);
+					displayMessage("Notification 1", content, NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 2", content, NotificationType.DOWNLOAD);
+					displayMessage("Notification 2", content, NotificationType.DOWNLOAD,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 3", content, NotificationType.COURSE_NEWS);
+					displayMessage("Notification 3", content, NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 4", content, NotificationType.DOWNLOAD);
+					displayMessage("Notification 4", content, NotificationType.DOWNLOAD,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 5", content, NotificationType.COURSE_NEWS);
+					displayMessage("Notification 5", content, NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 6", content, NotificationType.DOWNLOAD);
+					displayMessage("Notification 6", content, NotificationType.DOWNLOAD,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 7", content, NotificationType.COURSE_NEWS);
+					displayMessage("Notification 7", content, NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 8", content, NotificationType.DOWNLOAD);
+					displayMessage("Notification 8", content, NotificationType.DOWNLOAD,
+							new CourseNewsReceivedEvent(null));
 					Thread.sleep(200);
-					displayMessage("Notification 9", content, NotificationType.COURSE_NEWS);
+					displayMessage("Notification 9", content, NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(null));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -244,7 +265,7 @@ public class NotificationController implements Observer {
 
 	}
 
-	public void displayMessage(String title, String content, NotificationType notificationType) {
+	public void displayMessage(String title, String content, NotificationType notificationType, Event event) {
 		assert title != null;
 		assert content != null;
 
@@ -255,9 +276,13 @@ public class NotificationController implements Observer {
 			@Override
 			public void run() {
 				Platform.runLater(() -> {
-					notificationView = new NotificationView(title, content, notificationType);
+					notificationView = new NotificationView(title, content, notificationType, event);
 					notificationView.getScene().getRoot().setOpacity(0);
 					notificationView.show();
+
+					for (NotificationViewCreatedEventListener listener : notificationViewCreatedEventListeners) {
+						listener.onNotificationViewCreated(notificationView);
+					}
 
 					notificationQueue.add(0, notificationView);
 				});
@@ -278,7 +303,8 @@ public class NotificationController implements Observer {
 				List<CourseNews> courseNewsForCourse = courseNewsMap.get(c);
 
 				for (CourseNews courseNews : courseNewsForCourse) {
-					displayMessage(courseNews.getTopic(), courseNews.getBody(), NotificationType.COURSE_NEWS);
+					displayMessage(courseNews.getTopic(), courseNews.getBody(), NotificationType.COURSE_NEWS,
+							new CourseNewsReceivedEvent(courseNews));
 				}
 			}
 		} catch (NotAuthenticatedException e) {

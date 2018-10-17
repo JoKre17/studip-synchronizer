@@ -42,7 +42,8 @@ public class SynchronizeTimer extends Thread {
 		this.studipClient = studipClient;
 
 		this.sleepTimeMillis = sleepTimeMillis;
-
+		this.setDaemon(true);
+		
 		try {
 			init();
 		} catch (NotAuthenticatedException | ParseException e) {

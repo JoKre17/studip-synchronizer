@@ -10,6 +10,7 @@
 	-fx-border-width: 0 0 1 0;
 	-fx-border-style: solid;
 	-fx-border-color: baseGreyLighter1;
+
 }
 
 .tab-pane *.tab-header-background {
@@ -17,7 +18,7 @@
 }
 
 .tab {
-    -fx-pref-width: 120.0px;
+    /*-fx-pref-width: 120.0px;*/
     -fx-fill-width: true;
 	-fx-background-insets: 0.0 1.0 0.0 1.0,0.0,0.0;
 	-fx-pref-height: 30.0px;
@@ -36,7 +37,7 @@
 }
 
 .tab .tab-label {
-	-fx-pref-width: 100.0px;
+	/*-fx-pref-width: 100.0px;*/
 	-fx-max-width: 1000px;
 	-fx-alignment: center;
 	-fx-text-alignment: center;

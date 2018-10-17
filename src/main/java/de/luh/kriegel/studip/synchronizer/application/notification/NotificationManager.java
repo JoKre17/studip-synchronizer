@@ -97,7 +97,6 @@ public class NotificationManager {
 		}
 
 		writer.close();
-
 	}
 
 	public List<Id> getAllOldCourseNewsIds() {
