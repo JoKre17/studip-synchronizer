@@ -172,6 +172,9 @@ public class LoginController implements Initializable {
 						String protocol = baseUri.getProtocol();
 						URL baseUrl = new URL(protocol + "://" + host);
 
+						ConfigManager.getStudipServerNameProperty().set("");
+						ConfigManager.getStudipUrlProperty().set(studipUrlField.getText());
+
 						Platform.runLater(() -> {
 							studipUrlInfoLabel.setText("");
 						});
@@ -219,21 +222,30 @@ public class LoginController implements Initializable {
 			}
 		});
 
-		if (ConfigManager.getStudipServerNameProperty().get().equals("") && studipUrlComboBox.getItems().size() > 0) {
-			studipUrlComboBox.getSelectionModel().select(0);
-			studipUrlField.setText(studipUrlComboBox.getItems().get(0).getValue().toString());
-		}
+		/*
+		 * if (ConfigManager.getStudipServerNameProperty().get().equals("") &&
+		 * studipUrlComboBox.getItems().size() > 0) {
+		 * studipUrlComboBox.getSelectionModel().select(0); log.debug("if catch UI: " +
+		 * studipUrlField.getText() + " Property: " +
+		 * ConfigManager.getStudipUrlProperty().get());
+		 * studipUrlField.setText(studipUrlComboBox.getItems().get(0).getValue().
+		 * toString()); }
+		 */
 
+		// if url matches with one of the predefined servers, then select it
 		for (int i = 0; i < studipUrlComboBox.getItems().size(); i++) {
-			if (ConfigManager.getStudipServerNameProperty().get()
-					.equals(studipUrlComboBox.getItems().get(i).getKey())) {
+			if (ConfigManager.getStudipUrlProperty().get()
+					.equals(studipUrlComboBox.getItems().get(i).getValue().toString())) {
 				studipUrlComboBox.getSelectionModel().select(i);
+				log.debug("for UI: " + studipUrlField.getText() + " Property: "
+						+ ConfigManager.getStudipUrlProperty().get());
 				studipUrlField.setText(studipUrlComboBox.getItems().get(i).getValue().toString());
 				break;
 			}
 		}
 
 		studipUrlOtherCheckBox.selectedProperty().set(ConfigManager.getStudipOtherUrlEnabledProperty().get());
+		log.debug("last UI: " + studipUrlField.getText() + " Property: " + ConfigManager.getStudipUrlProperty().get());
 		studipUrlField.setText(ConfigManager.getStudipUrlProperty().get());
 		usernameField.setText(ConfigManager.getUsernameProperty().get());
 		passwordField.setText(ConfigManager.getPasswordProperty().get());
@@ -363,7 +375,7 @@ public class LoginController implements Initializable {
 
 			MainView mainView = new MainView();
 			StageController.addRegionToStagingMap(SynchronizerApp.MAIN_STAGE_ID, mainView);
-			
+
 			StageController.setStage(SynchronizerApp.MAIN_STAGE_ID);
 			mainView.getSettingsView().getController().loginPerformed();
 			// StageController.setStage("SETTINGS_STAGE");

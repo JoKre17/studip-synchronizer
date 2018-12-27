@@ -179,12 +179,15 @@ public class DownloadManager extends Observable {
 			return;
 		}
 
-		setChanged();
-		notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
-		for (CourseDownloadFinishedEventListener eventListener : courseDownloadFinishedEventListeners) {
-			eventListener.onCourseDownloadFinished(new CourseDownloadFinishedEvent(course, toBeDownloadedFiles));
+		if (size > 0) {
+			setChanged();
+			notifyObservers(new CourseDownloadProgressEvent(course, count / (double) size));
+			for (CourseDownloadFinishedEventListener eventListener : courseDownloadFinishedEventListeners) {
+				eventListener.onCourseDownloadFinished(new CourseDownloadFinishedEvent(course, toBeDownloadedFiles));
+			}
+			log.info("DONE : " + course.getTitle());
 		}
-		log.info("DONE : " + course.getTitle());
+
 	}
 
 	private void downloadFileRefTreeRecursive(File parentDir, FileRefNode node,
@@ -206,6 +209,12 @@ public class DownloadManager extends Observable {
 				if (outputFile.exists()) {
 					if (fileRef.getChdate() < outputFile.lastModified()) {
 						continue;
+					}
+				} else {
+					try {
+						outputFile.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
 

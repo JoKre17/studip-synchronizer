@@ -56,7 +56,7 @@ class NotificationTimerThread extends Thread {
 
 	public NotificationTimerThread(NotificationTimer notificationTimer) {
 		this.notificationTimer = notificationTimer;
-		
+
 		this.setDaemon(true);
 	}
 
@@ -64,7 +64,7 @@ class NotificationTimerThread extends Thread {
 	public void run() {
 
 		try {
-			log.debug("Waiting " + (TIMER_STARTUP_MILLIS / 1000.0) + " seconds before first run.");
+			log.info("Waiting " + (TIMER_STARTUP_MILLIS / 1000.0) + " seconds before first run.");
 			Thread.sleep(TIMER_STARTUP_MILLIS);
 		} catch (InterruptedException e) {
 			log.error(e.getMessage(), e);
@@ -72,11 +72,11 @@ class NotificationTimerThread extends Thread {
 		}
 
 		while (true) {
-			log.info("Notification Timer: Trigger!");
+			log.debug("Notification Timer: Trigger!");
 			notificationTimer.trigger();
 
 			try {
-				log.debug("Waiting " + (TIMER_INTERVAL_MILLIS / 1000.0) + " seconds before next run.");
+				log.info("Waiting " + (TIMER_INTERVAL_MILLIS / (60.0 * 1000.0)) + " minutes before next run.");
 				Thread.sleep(TIMER_INTERVAL_MILLIS);
 			} catch (InterruptedException e) {
 				log.error(e.getMessage(), e);

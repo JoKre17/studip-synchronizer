@@ -60,7 +60,7 @@ public class EventManager {
 		courseDownloadFinishedEventListener = new CourseDownloadFinishedEventListener() {
 			@Override
 			public void onCourseDownloadFinished(CourseDownloadFinishedEvent courseDownloadFinishedEvent) {
-				log.info("course download finished event");
+				log.debug("course download finished event");
 				allLoggedEvents.add(courseDownloadFinishedEvent);
 				try {
 					saveEventsToJSONFile(allEventsJSONLogfile);

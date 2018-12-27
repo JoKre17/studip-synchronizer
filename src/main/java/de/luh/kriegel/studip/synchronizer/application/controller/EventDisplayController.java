@@ -1,6 +1,7 @@
 package de.luh.kriegel.studip.synchronizer.application.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -37,7 +38,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Region;
 import javafx.util.Callback;
 
-public class EventDisplayController implements Initializable, NotificationViewCreatedEventListener, NotificationViewClickedEventListener {
+public class EventDisplayController
+		implements Initializable, NotificationViewCreatedEventListener, NotificationViewClickedEventListener {
 
 	private static final Logger log = LogManager.getLogger(EventDisplayController.class);
 
@@ -94,7 +96,7 @@ public class EventDisplayController implements Initializable, NotificationViewCr
 				events.add(courseNewsReceivedEvent);
 			}
 		};
-		
+
 		cellFactory = new Callback<ListView<EventView>, ListCell<EventView>>() {
 			@Override
 			public ListCell<EventView> call(ListView<EventView> arg0) {
@@ -122,8 +124,8 @@ public class EventDisplayController implements Initializable, NotificationViewCr
 						case DOWNLOAD_COMPLETED:
 							CourseDownloadFinishedEvent courseDownloadCompletedEvent = (CourseDownloadFinishedEvent) event;
 							Platform.runLater(() -> {
-								CourseDownloadFinishedEventView courseDownloadCompletedEventView = new CourseDownloadFinishedEventView(courseDownloadCompletedEvent, 
-										courseDownloadCompletedEvent.getCourse(),
+								CourseDownloadFinishedEventView courseDownloadCompletedEventView = new CourseDownloadFinishedEventView(
+										courseDownloadCompletedEvent, courseDownloadCompletedEvent.getCourse(),
 										courseDownloadCompletedEvent.getDownloadedFiles());
 
 								eventView = courseDownloadCompletedEventView;
@@ -166,46 +168,52 @@ public class EventDisplayController implements Initializable, NotificationViewCr
 		courseNewsEventsListView.setCellFactory(cellFactory);
 
 		SynchronizerApp.notificationController.addNotificationViewCreatedEventListener(this);
-		
+
 		SynchronizerApp.studipClient.getCourseService().getDownloadManager()
 				.addCourseDownloadFinishedEventListener(courseDownloadFinishedEventListener);
 		SynchronizerApp.notificationController.getNotificationManager()
 				.addCourseNewsReceivedEventListener(courseNewsReceivedEventListener);
 
-		events.addAll(eventManager.getAllLoggedEvents());
+		new Thread(() -> {
+			List<Event> allLoggedEvents = eventManager.getAllLoggedEvents();
+
+			Platform.runLater(() -> {
+				events.addAll(allLoggedEvents);
+			});
+		}).start();
 	}
 
 	@Override
 	public void onNotificationViewClicked(NotificationView notificationView) {
 		Event event = notificationView.getEvent();
-		
+
 		SynchronizerApp.simpleWindowStage.show();
-		
+
 		Region region = StageController.getStageById(SynchronizerApp.MAIN_STAGE_ID);
-		
-		if(region instanceof MainView) {
+
+		if (region instanceof MainView) {
 			MainView mainView = (MainView) region;
-			
+
 			Node node = mainView.getController().eventRootPane.getChildren().get(0);
 			TabPane eventsTabPane = null;
-			if(node instanceof EventDashbordView) {
+			if (node instanceof EventDashbordView) {
 				EventDashbordView eventView = (EventDashbordView) node;
-				
+
 				eventsTabPane = eventView.getTabPane();
 			} else {
 				return;
 			}
-			
+
 			int eventsTabIndex = 0;
-			
-			for(int i = 0; i < mainView.getController().tabPane.getTabs().size(); i++) {
-				if(mainView.getController().tabPane.getTabs().get(i).getText().toLowerCase().equals("events")) {
+
+			for (int i = 0; i < mainView.getController().tabPane.getTabs().size(); i++) {
+				if (mainView.getController().tabPane.getTabs().get(i).getText().toLowerCase().equals("events")) {
 					eventsTabIndex = i;
 				}
 			}
 			mainView.getController().tabPane.getSelectionModel().select(eventsTabIndex);
-			
-			switch(event.getEventType()) {
+
+			switch (event.getEventType()) {
 			case DOWNLOAD_COMPLETED:
 				eventsTabPane.getSelectionModel().select(1);
 				break;

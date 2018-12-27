@@ -44,6 +44,8 @@ public class CourseService {
 
 	private final DownloadManager downloadManager;
 
+	private final Map<Id, Course> courseCache = new HashMap<>();
+
 	private final ExecutorService es = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 	public CourseService(BasicHttpClient httpClient, AuthService authService) {
@@ -62,30 +64,37 @@ public class CourseService {
 	public DownloadManager getDownloadManager() {
 		return downloadManager;
 	}
-	
+
 	public Course getCourseById(Id courseId) throws NotAuthenticatedException {
 		authService.checkIfAuthenticated();
-		
+
+		if (courseCache.containsKey(courseId)) {
+			courseCache.get(courseId);
+		}
+
 		HttpResponse response;
 
 		try {
-			response = httpClient.get(SubPaths.API.toString()
-					+ Endpoints.COURSE.toString().replace(":course_id", courseId.asHex()));
-		
+			response = httpClient
+					.get(SubPaths.API.toString() + Endpoints.COURSE.toString().replace(":course_id", courseId.asHex()));
 
-		if (response.getStatusLine().getStatusCode() / 100 == 2) {
-			String responseBody = BasicHttpClient.getResponseBody(response);
-			JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
+			if (response.getStatusLine().getStatusCode() / 100 == 2) {
+				String responseBody = BasicHttpClient.getResponseBody(response);
+				JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
 
-			return Course.fromJson(responseJson);
-		}
-		
+				Course course = Course.fromJson(responseJson);
+
+				courseCache.put(courseId, course);
+
+				return course;
+			}
+
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
@@ -153,7 +162,10 @@ public class CourseService {
 
 				if (responseJson.containsKey("collection")) {
 					((Map<String, JSONObject>) responseJson.get("collection")).forEach((link, courseJson) -> {
+
 						Course course = Course.fromJson(courseJson);
+
+						courseCache.putIfAbsent(course.getId(), course);
 
 						allCourses.add(course);
 					});
@@ -299,8 +311,8 @@ public class CourseService {
 
 		return semester;
 	}
-	
-	public CourseNews getCourseNewsForCourseNewsId(Id courseNewsId) throws NotAuthenticatedException {
+
+	public CourseNews getCourseNewsForCourseNewsId(Id courseId, Id courseNewsId) throws NotAuthenticatedException {
 		authService.checkIfAuthenticated();
 
 		HttpResponse response;
@@ -308,15 +320,22 @@ public class CourseService {
 		try {
 			response = httpClient.get(SubPaths.API.toString()
 					+ Endpoints.COURSE_NEWS.toString().replace(":news_id", courseNewsId.asHex()));
-		
 
 			if (response.getStatusLine().getStatusCode() / 100 == 2) {
 				String responseBody = BasicHttpClient.getResponseBody(response);
+				log.debug("getCourseNewsForCourseNewsId: Response: " + responseBody);
 				JSONObject responseJson = (JSONObject) new JSONParser().parse(responseBody);
-	
+				responseJson.put("course_id", courseId);
+
 				return CourseNews.fromJson(responseJson);
+			} else {
+				log.error("Could not get CourseNews for CourseNewsId " + courseNewsId);
+				log.error(response.getStatusLine());
+				log.error("Returning null instead.");
+
+				return null;
 			}
-		
+
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
@@ -383,6 +402,8 @@ public class CourseService {
 
 				if (responseJson.containsKey("collection")) {
 					((Map<String, JSONObject>) responseJson.get("collection")).forEach((link, courseNewsJson) -> {
+
+						courseNewsJson.put("course_id", id);
 						CourseNews courseNews = CourseNews.fromJson(courseNewsJson);
 
 						allCourseNews.add(courseNews);

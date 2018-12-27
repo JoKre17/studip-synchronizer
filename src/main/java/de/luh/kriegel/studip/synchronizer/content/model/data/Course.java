@@ -6,14 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 
 import de.luh.kriegel.studip.synchronizer.content.util.RegexHelper;
 
 public class Course {
 
+	private static final Logger log = LogManager.getLogger(Course.class);
+
 	private final Id id;
-	private final int number;
+	private final float number;
 	private final String title;
 	private final String subtitle;
 	private final int type;
@@ -28,7 +32,7 @@ public class Course {
 
 	private final boolean isTutorium;
 
-	public Course(Id id, int number, String title, String subtitle, int type, String description, String location,
+	public Course(Id id, float number, String title, String subtitle, int type, String description, String location,
 			List<User> lecturers, Map<CourseMemberType, Integer> memberCounts, Id start_semesterId, Id end_semesterId,
 			List<CourseModule> modules, int group) {
 		this.id = id;
@@ -54,7 +58,7 @@ public class Course {
 		assert jsonObject.containsKey("course_id");
 
 		Id id = null;
-		int number = 0;
+		float number = 0;
 		String title = "";
 		String subtitle = "";
 		int type = 0;
@@ -75,7 +79,7 @@ public class Course {
 			if (jsonObject.get("number").toString().isEmpty()) {
 				number = 0;
 			} else {
-				number = Integer.parseInt(jsonObject.get("number").toString().trim());
+				number = Float.parseFloat(jsonObject.get("number").toString().trim());
 			}
 		}
 
@@ -122,11 +126,11 @@ public class Course {
 			});
 		}
 
-		if (jsonObject.containsKey("start_semester")) {
+		if (jsonObject.containsKey("start_semester") && jsonObject.get("start_semester") != null) {
 			start_semesterId = RegexHelper.extractIdFromString(jsonObject.get("start_semester").toString());
 		}
 
-		if (jsonObject.containsKey("end_semester")) {
+		if (jsonObject.containsKey("end_semester") && jsonObject.get("end_semester") != null) {
 			end_semesterId = RegexHelper.extractIdFromString(jsonObject.get("end_semester").toString());
 		}
 
@@ -152,7 +156,7 @@ public class Course {
 		return id;
 	}
 
-	public int getNumber() {
+	public float getNumber() {
 		return number;
 	}
 

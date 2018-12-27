@@ -14,30 +14,30 @@ import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
 
 public class CourseDownloadFinishedEventBuilder extends EventBuilder {
-	
+
 	private final CourseService courseService;
-	
+
 	public CourseDownloadFinishedEventBuilder(CourseService courseService) {
 		assert courseService != null;
-		
+
 		this.courseService = courseService;
 	};
-	
+
 	@Override
 	public CourseDownloadFinishedEvent fromJson(JSONObject json) throws NotAuthenticatedException {
-		
+
 		Id courseId = new Id((String) json.get("courseId"));
 		Course course = courseService.getCourseById(courseId);
-		
+
 		JSONArray downloadedFilesJson = (JSONArray) json.get("downloadedFiles");
 		List<File> downloadedFiles = new ArrayList<>();
-		for(int i = 0; i < downloadedFilesJson.size(); i++) {
+		for (int i = 0; i < downloadedFilesJson.size(); i++) {
 			downloadedFiles.add(new File((String) downloadedFilesJson.get(i)));
 		}
 
-		Date eventDate = new Date(Long.parseLong((String) json.get("date")));
-		
+		Date eventDate = new Date(Long.parseLong(json.get("eventDate").toString()));
+
 		return new CourseDownloadFinishedEvent(course, downloadedFiles, eventDate);
 	}
-	
+
 }

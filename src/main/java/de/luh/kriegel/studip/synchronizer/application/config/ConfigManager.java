@@ -15,7 +15,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
-import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -283,24 +282,24 @@ public class ConfigManager {
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				properties.setProperty(SYNCHRONIZATION_INTERVAL_KEY, newValue.toString());
 
-				if (downloadEnabledProperty.get()) {
-					if (SynchronizerApp.synchronizerTimer != null) {
-						SynchronizerApp.synchronizerTimer.interrupt();
-					}
-
-					File downloadDirectory = new File(downloadDirectoryPathProperty.get());
-
-					if (downloadDirectory.exists() && downloadDirectory.isDirectory()) {
-						SynchronizerApp.synchronizerTimer = new SynchronizeTimer(SynchronizerApp.studipClient,
-								synchronizationIntervalProperty.get() * 60000);
-						SynchronizerApp.synchronizerTimer.start();
-					} else {
-						log.warn("Could not start Synchronization. Conditions:");
-						log.warn("\tdownload directory exists: " + downloadDirectory.exists());
-						log.warn("\tdownload directory is directory: " + downloadDirectory.isDirectory());
-						properties.setProperty(SYNCHRONIZATION_INTERVAL_KEY, oldValue.toString());
-					}
-				}
+				/*
+				 * if (downloadEnabledProperty.get()) { if (SynchronizerApp.synchronizerTimer !=
+				 * null) { SynchronizerApp.synchronizerTimer.interrupt(); }
+				 * 
+				 * File downloadDirectory = new File(downloadDirectoryPathProperty.get());
+				 * 
+				 * if (downloadDirectory.exists() && downloadDirectory.isDirectory()) {
+				 * SynchronizerApp.synchronizerTimer = new
+				 * SynchronizeTimer(SynchronizerApp.studipClient,
+				 * synchronizationIntervalProperty.get() * 60000);
+				 * SynchronizerApp.synchronizerTimer.start(); } else {
+				 * log.warn("Could not start Synchronization. Conditions:");
+				 * log.warn("\tdownload directory exists: " + downloadDirectory.exists());
+				 * log.warn("\tdownload directory is directory: " +
+				 * downloadDirectory.isDirectory());
+				 * properties.setProperty(SYNCHRONIZATION_INTERVAL_KEY, oldValue.toString()); }
+				 * }
+				 */
 
 				try {
 					saveProperties();

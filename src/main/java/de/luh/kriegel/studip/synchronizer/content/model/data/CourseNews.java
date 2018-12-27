@@ -21,9 +21,12 @@ public class CourseNews {
 	private final String body_html;
 	private final List<String> ranges;
 
-	public CourseNews(Id id, String topic, String body, long date, Id user_id, long expire, int allow_comments,
-			long chdate, Id chdate_uid, long mkdate, String body_html, List<String> ranges) {
+	private final Id courseId;
+
+	public CourseNews(Id courseId, Id id, String topic, String body, long date, Id user_id, long expire,
+			int allow_comments, long chdate, Id chdate_uid, long mkdate, String body_html, List<String> ranges) {
 		super();
+		this.courseId = courseId;
 		this.id = id;
 		this.topic = topic;
 		this.body = body;
@@ -43,6 +46,8 @@ public class CourseNews {
 		assert jsonObject != null;
 		assert jsonObject.containsKey("news_id");
 
+		Id courseId = null;
+
 		Id id = null;
 		String topic = "";
 		String body = "";
@@ -55,6 +60,10 @@ public class CourseNews {
 		long mkdate = 0;
 		String body_html = "";
 		List<String> ranges = new ArrayList<>();
+
+		if (jsonObject.containsKey("course_id")) {
+			courseId = new Id(jsonObject.get("course_id").toString());
+		}
 
 		if (jsonObject.containsKey("news_id")) {
 			id = new Id(jsonObject.get("news_id").toString());
@@ -108,8 +117,12 @@ public class CourseNews {
 			rangesJson.forEach(range -> ranges.add(range.toString()));
 		}
 
-		return new CourseNews(id, topic, body, date, user_id, expire, allow_comments, chdate, chdate_uid, mkdate,
-				body_html, ranges);
+		return new CourseNews(courseId, id, topic, body, date, user_id, expire, allow_comments, chdate, chdate_uid,
+				mkdate, body_html, ranges);
+	}
+
+	public Id getCourseId() {
+		return courseId;
 	}
 
 	public Id getId() {
@@ -236,6 +249,13 @@ public class CourseNews {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
+		if (courseId == null) {
+			if (other.courseId != null) {
+				return false;
+			}
+		} else if (!courseId.equals(other.courseId)) {
+			return false;
+		}
 		if (mkdate != other.mkdate) {
 			return false;
 		}
@@ -262,7 +282,5 @@ public class CourseNews {
 		}
 		return true;
 	}
-
-
 
 }

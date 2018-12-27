@@ -71,7 +71,7 @@ public class NotificationManager {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(logfile))) {
 			for (String line; (line = br.readLine()) != null;) {
-				if (line.trim().equals("")) {
+				if (line.trim().isEmpty()) {
 					continue;
 				}
 				Id id = new Id(line.trim());

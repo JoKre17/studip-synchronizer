@@ -62,12 +62,13 @@ public class CourseNewsReceivedEvent extends Event {
 
 	@Override
 	public JSONObject toJson() {
-		
+
 		JSONObject json = new JSONObject();
-		
+
+		json.put("courseId", courseNews.getCourseId().asHex());
 		json.put("courseNewsId", courseNews.getId().asHex());
-		
+
 		return json;
 	}
-	
+
 }

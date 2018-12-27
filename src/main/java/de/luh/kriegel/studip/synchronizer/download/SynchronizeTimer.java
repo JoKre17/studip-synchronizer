@@ -1,6 +1,8 @@
 package de.luh.kriegel.studip.synchronizer.download;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,6 +21,8 @@ import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedExcep
 import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
 import de.luh.kriegel.studip.synchronizer.content.model.file.FileRefTree;
+import javafx.application.Platform;
+import javafx.scene.control.Label;
 
 public class SynchronizeTimer extends Thread {
 
@@ -26,6 +30,8 @@ public class SynchronizeTimer extends Thread {
 
 	private StudIPClient studipClient;
 	private long sleepTimeMillis = 0;
+	private Label nextSynchAtLabel;
+
 	public static final long SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS = 30000;
 	private boolean firstRun = true;
 	private boolean isInitialized = false;
@@ -38,12 +44,13 @@ public class SynchronizeTimer extends Thread {
 
 	private AtomicBoolean cancelled = new AtomicBoolean(false);
 
-	public SynchronizeTimer(StudIPClient studipClient, long sleepTimeMillis) {
+	public SynchronizeTimer(StudIPClient studipClient, long sleepTimeMillis, Label nextSynchAtLabel) {
 		this.studipClient = studipClient;
+		this.nextSynchAtLabel = nextSynchAtLabel;
 
 		this.sleepTimeMillis = sleepTimeMillis;
 		this.setDaemon(true);
-		
+
 		try {
 			init();
 		} catch (NotAuthenticatedException | ParseException e) {
@@ -94,6 +101,8 @@ public class SynchronizeTimer extends Thread {
 
 		// Run
 		while (true) {
+
+			setNextSynchAtLabelText();
 
 			// wait 30 seconds before first synch
 			if (firstRun) {
@@ -152,7 +161,8 @@ public class SynchronizeTimer extends Thread {
 
 				}
 
-				log.info("Created " + downloadTasks.size() + " Download tasks.");
+				log.info("Start Downloading");
+				log.debug("Created " + downloadTasks.size() + " Download tasks.");
 
 				for (int i = 0; i < downloadTasks.size(); i++) {
 					if (cancelled.get()) {
@@ -172,8 +182,13 @@ public class SynchronizeTimer extends Thread {
 
 				// if run only once at startup, then interrupt here
 				if (sleepTimeMillis == 0) {
+					Platform.runLater(() -> {
+						nextSynchAtLabel.setText("");
+					});
 					break;
 				}
+
+				setNextSynchAtLabelText();
 				Thread.sleep(sleepTimeMillis);
 			} catch (InterruptedException e) {
 				log.warn(e.getMessage(), e);
@@ -181,6 +196,23 @@ public class SynchronizeTimer extends Thread {
 		}
 
 		deinit();
+	}
+
+	private void setNextSynchAtLabelText() {
+		Calendar c = Calendar.getInstance();
+
+		if (firstRun) {
+			c.add(Calendar.MILLISECOND, (int) SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS);
+		} else {
+			c.add(Calendar.MILLISECOND, (int) sleepTimeMillis);
+		}
+
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+		String content = format.format(c.getTime());
+
+		Platform.runLater(() -> {
+			nextSynchAtLabel.setText("Next run at " + content + " (local time)");
+		});
 	}
 
 }

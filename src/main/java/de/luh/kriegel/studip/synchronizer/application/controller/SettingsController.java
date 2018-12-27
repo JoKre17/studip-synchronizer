@@ -2,9 +2,7 @@ package de.luh.kriegel.studip.synchronizer.application.controller;
 
 import java.io.File;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -20,7 +18,6 @@ import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.notification.NotificationController;
 import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -83,6 +80,8 @@ public class SettingsController implements Initializable {
 
 	private void downloadEnabledUpdated(boolean downloadEnabled) {
 
+		log.info("downloadEnabledUpdated: " + downloadEnabled);
+
 		Platform.runLater(() -> {
 			StringProperty downloadDirectoryPathProperty = ConfigManager.getDownloadDirectoryPathProperty();
 			if (downloadDirectoryPathProperty.get().equals("")) {
@@ -94,19 +93,6 @@ public class SettingsController implements Initializable {
 		});
 
 		if (downloadEnabled) {
-			int timeUntilNextSynchronizationInMilliseconds = (int) SynchronizeTimer.SLEEP_TIME_BEFORE_FIRST_SYNCH_IN_MILLIS;
-			int synchIntervallInMinutes = ConfigManager.getSynchronizationIntervalProperty().get();
-
-			Calendar c = Calendar.getInstance();
-			c.add(Calendar.MILLISECOND, timeUntilNextSynchronizationInMilliseconds);
-			// c.add(Calendar.MINUTE, synchIntervallInMinutes);
-
-			SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-			String content = format.format(c.getTime());
-
-			Platform.runLater(() -> {
-				nextSynchAtLabel.setText("Next run at " + content + " (local time)");
-			});
 
 			if (SynchronizerApp.synchronizerTimer != null) {
 				SynchronizerApp.synchronizerTimer.interrupt();
@@ -118,7 +104,7 @@ public class SettingsController implements Initializable {
 				SynchronizerApp.studipClient.getCourseService().getDownloadManager()
 						.setDownloadDirectory(downloadDirectory);
 				SynchronizerApp.synchronizerTimer = new SynchronizeTimer(SynchronizerApp.studipClient,
-						ConfigManager.getSynchronizationIntervalProperty().get() * 60000);
+						ConfigManager.getSynchronizationIntervalProperty().get() * 60000, nextSynchAtLabel);
 				SynchronizerApp.synchronizerTimer.start();
 			}
 		} else {
@@ -208,8 +194,20 @@ public class SettingsController implements Initializable {
 	 */
 	public void loginPerformed() {
 
-		downloadEnabledToggleButton.selectedProperty().set(ConfigManager.getDownloadEnabledProperty().get());
+		downloadEnabledToggleButton.selectedProperty().setValue(ConfigManager.getDownloadEnabledProperty().get());
 		downloadDirectoryLabel.setText(ConfigManager.getDownloadDirectoryPathProperty().get());
+
+		downloadEnabledUpdated(ConfigManager.getDownloadEnabledProperty().get());
+		ConfigManager.getSynchronizationIntervalProperty().addListener(new ChangeListener<Number>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+				if (SynchronizerApp.synchronizerTimer != null) {
+					SynchronizerApp.synchronizerTimer.updateSleepTimeMillis(60000 * arg2.longValue());
+				}
+			}
+
+		});
 
 		notificationEnabledToggleButton.selectedProperty().set(ConfigManager.getNotificationsEnabledProperty().get());
 
@@ -227,14 +225,6 @@ public class SettingsController implements Initializable {
 		ConfigManager.getRememberMeEnabledProperty().bind(rememberMeEnabledToggleButton.selectedProperty());
 
 		SynchronizerApp.notificationController.loginPerformed();
-	}
-
-	public BooleanProperty getDownloadEnabledProperty() {
-		return downloadEnabledToggleButton.selectedProperty();
-	}
-
-	public boolean isDownloadEnabled() {
-		return downloadEnabledToggleButton.isArmed();
 	}
 
 }
