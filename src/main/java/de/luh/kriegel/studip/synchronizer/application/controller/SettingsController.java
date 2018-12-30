@@ -13,10 +13,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXToggleButton;
 
+import de.luh.kriegel.studip.client.download.SynchronizeTimer;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.notification.NotificationController;
-import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;

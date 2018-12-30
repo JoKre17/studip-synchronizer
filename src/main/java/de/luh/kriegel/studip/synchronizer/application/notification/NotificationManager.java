@@ -16,13 +16,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
 
+import de.luh.kriegel.studip.client.content.model.data.Course;
+import de.luh.kriegel.studip.client.content.model.data.CourseNews;
+import de.luh.kriegel.studip.client.content.model.data.Id;
+import de.luh.kriegel.studip.client.event.CourseNewsReceivedEvent;
+import de.luh.kriegel.studip.client.event.CourseNewsReceivedEventListener;
+import de.luh.kriegel.studip.client.exception.NotAuthenticatedException;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
-import de.luh.kriegel.studip.synchronizer.application.event.CourseNewsReceivedEvent;
-import de.luh.kriegel.studip.synchronizer.application.event.CourseNewsReceivedEventListener;
-import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
-import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
-import de.luh.kriegel.studip.synchronizer.content.model.data.CourseNews;
-import de.luh.kriegel.studip.synchronizer.content.model.data.Id;
 
 public class NotificationManager {
 

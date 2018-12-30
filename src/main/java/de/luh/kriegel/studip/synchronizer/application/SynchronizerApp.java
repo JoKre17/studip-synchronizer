@@ -5,12 +5,12 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.client.download.SynchronizeTimer;
+import de.luh.kriegel.studip.client.service.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.controller.StageController;
 import de.luh.kriegel.studip.synchronizer.application.notification.NotificationController;
 import de.luh.kriegel.studip.synchronizer.application.view.LoginView;
-import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
-import de.luh.kriegel.studip.synchronizer.download.SynchronizeTimer;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.image.Image;

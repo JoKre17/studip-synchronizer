@@ -2,10 +2,10 @@ package de.luh.kriegel.studip.synchronizer.application.event;
 
 import java.io.IOException;
 
+import de.luh.kriegel.studip.client.event.Event;
+import de.luh.kriegel.studip.client.event.EventView;
 import de.luh.kriegel.studip.synchronizer.application.notification.NotificationView;
 import de.luh.kriegel.studip.synchronizer.application.view.WebViewFitContent;
-import de.luh.kriegel.studip.synchronizer.event.Event;
-import de.luh.kriegel.studip.synchronizer.event.EventView;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

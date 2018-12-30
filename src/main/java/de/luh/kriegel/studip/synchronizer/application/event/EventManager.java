@@ -17,16 +17,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import de.luh.kriegel.studip.client.event.CourseDownloadFinishedEvent;
+import de.luh.kriegel.studip.client.event.CourseDownloadFinishedEventBuilder;
+import de.luh.kriegel.studip.client.event.CourseDownloadFinishedEventListener;
+import de.luh.kriegel.studip.client.event.CourseDownloadProgressEventBuilder;
+import de.luh.kriegel.studip.client.event.CourseNewsReceivedEvent;
+import de.luh.kriegel.studip.client.event.CourseNewsReceivedEventBuilder;
+import de.luh.kriegel.studip.client.event.CourseNewsReceivedEventListener;
+import de.luh.kriegel.studip.client.event.Event;
+import de.luh.kriegel.studip.client.event.EventBuilder;
+import de.luh.kriegel.studip.client.event.EventType;
+import de.luh.kriegel.studip.client.exception.NotAuthenticatedException;
+import de.luh.kriegel.studip.client.service.CourseService;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
-import de.luh.kriegel.studip.synchronizer.client.exception.NotAuthenticatedException;
-import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
-import de.luh.kriegel.studip.synchronizer.event.CourseDownloadFinishedEvent;
-import de.luh.kriegel.studip.synchronizer.event.CourseDownloadFinishedEventBuilder;
-import de.luh.kriegel.studip.synchronizer.event.CourseDownloadFinishedEventListener;
-import de.luh.kriegel.studip.synchronizer.event.CourseDownloadProgressEventBuilder;
-import de.luh.kriegel.studip.synchronizer.event.Event;
-import de.luh.kriegel.studip.synchronizer.event.EventBuilder;
-import de.luh.kriegel.studip.synchronizer.event.EventType;
 
 public class EventManager {
 

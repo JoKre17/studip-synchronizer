@@ -21,13 +21,13 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 
+import de.luh.kriegel.studip.client.auth.Credentials;
+import de.luh.kriegel.studip.client.service.AuthService;
+import de.luh.kriegel.studip.client.service.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.luh.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.luh.kriegel.studip.synchronizer.application.model.CustomServerPair;
 import de.luh.kriegel.studip.synchronizer.application.view.MainView;
-import de.luh.kriegel.studip.synchronizer.auth.Credentials;
-import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
-import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

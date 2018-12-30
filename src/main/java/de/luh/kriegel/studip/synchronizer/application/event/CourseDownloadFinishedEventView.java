@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import de.luh.kriegel.studip.synchronizer.content.model.data.Course;
-import de.luh.kriegel.studip.synchronizer.event.Event;
-import de.luh.kriegel.studip.synchronizer.event.EventView;
+import de.luh.kriegel.studip.client.content.model.data.Course;
+import de.luh.kriegel.studip.client.event.Event;
+import de.luh.kriegel.studip.client.event.EventView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

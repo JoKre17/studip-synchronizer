@@ -6,13 +6,13 @@ import java.net.URI;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.luh.kriegel.studip.client.auth.Credentials;
+import de.luh.kriegel.studip.client.config.Config;
+import de.luh.kriegel.studip.client.download.DownloadManager;
+import de.luh.kriegel.studip.client.service.AuthService;
+import de.luh.kriegel.studip.client.service.CourseService;
+import de.luh.kriegel.studip.client.service.StudIPClient;
 import de.luh.kriegel.studip.synchronizer.application.SynchronizerApp;
-import de.luh.kriegel.studip.synchronizer.auth.Credentials;
-import de.luh.kriegel.studip.synchronizer.client.StudIPClient;
-import de.luh.kriegel.studip.synchronizer.client.service.AuthService;
-import de.luh.kriegel.studip.synchronizer.client.service.CourseService;
-import de.luh.kriegel.studip.synchronizer.config.Config;
-import de.luh.kriegel.studip.synchronizer.download.DownloadManager;
 import javafx.application.Application;
 
 public class Main {
