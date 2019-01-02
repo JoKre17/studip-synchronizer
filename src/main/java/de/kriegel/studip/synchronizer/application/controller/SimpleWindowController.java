@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.kriegel.studip.synchronizer.application.config.ConfigManager;
@@ -36,7 +36,7 @@ import javafx.stage.WindowEvent;
 
 public class SimpleWindowController implements Initializable {
 
-	private final static Logger log = LogManager.getLogger(SimpleWindowController.class);
+	private final static Logger log = LoggerFactory.getLogger(SimpleWindowController.class);
 
 	public TrayIcon trayIcon;
 
@@ -111,6 +111,7 @@ public class SimpleWindowController implements Initializable {
 			hide(stage);
 		} else {
 			stage.close();
+			SynchronizerApp.studipClient.shutdown();
 			System.exit(0);
 		}
 	}

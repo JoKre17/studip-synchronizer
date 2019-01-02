@@ -2,8 +2,8 @@ package de.kriegel.studip.synchronizer.application;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.controller.SimpleWindowController;
 import javafx.beans.value.ChangeListener;
@@ -17,7 +17,7 @@ import javafx.stage.StageStyle;
 
 public class SimpleWindowStage extends Stage {
 
-	private static final Logger log = LogManager.getLogger(SimpleWindowStage.class);
+	private static final Logger log = LoggerFactory.getLogger(SimpleWindowStage.class);
 
 
 	private SimpleWindowController controller;

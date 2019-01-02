@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.event.CourseDownloadFinishedEvent;
 import de.kriegel.studip.client.event.CourseDownloadFinishedEventBuilder;
@@ -33,7 +33,7 @@ import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 
 public class EventManager {
 
-	private static final Logger log = LogManager.getLogger(EventManager.class);
+	private static final Logger log = LoggerFactory.getLogger(EventManager.class);
 
 	private final File allEventsJSONLogfile;
 	private final String ALL_EVENTS_LOGFILE = "allEventsLog.json";

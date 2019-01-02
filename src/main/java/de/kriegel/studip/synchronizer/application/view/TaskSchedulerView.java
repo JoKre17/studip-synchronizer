@@ -2,8 +2,8 @@ package de.kriegel.studip.synchronizer.application.view;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.controller.TaskSchedulerController;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 
 public class TaskSchedulerView extends ScrollPane {
 
-	private static final Logger log = LogManager.getLogger(SettingsView.class);
+	private static final Logger log = LoggerFactory.getLogger(SettingsView.class);
 
 	private TaskSchedulerController controller;
 

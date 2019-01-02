@@ -3,8 +3,8 @@ package de.kriegel.studip.synchronizer;
 import java.io.File;
 import java.net.URI;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.auth.Credentials;
 import de.kriegel.studip.client.config.Config;
@@ -17,14 +17,14 @@ import javafx.application.Application;
 
 public class Main {
 
-	private static final Logger log = LogManager.getLogger(Main.class);
+	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
 	public static Config config;
 
 	public static void main(String[] args) throws Exception {
 
 		config = new Config(args);
-		log.info(config);
+		log.info(config.toString());
 
 		log.info(new File(".").getAbsolutePath());
 

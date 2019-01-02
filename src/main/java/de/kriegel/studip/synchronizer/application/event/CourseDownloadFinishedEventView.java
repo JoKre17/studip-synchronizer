@@ -6,7 +6,6 @@ import java.util.List;
 
 import de.kriegel.studip.client.content.model.data.Course;
 import de.kriegel.studip.client.event.Event;
-import de.kriegel.studip.client.event.EventView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.event.Event;
 import javafx.application.Platform;
@@ -29,7 +29,7 @@ public class NotificationView extends Stage {
 			+ "font-size: 14px;" + "line-height: 1.42857143;" + "color: #000;" + "background-color: #f5f5f6;"
 			+ "}</style>";
 
-	private static final Logger log = LogManager.getLogger(NotificationView.class);
+	private static final Logger log = LoggerFactory.getLogger(NotificationView.class);
 
 	public static final int HEIGHT = 200;
 

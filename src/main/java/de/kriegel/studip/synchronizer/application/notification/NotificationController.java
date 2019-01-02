@@ -8,9 +8,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.content.model.data.Course;
 import de.kriegel.studip.client.content.model.data.CourseNews;
@@ -38,7 +38,7 @@ import javafx.util.Duration;
 
 public class NotificationController implements Observer {
 
-	private final Logger log = LogManager.getLogger(NotificationController.class);
+	private final Logger log = LoggerFactory.getLogger(NotificationController.class);
 
 	private final TrayIcon trayIcon;
 	private final NotificationManager notificationManager;

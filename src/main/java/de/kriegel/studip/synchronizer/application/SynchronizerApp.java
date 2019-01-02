@@ -2,8 +2,8 @@ package de.kriegel.studip.synchronizer.application;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.download.SynchronizeTimer;
 import de.kriegel.studip.client.service.StudIPClient;
@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 public class SynchronizerApp extends Application {
 
-	private static final Logger log = LogManager.getLogger(SynchronizerApp.class);
+	private static final Logger log = LoggerFactory.getLogger(SynchronizerApp.class);
 
 	final private int MIN_WIDTH = 800;
 	final private int MIN_HEIGHT = 600;

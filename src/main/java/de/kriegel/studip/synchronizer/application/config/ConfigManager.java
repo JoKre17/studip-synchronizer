@@ -11,8 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 import javafx.beans.property.BooleanProperty;
@@ -26,7 +26,7 @@ import javafx.beans.value.ObservableValue;
 
 public class ConfigManager {
 
-	private static final Logger log = LogManager.getLogger(ConfigManager.class);
+	private static final Logger log = LoggerFactory.getLogger(ConfigManager.class);
 
 	private static final String PROPERTIES_FILE_PATH = "settings.conf";
 	private static final Properties properties = new Properties();

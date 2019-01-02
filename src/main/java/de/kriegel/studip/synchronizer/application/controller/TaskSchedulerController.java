@@ -9,8 +9,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jfoenix.controls.JFXButton;
 
@@ -37,7 +37,7 @@ import javafx.stage.Stage;
 
 public class TaskSchedulerController implements Initializable {
 
-	private final Logger log = LogManager.getLogger(TaskSchedulerController.class);
+	private final Logger log = LoggerFactory.getLogger(TaskSchedulerController.class);
 
 	private StringProperty passwordProperty = new SimpleStringProperty("");
 	private final String TASK_ENABLED_MESSAGE = "Der StudIP Synchronizer wird beim Systemstart gestartet.";

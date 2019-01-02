@@ -3,8 +3,8 @@ package de.kriegel.studip.synchronizer.application.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.SimpleWindowStage;
 import de.kriegel.studip.synchronizer.application.config.ConfigManager;
@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 
 public class StageController {
 
-	private static final Logger log = LogManager.getLogger(StageController.class);
+	private static final Logger log = LoggerFactory.getLogger(StageController.class);
 
 	private static SimpleWindowStage simpleWindowStage;
 

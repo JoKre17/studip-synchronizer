@@ -2,8 +2,8 @@ package de.kriegel.studip.synchronizer.application.view;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.controller.LoginController;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 
 public class LoginView extends StackPane {
 
-	private static final Logger log = LogManager.getLogger(LoginView.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginView.class);
 
 	private LoginController controller;
 

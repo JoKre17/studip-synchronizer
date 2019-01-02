@@ -2,8 +2,8 @@ package de.kriegel.studip.synchronizer.application.notification;
 
 import java.util.Observable;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NotificationTimer extends Observable {
 
@@ -41,7 +41,7 @@ public class NotificationTimer extends Observable {
 
 class NotificationTimerThread extends Thread {
 
-	private static final Logger log = LogManager.getLogger(NotificationTimerThread.class);
+	private static final Logger log = LoggerFactory.getLogger(NotificationTimerThread.class);
 
 	// 10 seconds
 	private final long TIMER_STARTUP_MILLIS = 10000;

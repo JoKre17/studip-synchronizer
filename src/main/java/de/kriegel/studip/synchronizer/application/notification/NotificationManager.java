@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.content.model.data.Course;
 import de.kriegel.studip.client.content.model.data.CourseNews;
@@ -26,7 +26,7 @@ import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 
 public class NotificationManager {
 
-	private final Logger log = LogManager.getLogger(NotificationManager.class);
+	private final Logger log = LoggerFactory.getLogger(NotificationManager.class);
 
 	private final List<CourseNewsReceivedEventListener> courseNewsReceivedEventListeners = new ArrayList<>();
 

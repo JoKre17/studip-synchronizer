@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.synchronizer.application.controller.MainController;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 
 public class MainView extends VBox implements Initializable {
 
-	private static final Logger log = LogManager.getLogger(MainView.class);
+	private static final Logger log = LoggerFactory.getLogger(MainView.class);
 
 	private MainController mainController;
 	private SettingsView settingsView;

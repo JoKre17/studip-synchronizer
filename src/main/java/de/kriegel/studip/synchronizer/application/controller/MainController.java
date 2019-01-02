@@ -1,7 +1,7 @@
 package de.kriegel.studip.synchronizer.application.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
@@ -10,7 +10,7 @@ import javafx.scene.layout.Region;
 
 public class MainController {
 
-	private final static Logger log = LogManager.getLogger(MainController.class);
+	private final static Logger log = LoggerFactory.getLogger(MainController.class);
 
 	@FXML
 	TabPane tabPane;

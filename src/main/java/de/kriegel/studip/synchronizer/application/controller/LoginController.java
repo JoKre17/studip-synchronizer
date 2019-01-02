@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
@@ -47,7 +47,7 @@ import javafx.util.Callback;
 
 public class LoginController implements Initializable {
 
-	private static final Logger log = LogManager.getLogger(LoginController.class);
+	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@FXML
 	private JFXTextField studipUrlField;

@@ -3,7 +3,6 @@ package de.kriegel.studip.synchronizer.application.event;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 
-import de.kriegel.studip.client.event.EventView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ContentDisplay;

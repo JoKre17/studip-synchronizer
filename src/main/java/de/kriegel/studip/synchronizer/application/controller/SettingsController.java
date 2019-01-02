@@ -2,18 +2,21 @@ package de.kriegel.studip.synchronizer.application.controller;
 
 import java.io.File;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXToggleButton;
 
 import de.kriegel.studip.client.download.SynchronizeTimer;
+import de.kriegel.studip.client.download.SynchronizeTimer.SynchronizeTimerTriggeredListener;
 import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.kriegel.studip.synchronizer.application.config.ConfigManager;
 import de.kriegel.studip.synchronizer.application.notification.NotificationController;
@@ -31,7 +34,7 @@ import javafx.stage.DirectoryChooser;
 
 public class SettingsController implements Initializable {
 
-	private final static Logger log = LogManager.getLogger(SettingsController.class);
+	private final static Logger log = LoggerFactory.getLogger(SettingsController.class);
 
 	// UI Elements //
 
@@ -104,7 +107,22 @@ public class SettingsController implements Initializable {
 				SynchronizerApp.studipClient.getCourseService().getDownloadManager()
 						.setDownloadDirectory(downloadDirectory);
 				SynchronizerApp.synchronizerTimer = new SynchronizeTimer(SynchronizerApp.studipClient,
-						ConfigManager.getSynchronizationIntervalProperty().get() * 60000, nextSynchAtLabel);
+						ConfigManager.getSynchronizationIntervalProperty().get() * 60000);
+
+				SynchronizerApp.synchronizerTimer
+						.addSynchronizeTimerTriggeredListener(new SynchronizeTimerTriggeredListener() {
+
+							@Override
+							public void onTrigger(Date nextTriggerDate) {
+								SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+								String content = format.format(nextTriggerDate);
+
+								Platform.runLater(() -> {
+									nextSynchAtLabel.setText("Next run at " + content + " (local time)");
+								});
+							}
+						});
+
 				SynchronizerApp.synchronizerTimer.start();
 			}
 		} else {

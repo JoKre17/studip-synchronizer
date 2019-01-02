@@ -4,8 +4,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import de.kriegel.studip.client.event.CourseDownloadFinishedEvent;
 import de.kriegel.studip.client.event.CourseDownloadFinishedEventListener;
@@ -13,15 +13,15 @@ import de.kriegel.studip.client.event.CourseDownloadProgressEvent;
 import de.kriegel.studip.client.event.CourseNewsReceivedEvent;
 import de.kriegel.studip.client.event.CourseNewsReceivedEventListener;
 import de.kriegel.studip.client.event.Event;
-import de.kriegel.studip.client.event.EventView;
 import de.kriegel.studip.synchronizer.application.SynchronizerApp;
 import de.kriegel.studip.synchronizer.application.event.CourseDownloadFinishedEventView;
 import de.kriegel.studip.synchronizer.application.event.EventListCell;
 import de.kriegel.studip.synchronizer.application.event.EventManager;
+import de.kriegel.studip.synchronizer.application.event.EventView;
 import de.kriegel.studip.synchronizer.application.event.HtmlEventEntryView;
 import de.kriegel.studip.synchronizer.application.notification.NotificationView;
-import de.kriegel.studip.synchronizer.application.notification.NotificationViewCreatedEventListener;
 import de.kriegel.studip.synchronizer.application.notification.NotificationView.NotificationViewClickedEventListener;
+import de.kriegel.studip.synchronizer.application.notification.NotificationViewCreatedEventListener;
 import de.kriegel.studip.synchronizer.application.view.EventDashbordView;
 import de.kriegel.studip.synchronizer.application.view.MainView;
 import javafx.application.Platform;
@@ -41,7 +41,7 @@ import javafx.util.Callback;
 public class EventDisplayController
 		implements Initializable, NotificationViewCreatedEventListener, NotificationViewClickedEventListener {
 
-	private static final Logger log = LogManager.getLogger(EventDisplayController.class);
+	private static final Logger log = LoggerFactory.getLogger(EventDisplayController.class);
 
 	@FXML
 	private TabPane root;
